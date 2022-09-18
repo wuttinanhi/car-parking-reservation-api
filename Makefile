@@ -5,7 +5,7 @@ install:
 	pip install -r requirements.txt
 
 run:
-	flask --app main run 
+	flask --app main run --host=0.0.0.0
 
 dev:
-	flask --app main --debug run 
+	flask --app main --debug run
