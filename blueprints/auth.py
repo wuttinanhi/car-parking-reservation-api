@@ -8,6 +8,7 @@ import os
 from flask import Blueprint, request
 from marshmallow import Schema, ValidationError, fields, validate
 from services.auth.decorator import login_required
+from services.auth.function import GetUser
 from services.jwt_wrapper.jwt_wrapper import JwtWrapper
 from services.user.user import UserService
 from util.validate_request import ValidateRequest
@@ -54,15 +55,7 @@ def register():
 @bp.route('/user', methods=['GET'])
 @login_required
 def user():
-    # jwt_token = request.headers.get("Authorization").split("Bearer ")[1]
-    # check = JwtWrapper.validate(jwt_token)
-
-    # if check:
-    #     decoded = JwtWrapper.decode(jwt_token)
-    #     user = UserService.find_by_id(decoded["user_id"])
-    #     return {"id": user.id, "email": user.email}, 200
-    # return {"message": "Unauthorized!"}, 401
-    user = request.user
+    user = GetUser()
     return user.email
 
 
