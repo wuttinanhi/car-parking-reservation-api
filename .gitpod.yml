@@ -16,3 +16,5 @@ vscode:
     - VisualStudioExptTeam.vscodeintellicode
     - ms-python.python
     - rangav.vscode-thunder-client
+    - IronGeek.vscode-env
+

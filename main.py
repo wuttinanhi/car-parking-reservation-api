@@ -7,6 +7,11 @@ from flask import Flask
 import blueprints.auth as auth
 from services.database import db_session, init_db
 
+from dotenv import load_dotenv
+
+load_dotenv()  # take environment variables from .env.
+
+
 app = Flask(__name__)
 
 
