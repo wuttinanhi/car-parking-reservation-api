@@ -27,7 +27,9 @@ class UserService:
             user = User(email, hashed_password)
             db_session.add(user)
             db_session.commit()
+            return user
         except IntegrityError:
+            db_session.rollback()
             raise Exception("User already registerd!")
 
     @staticmethod
