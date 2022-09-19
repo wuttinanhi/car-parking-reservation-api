@@ -33,8 +33,10 @@ class UserService:
     @staticmethod
     def login(email: str, password: str):
         user: User = UserService.find_by_email(email)
-        check_pwd = BcryptWrapper.validate(password, user.password)
-        return check_pwd
+        if user:
+            check_pwd = BcryptWrapper.validate(password, user.password)
+            return check_pwd
+        return False
 
     @staticmethod
     def find_by_email(email: str):
