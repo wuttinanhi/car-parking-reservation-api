@@ -12,7 +12,11 @@ from services.user.user import UserService
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        jwt_token = request.headers.get("Authorization").split("Bearer ")[1]
+        auth_header = request.headers.get("Authorization")
+        if auth_header == None:
+            return {"message": "Unauthorized!"}, 401
+
+        jwt_token = auth_header.split("Bearer ")[1]
         check = JwtWrapper.validate(jwt_token)
 
         if check:
