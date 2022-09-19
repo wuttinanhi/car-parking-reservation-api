@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from flask import Flask
 
 import blueprints.auth as auth
+import blueprints.car as car
 from services.database import db_session, init_db
 
 load_dotenv()
@@ -15,6 +16,7 @@ app = Flask(__name__)
 
 
 app.register_blueprint(auth.bp)
+app.register_blueprint(car.bp)
 
 
 @app.teardown_appcontext

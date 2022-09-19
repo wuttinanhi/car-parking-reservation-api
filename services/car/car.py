@@ -9,7 +9,7 @@ class Car(Base):
 
     id = Column(Integer, primary_key=True)
     car_license_plate = Column(String(100), unique=True)
-    car_owner_id = Column(String(100))
+    car_owner_id = Column(Integer())
     car_type = Column(String(100))
 
     def __init__(self, car_license_plate: str, car_owner_id: str, car_type: str):
@@ -23,11 +23,12 @@ class Car(Base):
 
 class CarService:
     @staticmethod
-    def register(car_owner: User, car_license_plate: str, car_type: str):
+    def add(car_owner: User, car_license_plate: str, car_type: str):
         try:
             car = Car(car_license_plate, car_owner.id, car_type)
             db_session.add(car)
             db_session.commit()
+            return car
         except IntegrityError:
             db_session.rollback()
             raise Exception("Car already registerd!")
@@ -44,3 +45,11 @@ class CarService:
     @staticmethod
     def find_all_car_by_user(user: User):
         return Car.query.filter(Car.car_owner_id == user.id).all()
+
+    @staticmethod
+    def find_by_id(id: int):
+        return Car.query.filter(Car.id == id).first()
+
+    @staticmethod
+    def is_user_own_car(user: User, car: Car):
+        return car.car_owner_id == user.id
