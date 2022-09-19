@@ -1,0 +1,14 @@
+[
+  {
+    "_id": "55d84e90-6849-46a6-b752-48f30ef9a83c",
+    "colName": "auth",
+    "created": "2022-09-19T03:39:32.146Z",
+    "sortNum": 10000,
+    "folders": [],
+    "settings": {
+      "headers": [],
+      "tests": [],
+      "envId": "99e59d5a-e5fa-450f-9cc1-4ade3a66969b"
+    }
+  }
+]

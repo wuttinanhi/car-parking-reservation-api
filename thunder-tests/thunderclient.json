@@ -1,0 +1,58 @@
+[
+  {
+    "_id": "8b530330-87b6-4ec2-8e3b-168b14ca4952",
+    "colId": "55d84e90-6849-46a6-b752-48f30ef9a83c",
+    "containerId": "",
+    "name": "login",
+    "url": "{{BASE_API_URL}}/auth/login",
+    "method": "POST",
+    "sortNum": 10000,
+    "created": "2022-09-19T03:39:38.779Z",
+    "modified": "2022-09-19T03:46:43.666Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"@Test12345\"\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "e7480ac6-60cf-49da-a4a5-10a0c4877668",
+    "colId": "55d84e90-6849-46a6-b752-48f30ef9a83c",
+    "containerId": "",
+    "name": "register",
+    "url": "{{BASE_API_URL}}/auth/register",
+    "method": "POST",
+    "sortNum": 20000,
+    "created": "2022-09-19T03:43:42.770Z",
+    "modified": "2022-09-19T03:46:32.753Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"@Test12345\"\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "64f8db50-0575-4a5c-9089-0f15cb429069",
+    "colId": "55d84e90-6849-46a6-b752-48f30ef9a83c",
+    "containerId": "",
+    "name": "user",
+    "url": "{{BASE_API_URL}}/auth/user",
+    "method": "GET",
+    "sortNum": 15000,
+    "created": "2022-09-19T03:46:58.194Z",
+    "modified": "2022-09-19T03:47:43.811Z",
+    "headers": [],
+    "params": [],
+    "auth": {
+      "type": "bearer",
+      "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE2NjM1NTkyMDYsImV4cCI6MTY2MzU1OTUwNn0.9PYMmP-4yLEFh-NJNuTlY4IrTnLyIoQRl56lWr5y18U"
+    },
+    "tests": []
+  }
+]

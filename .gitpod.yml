@@ -14,3 +14,4 @@ vscode:
     - ms-vscode.makefile-tools
     - VisualStudioExptTeam.vscodeintellicode
     - ms-python.python
+    - rangav.vscode-thunder-client

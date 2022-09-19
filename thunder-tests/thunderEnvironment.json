@@ -1,0 +1,16 @@
+[
+  {
+    "_id": "99e59d5a-e5fa-450f-9cc1-4ade3a66969b",
+    "name": "dev",
+    "default": true,
+    "sortNum": 10000,
+    "created": "2022-09-19T03:40:08.517Z",
+    "modified": "2022-09-19T03:45:26.188Z",
+    "data": [
+      {
+        "name": "BASE_API_URL",
+        "value": "http://127.0.0.1:5000"
+      }
+    ]
+  }
+]
