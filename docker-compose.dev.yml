@@ -1,0 +1,28 @@
+version: '3.4'
+
+services:
+  mysql:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_DATABASE: appdb
+      MYSQL_USER: appuser
+      MYSQL_PASSWORD: app-password
+      MYSQL_ROOT_PASSWORD: app-root-password
+    volumes:
+      - db_storage:/var/lib/mysql
+    ports:
+      - 3306:3306
+
+  phpmyadmin:
+    image: phpmyadmin
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: appuser
+      PMA_PASSWORD: app-password
+      PMA_DATABASE: appdb
+    ports:
+      - 8080:80
+
+volumes:
+  db_storage:
