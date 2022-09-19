@@ -18,4 +18,8 @@ class BcryptWrapper:
 
     @staticmethod
     def validate(value: str, hash: str):
-        return bcrypt.checkpw(value.encode("utf-8"), hash)
+        if isinstance(value, str):
+            value = value.encode("utf-8")
+        if isinstance(hash, str):
+            hash = hash.encode("utf-8")
+        return bcrypt.checkpw(value, hash)
