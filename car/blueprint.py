@@ -3,17 +3,18 @@
 '''
 
 
-from http.client import BAD_REQUEST, CREATED, FORBIDDEN, NOT_FOUND, OK
-from xmlrpc.client import INTERNAL_ERROR
+from http.client import (BAD_REQUEST, CREATED, FORBIDDEN,
+                         INTERNAL_SERVER_ERROR, NOT_FOUND, OK)
 
+from auth.decorator import login_required
+from auth.function import GetUser
 from flask import Blueprint, request
 from marshmallow import Schema, ValidationError, fields, validate
-from services.auth.decorator import login_required
-from services.auth.function import GetUser
-from services.car.car import CarService
 from util.validate_request import ValidateRequest
 
-bp = Blueprint("car", __name__, url_prefix="/car")
+from car.service import CarService
+
+blueprint = Blueprint("car", __name__, url_prefix="/car")
 
 
 class CarAddDto(Schema):
@@ -31,7 +32,7 @@ class CarDeleteDto(Schema):
     car_id = fields.Int(required=True)
 
 
-@bp.route('/add', methods=['POST'])
+@blueprint.route('/add', methods=['POST'])
 @login_required
 def add_car():
     user = GetUser()
@@ -40,7 +41,7 @@ def add_car():
     return {"message": "Car add."}, CREATED
 
 
-@bp.route('/remove', methods=['DELETE'])
+@blueprint.route('/remove', methods=['DELETE'])
 @login_required
 def remove_car():
     user = GetUser()
@@ -55,8 +56,8 @@ def remove_car():
     return {"message": "Car not found!"}, NOT_FOUND
 
 
-@bp.errorhandler(Exception)
+@blueprint.errorhandler(Exception)
 def error_handle(err: Exception):
     if err.__class__ is ValidationError:
         return str(err), BAD_REQUEST
-    return {'message': "Internal server exception!", "error": str(err)}, INTERNAL_ERROR
+    return {'message': "Internal server exception!"}, INTERNAL_SERVER_ERROR

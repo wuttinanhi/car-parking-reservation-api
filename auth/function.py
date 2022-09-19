@@ -3,7 +3,7 @@
 """
 
 from flask import request
-from services.user.user import User
+from user.model import User
 
 
 def GetUser() -> User:

@@ -9,9 +9,9 @@ load_dotenv()
 
 
 if __name__ == '__main__':
-    from services.car.car import CarService
-    from services.database import Base, db_session, engine, init_db
-    from services.user.user import UserService
+    from car.service import CarService
+    from database.database import Base, db_session, engine, init_db
+    from user.service import UserService
 
     # drop all
     Base.metadata.drop_all(bind=engine)

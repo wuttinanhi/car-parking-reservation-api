@@ -1,29 +1,15 @@
-from services.bcrypt_wrapper.bcrypt_wrapper import BcryptWrapper
-from services.database import Base, db_session
-from sqlalchemy import Column, Integer, String
+from bcrypt_wrapper.service import BcryptService
+from database.database import db_session
 from sqlalchemy.exc import IntegrityError
 
-
-class User(Base):
-    __tablename__ = 'users'
-
-    id = Column(Integer, primary_key=True)
-    email = Column(String(100), unique=True)
-    password = Column(String(100))
-
-    def __init__(self, email: str, password: str):
-        self.email = email
-        self.password = password
-
-    def __repr__(self):
-        return f'<User {self.email!r}>'
+from user import User
 
 
 class UserService:
     @staticmethod
     def register(email: str, password: str):
         try:
-            hashed_password = BcryptWrapper.hash(password)
+            hashed_password = BcryptService.hash(password)
             user = User(email, hashed_password)
             db_session.add(user)
             db_session.commit()
@@ -36,7 +22,7 @@ class UserService:
     def login(email: str, password: str):
         user: User = UserService.find_by_email(email)
         if user:
-            check_pwd = BcryptWrapper.validate(password, user.password)
+            check_pwd = BcryptService.validate(password, user.password)
             return check_pwd
         return False
 
