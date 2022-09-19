@@ -46,12 +46,12 @@
     "method": "GET",
     "sortNum": 15000,
     "created": "2022-09-19T03:46:58.194Z",
-    "modified": "2022-09-19T03:47:43.811Z",
+    "modified": "2022-09-19T04:04:56.389Z",
     "headers": [],
     "params": [],
     "auth": {
       "type": "bearer",
-      "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE2NjM1NTkyMDYsImV4cCI6MTY2MzU1OTUwNn0.9PYMmP-4yLEFh-NJNuTlY4IrTnLyIoQRl56lWr5y18U"
+      "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE2NjM1NjAyNzMsImV4cCI6MTY2MzU2MDU3M30.1u0uLHXip-01t5CK8R7j1_rNRQ8_R5P7d49yNJyoM88"
     },
     "tests": []
   }
