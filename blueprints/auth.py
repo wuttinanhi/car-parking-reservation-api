@@ -3,6 +3,8 @@
 '''
 
 
+import os
+
 from flask import Blueprint, request
 from marshmallow import Schema, ValidationError, fields, validate
 from services.auth.decorator import login_required
@@ -33,7 +35,11 @@ def login():
     if check:
         user = UserService.find_by_email(data.email)
         jwt = {"user_id": user.id}
-        token = JwtWrapper.encode(jwt, 60*5)
+        token: str
+        if os.getenv("ENV") != "production":
+            token = JwtWrapper.encode(jwt, 86400) # 1 day
+        else:
+            token = JwtWrapper.encode(jwt, 60*5)  # 5 minutes
         return {'token': token}, 200
     return {"message": "Invalid login!"}, 401
 
