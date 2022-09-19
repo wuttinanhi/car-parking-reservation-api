@@ -1,6 +1,7 @@
 from bcrypt_wrapper.service import BcryptService
 from database.database import db_session
 from sqlalchemy.exc import IntegrityError
+from werkzeug.exceptions import Conflict
 
 from user import User
 
@@ -16,7 +17,7 @@ class UserService:
             return user
         except IntegrityError:
             db_session.rollback()
-            raise Exception("User already registerd!")
+            raise Conflict("User already registerd!")
 
     @staticmethod
     def login(email: str, password: str):

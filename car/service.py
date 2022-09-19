@@ -1,6 +1,7 @@
 from database.database import db_session
 from sqlalchemy.exc import IntegrityError
 from user.model import User
+from werkzeug.exceptions import Conflict
 
 from car.model import Car
 
@@ -15,7 +16,7 @@ class CarService:
             return car
         except IntegrityError:
             db_session.rollback()
-            raise Exception("Car already registerd!")
+            raise Conflict("Car already registerd!")
 
     @staticmethod
     def remove(car: Car):

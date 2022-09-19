@@ -4,13 +4,14 @@
 
 
 from http.client import (BAD_REQUEST, CREATED, FORBIDDEN,
-                         INTERNAL_SERVER_ERROR, NOT_FOUND, OK)
+                         INTERNAL_SERVER_ERROR, NOT_FOUND, OK, HTTPException)
 
 from auth.decorator import login_required
 from auth.function import GetUser
 from flask import Blueprint, request
 from marshmallow import Schema, ValidationError, fields, validate
 from util.validate_request import ValidateRequest
+from werkzeug.exceptions import HTTPException
 
 from car.service import CarService
 
@@ -58,6 +59,8 @@ def remove_car():
 
 @blueprint.errorhandler(Exception)
 def error_handle(err: Exception):
-    if err.__class__ is ValidationError:
+    if issubclass(type(err), ValidationError):
         return str(err), BAD_REQUEST
+    if issubclass(type(err), HTTPException):
+        return {'error': err.description}, err.code
     return {'message': "Internal server exception!"}, INTERNAL_SERVER_ERROR

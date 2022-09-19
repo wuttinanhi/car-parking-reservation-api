@@ -79,12 +79,12 @@
     "method": "DELETE",
     "sortNum": 20000,
     "created": "2022-09-19T13:00:30.444Z",
-    "modified": "2022-09-19T18:45:43.093Z",
+    "modified": "2022-09-19T19:06:05.401Z",
     "headers": [],
     "params": [],
     "body": {
       "type": "json",
-      "raw": "{\n  \"car_id\": 1\n}\n",
+      "raw": "{\n  \"car_id\": 10\n}\n",
       "form": []
     },
     "tests": []

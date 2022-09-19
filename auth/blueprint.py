@@ -4,12 +4,14 @@
 
 
 import os
+from http.client import BAD_REQUEST, INTERNAL_SERVER_ERROR
 
 from flask import Blueprint, request
 from jwt_wrapper.service import JwtService
 from marshmallow import Schema, ValidationError, fields, validate
 from user.service import UserService
 from util.validate_request import ValidateRequest
+from werkzeug.exceptions import HTTPException
 
 from auth.decorator import login_required
 from auth.function import GetUser
@@ -62,6 +64,8 @@ def user():
 
 @blueprint.errorhandler(Exception)
 def error_handle(err: Exception):
-    if err.__class__ is ValidationError:
-        return str(err), 400
-    return {'message': "Internal server exception!", "error": str(err)}, 500
+    if issubclass(type(err), ValidationError):
+        return str(err), BAD_REQUEST
+    if issubclass(type(err), HTTPException):
+        return {'error': err.description}, err.code
+    return {'message': "Internal server exception!"}, INTERNAL_SERVER_ERROR
