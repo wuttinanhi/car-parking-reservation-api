@@ -22,20 +22,20 @@ if __name__ == '__main__':
     # mock user
     try:
         UserService.register("test@example.com", "@Test12345")
-    except Exception as e:
-        print("user already registerd!")
+    except Exception:
+        pass
 
     # get user
     user = UserService.find_by_email("test@example.com")
 
     # mock user car
     try:
-        CarService.register(user, "A11111", "Tesla")
+        CarService.add(user, "A11111", "Tesla")
     except Exception:
         pass
 
     try:
-        CarService.register(user, "A22222", "Starship")
+        CarService.add(user, "A22222", "Starship")
     except Exception:
         pass
 

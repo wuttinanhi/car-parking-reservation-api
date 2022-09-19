@@ -12,5 +12,16 @@
         "value": "http://127.0.0.1:5000"
       }
     ]
+  },
+  {
+    "_id": "3a9fa772-d298-4dec-9fa9-cce91bc6bc4d",
+    "name": "(Local Env)",
+    "default": false,
+    "global": true,
+    "local": true,
+    "sortNum": -2,
+    "created": "2022-09-19T12:53:31.598Z",
+    "modified": "2022-09-19T12:53:31.598Z",
+    "data": []
   }
 ]

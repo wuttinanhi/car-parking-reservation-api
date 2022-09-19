@@ -7,6 +7,26 @@
     "folders": [],
     "settings": {
       "headers": [],
+      "auth": {
+        "type": "bearer",
+        "bearer": "{{JWT_TOKEN}}"
+      },
+      "tests": [],
+      "envId": "99e59d5a-e5fa-450f-9cc1-4ade3a66969b"
+    }
+  },
+  {
+    "_id": "e858eb49-2d8b-4bc5-bc1e-5eb5dcef9be0",
+    "colName": "car",
+    "created": "2022-09-19T12:49:24.880Z",
+    "sortNum": 20000,
+    "folders": [],
+    "settings": {
+      "headers": [],
+      "auth": {
+        "type": "bearer",
+        "bearer": "{{JWT_TOKEN}}"
+      },
       "tests": [],
       "envId": "99e59d5a-e5fa-450f-9cc1-4ade3a66969b"
     }

@@ -46,12 +46,46 @@
     "method": "GET",
     "sortNum": 15000,
     "created": "2022-09-19T03:46:58.194Z",
-    "modified": "2022-09-19T12:37:55.641Z",
+    "modified": "2022-09-19T13:09:15.749Z",
     "headers": [],
     "params": [],
-    "auth": {
-      "type": "bearer",
-      "bearer": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE2NjM1OTEwNzAsImV4cCI6MTY2MzU5MTM3MH0.KUcs9JUkJyf-rq0SJICo7diXBNbwhIA0qcxx14_9_XY"
+    "tests": []
+  },
+  {
+    "_id": "cffa7e72-fc55-4ce3-983a-ad17cf3fc5c1",
+    "colId": "e858eb49-2d8b-4bc5-bc1e-5eb5dcef9be0",
+    "containerId": "",
+    "name": "add",
+    "url": "{{BASE_API_URL}}/car/add",
+    "method": "POST",
+    "sortNum": 10000,
+    "created": "2022-09-19T12:49:30.945Z",
+    "modified": "2022-09-19T12:51:14.936Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"car_license_plate\": \"A33333\",\n  \"car_type\": \"Falcon9\"\n}\n",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "19ac555e-559e-4408-b444-3290ed496ad4",
+    "colId": "e858eb49-2d8b-4bc5-bc1e-5eb5dcef9be0",
+    "containerId": "",
+    "name": "remove",
+    "url": "{{BASE_API_URL}}/car/remove",
+    "method": "DELETE",
+    "sortNum": 20000,
+    "created": "2022-09-19T13:00:30.444Z",
+    "modified": "2022-09-19T13:13:57.167Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"car_id\": 1\n}\n",
+      "form": []
     },
     "tests": []
   }
