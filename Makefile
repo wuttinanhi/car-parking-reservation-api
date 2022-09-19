@@ -1,3 +1,8 @@
+.PHONY: mock run dev
+
+mock:
+	python -m mock.mock
+
 freeze:
 	pip freeze > requirements.txt
 
