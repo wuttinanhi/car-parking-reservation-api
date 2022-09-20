@@ -16,4 +16,4 @@ class Car(Base):
         self.car_type = car_type
 
     def __repr__(self):
-        return f'<Car {self.id}>'
+        return f'<Car {self.car_license_plate}>'
