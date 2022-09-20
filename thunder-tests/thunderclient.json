@@ -88,5 +88,19 @@
       "form": []
     },
     "tests": []
+  },
+  {
+    "_id": "d2786c92-e0c7-4379-9a97-8def31853311",
+    "colId": "e858eb49-2d8b-4bc5-bc1e-5eb5dcef9be0",
+    "containerId": "",
+    "name": "my_car",
+    "url": "{{BASE_API_URL}}/car/my_car",
+    "method": "GET",
+    "sortNum": 30000,
+    "created": "2022-09-20T17:47:47.919Z",
+    "modified": "2022-09-20T17:48:17.596Z",
+    "headers": [],
+    "params": [],
+    "tests": []
   }
 ]

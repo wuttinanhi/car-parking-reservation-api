@@ -5,11 +5,15 @@
     "default": true,
     "sortNum": 10000,
     "created": "2022-09-19T03:40:08.517Z",
-    "modified": "2022-09-19T03:45:26.188Z",
+    "modified": "2022-09-20T17:49:51.229Z",
     "data": [
       {
         "name": "BASE_API_URL",
         "value": "http://127.0.0.1:5000"
+      },
+      {
+        "name": "JWT_TOKEN",
+        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE2NjM2OTYxMDQsImV4cCI6MTY2Mzc4MjUwNH0.WO77Dwz_J2cHAVp76c-pUQtPADzmN4oSHOEQBvjUcGw"
       }
     ]
   },

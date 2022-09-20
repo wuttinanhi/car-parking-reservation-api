@@ -1,3 +1,5 @@
+from typing import List
+
 from database.database import db_session
 from sqlalchemy.exc import IntegrityError
 from user.model import User
@@ -38,3 +40,7 @@ class CarService:
     @staticmethod
     def is_user_own_car(user: User, car: Car):
         return car.car_owner_id == user.id
+
+    @staticmethod
+    def get_all_cars_by_user(user: User) -> List[Car]:
+        return Car.query.filter(Car.car_owner_id == user.id).all()

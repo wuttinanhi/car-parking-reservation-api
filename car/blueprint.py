@@ -57,6 +57,17 @@ def remove_car():
     return {"message": "Car not found!"}, NOT_FOUND
 
 
+@blueprint.route('/my_car', methods=['GET'])
+@login_required
+def my_car():
+    response = []
+    user = GetUser()
+    all_user_cars = CarService.get_all_cars_by_user(user)
+    for car in all_user_cars:
+        response.append(car.json())
+    return response
+
+
 @blueprint.errorhandler(Exception)
 def error_handle(err: Exception):
     if issubclass(type(err), ValidationError):

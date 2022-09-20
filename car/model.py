@@ -17,3 +17,12 @@ class Car(Base):
 
     def __repr__(self):
         return f'<Car {self.car_license_plate}>'
+
+    def json(self):
+        return {
+            'car_id': self.id,
+            'car_license_plate': self.car_license_plate,
+            'car_owner_id': self.car_owner_id,
+            'car_type': self.car_type
+        }
+
