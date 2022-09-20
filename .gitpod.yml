@@ -3,13 +3,14 @@
 # and commit this file to your remote git repository to share the goodness with others.
 
 tasks:
-  - init: make install
+  - init: pyenv install --force 3.9.13
+  - command: make install
 
 ports:
-    - port: 5000
-      onOpen: ignore
-    - port: 8080
-      onOpen: ignore
+  - port: 5000
+    onOpen: ignore
+  - port: 8080
+    onOpen: ignore
 
 vscode:
   extensions:
@@ -19,4 +20,3 @@ vscode:
     - ms-python.python
     - rangav.vscode-thunder-client
     - IronGeek.vscode-env
-

@@ -6,6 +6,7 @@
     "python.linting.lintOnSave": true,
     "python.languageServer": "Pylance",
     "python.terminal.activateEnvironment": true,
+    "python.terminal.activateEnvInCurrentTerminal": true,
     "[python]": {
         "editor.wordBasedSuggestions": false,
         "editor.formatOnSave": true,
