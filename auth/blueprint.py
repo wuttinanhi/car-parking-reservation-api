@@ -45,7 +45,7 @@ def login():
         else:
             token = JwtService.encode(jwt, 60*5)  # 5 minutes
         return {'token': token}, 200
-    return {"message": "Invalid login!"}, 401
+    return {"error": "Invalid login!"}, 401
 
 
 @blueprint.route('/register', methods=['POST'])
@@ -68,4 +68,4 @@ def error_handle(err: Exception):
         return str(err), BAD_REQUEST
     if issubclass(type(err), HTTPException):
         return {'error': err.description}, err.code
-    return {'message': "Internal server exception!"}, INTERNAL_SERVER_ERROR
+    return {'error': "Internal server exception!"}, INTERNAL_SERVER_ERROR

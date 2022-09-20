@@ -14,7 +14,7 @@ def login_required(f):
     def decorated_function(*args, **kwargs):
         auth_header = request.headers.get("Authorization")
         if auth_header == None:
-            return {"message": "Unauthorized!"}, 401
+            return {"error": "Unauthorized!"}, 401
 
         jwt_token = auth_header.split("Bearer ")[1]
         check = JwtService.validate(jwt_token)
@@ -24,6 +24,6 @@ def login_required(f):
             user = UserService.find_by_id(decoded["user_id"])
             request.user = user
             return f(*args, **kwargs)
-        return {"message": "Unauthorized!"}, 401
+        return {"error": "Unauthorized!"}, 401
 
     return decorated_function

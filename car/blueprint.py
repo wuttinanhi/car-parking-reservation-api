@@ -54,7 +54,7 @@ def remove_car():
             CarService.remove(car)
             return {"message": "Car delete."}, OK
         return {"error": "Forbidden"}, FORBIDDEN
-    return {"message": "Car not found!"}, NOT_FOUND
+    return {"error": "Car not found!"}, NOT_FOUND
 
 
 @blueprint.route('/my_car', methods=['GET'])
@@ -74,4 +74,4 @@ def error_handle(err: Exception):
         return str(err), BAD_REQUEST
     if issubclass(type(err), HTTPException):
         return {'error': err.description}, err.code
-    return {'message': "Internal server exception!"}, INTERNAL_SERVER_ERROR
+    return {'error': "Internal server exception!"}, INTERNAL_SERVER_ERROR
