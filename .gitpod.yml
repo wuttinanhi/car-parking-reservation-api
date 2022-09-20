@@ -3,11 +3,12 @@
 # and commit this file to your remote git repository to share the goodness with others.
 
 tasks:
-  - name: Setup Python
-    before: pyenv install --force 3.9.13
-  - name: Install packages
+  - name: Setup Workspace
+    before: |
+      pyenv install --force 3.9.13
+      python -m venv venv
+      . venv/bin/activate
     init: make install
-  - name: Run dev Docker compose
     command: docker compose -f "docker-compose.dev.yml" up -d --build
 
 ports:
