@@ -1,19 +1,29 @@
 """
     database module
 """
+import os
+
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
-import os
-
+from sqlalchemy.orm.query import Query
+from sqlalchemy.orm.session import Session
 
 engine = create_engine(os.getenv("DATABASE_URI"))
-db_session = scoped_session(
+db_session: Session = scoped_session(
     sessionmaker(autocommit=False, autoflush=False, bind=engine)
 )
 
+
+class Base():
+    """
+        class for type hint
+    """
+    query: Query
+
+
 Base = declarative_base()
-Base.query = db_session.query_property()
+Base.query: Query = db_session.query_property()
 
 
 def init_db():
