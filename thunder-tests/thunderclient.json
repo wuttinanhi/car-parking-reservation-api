@@ -79,12 +79,12 @@
     "method": "DELETE",
     "sortNum": 20000,
     "created": "2022-09-19T13:00:30.444Z",
-    "modified": "2022-09-19T19:06:05.401Z",
+    "modified": "2022-09-20T19:03:01.644Z",
     "headers": [],
     "params": [],
     "body": {
       "type": "json",
-      "raw": "{\n  \"car_id\": 10\n}\n",
+      "raw": "{\n  \"car_id\": 2\n}\n",
       "form": []
     },
     "tests": []
@@ -99,6 +99,58 @@
     "sortNum": 30000,
     "created": "2022-09-20T17:47:47.919Z",
     "modified": "2022-09-20T17:48:17.596Z",
+    "headers": [],
+    "params": [],
+    "tests": []
+  },
+  {
+    "_id": "2edc1077-7412-4d2f-8b0c-ab49f19caad0",
+    "colId": "912c87d0-1a78-47ba-8947-574d0f04b38f",
+    "containerId": "",
+    "name": "add",
+    "url": "{{BASE_API_URL}}/parking_lot/add",
+    "method": "POST",
+    "sortNum": 10000,
+    "created": "2022-09-20T19:16:56.660Z",
+    "modified": "2022-09-20T19:19:36.422Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"location\": \"Floor 1, Sector A\",\n  \"open_status\": true\n}\n",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "6c914bd9-df7b-4a9e-b578-42e0b7fb9fb2",
+    "colId": "912c87d0-1a78-47ba-8947-574d0f04b38f",
+    "containerId": "",
+    "name": "remove",
+    "url": "{{BASE_API_URL}}/parking_lot/remove",
+    "method": "DELETE",
+    "sortNum": 20000,
+    "created": "2022-09-20T19:16:56.661Z",
+    "modified": "2022-09-20T19:21:48.880Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"parking_lot_id\": 4\n}\n",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "16044cf0-b4c1-4304-be64-48ae4b5b8e26",
+    "colId": "912c87d0-1a78-47ba-8947-574d0f04b38f",
+    "containerId": "",
+    "name": "all",
+    "url": "{{BASE_API_URL}}/parking_lot/all",
+    "method": "GET",
+    "sortNum": 30000,
+    "created": "2022-09-20T19:16:56.662Z",
+    "modified": "2022-09-20T19:17:32.429Z",
     "headers": [],
     "params": [],
     "tests": []

@@ -11,6 +11,7 @@ load_dotenv()
 if __name__ == '__main__':
     from car.service import CarService
     from database.database import Base, db_session, engine, init_db
+    from parking_lot.service import ParkingLotService
     from user.service import UserService
 
     # drop all
@@ -33,6 +34,11 @@ if __name__ == '__main__':
     user_cars = CarService.find_all_car_by_user(user)
     for car in user_cars:
         print(car)
+
+    # mock parking lot
+    ParkingLotService.add("Floor 1", True)
+    ParkingLotService.add("Floor 2", True)
+    ParkingLotService.add("Floor 3", False)
 
     # remove database session
     db_session.remove()
