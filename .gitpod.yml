@@ -9,7 +9,9 @@ tasks:
       python -m venv venv
       . venv/bin/activate
     init: make install
-    command: docker compose -f "docker-compose.dev.yml" up -d --build
+    command: | 
+      docker compose -f "docker-compose.dev.yml" up -d --build
+      . venv/bin/activate
 
 ports:
   - port: 5000
@@ -25,3 +27,5 @@ vscode:
     - ms-python.python
     - rangav.vscode-thunder-client
     - IronGeek.vscode-env
+    - VisualStudioExptTeam.intellicode-api-usage-examples
+    - VisualStudioExptTeam.vscodeintellicode-completions
