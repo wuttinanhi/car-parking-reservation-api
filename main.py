@@ -2,7 +2,12 @@
     main
 '''
 
+
+from http.client import BAD_REQUEST, INTERNAL_SERVER_ERROR
+
 from flask import Flask
+from marshmallow import ValidationError
+from werkzeug.exceptions import HTTPException
 
 from auth import auth_blueprint
 from car import car_blueprint
@@ -13,6 +18,7 @@ from parking_lot import parking_lot_blueprint
 # load env
 load_env()
 
+
 # create app
 app = Flask(__name__)
 
@@ -21,9 +27,8 @@ app.register_blueprint(auth_blueprint)
 app.register_blueprint(car_blueprint)
 app.register_blueprint(parking_lot_blueprint)
 
+
 # shutdown database session when request context end
-
-
 @app.teardown_appcontext
 def shutdown_session(__exception=None):
     db_session.remove()
@@ -37,3 +42,12 @@ init_db()
 @app.route("/")
 def hello_world():
     return "<p>Hello, World!</p>"
+
+
+@app.errorhandler(Exception)
+def error_handle(err: Exception):
+    if issubclass(type(err), ValidationError):
+        return str(err), BAD_REQUEST
+    if issubclass(type(err), HTTPException):
+        return {'error': err.description}, err.code
+    return {'error': "Internal server exception!"}, INTERNAL_SERVER_ERROR

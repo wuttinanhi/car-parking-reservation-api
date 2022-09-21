@@ -34,7 +34,7 @@ class CarService:
         return Car.query.filter(Car.car_owner_id == user.id).all()
 
     @staticmethod
-    def find_by_id(id: int):
+    def find_by_id(id: int) -> Car:
         return Car.query.filter(Car.id == id).first()
 
     @staticmethod

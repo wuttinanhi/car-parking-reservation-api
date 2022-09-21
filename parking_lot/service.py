@@ -36,3 +36,8 @@ class ParkingLotService:
     @staticmethod
     def get_open_parking_lot() -> List[ParkingLot]:
         return ParkingLot.query.filter(ParkingLot.open_status == True).all()
+
+    @staticmethod
+    def is_available(parking_lot: ParkingLot):
+        # TODO: need implement
+        pass

@@ -7,7 +7,7 @@
     "python.languageServer": "Pylance",
     "python.terminal.activateEnvironment": true,
     "python.terminal.activateEnvInCurrentTerminal": true,
-    "[python]": {
+        "[python]": {
         "editor.wordBasedSuggestions": false,
         "editor.formatOnSave": true,
         "editor.codeActionsOnSave": {

@@ -13,21 +13,19 @@ class Reservation(Base):
     car_id = Column(Integer())
     parking_lot_id = Column(Integer())
     start_time = Column(DateTime, nullable=False)
-    end_time = Column(DateTime, nullable=False)
+    end_time = Column(DateTime)
 
     def __init__(
         self,
         user_id: int,
         car_id: int,
         parking_lot_id: int,
-        start_time: datetime,
-        end_time: datetime
+        start_time: datetime
     ):
         self.user_id = user_id
         self.car_id = car_id
         self.parking_lot_id = parking_lot_id
         self.start_time = start_time
-        self.end_time = end_time
 
     def __repr__(self):
         return f'<Reservation {self.id}>'
