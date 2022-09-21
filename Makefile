@@ -1,7 +1,7 @@
 .PHONY: mock run dev
 
 mock:
-	python -m mock.mock
+	python -m mock.run
 
 freeze:
 	pip freeze > requirements.txt

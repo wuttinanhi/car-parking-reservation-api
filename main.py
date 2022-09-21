@@ -2,16 +2,16 @@
     main
 '''
 
-from dotenv import load_dotenv
 from flask import Flask
 
 from auth import auth_blueprint
 from car import car_blueprint
 from database.database import db_session, init_db
+from env import load_env
 from parking_lot import parking_lot_blueprint
 
 # load env
-load_dotenv()
+load_env()
 
 # create app
 app = Flask(__name__)
