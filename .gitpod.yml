@@ -6,12 +6,13 @@ tasks:
   - name: Setup Workspace
     before: |
       pyenv install --force 3.9.13
+      /home/gitpod/.pyenv/versions/3.9.13/bin/python -m pip install -U pylint 
       python -m venv venv
       . venv/bin/activate
-    init: make install
+    init: |
+      make install
     command: | 
       docker compose -f "docker-compose.dev.yml" up -d --build
-      . venv/bin/activate
 
 ports:
   - port: 5000
