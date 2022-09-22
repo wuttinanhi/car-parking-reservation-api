@@ -85,7 +85,7 @@ class ReservationService:
         return True
 
     @staticmethod
-    def find_by_id(id: int):
+    def find_by_id(id: int) -> Reservation:
         return Reservation.query.filter(Reservation.id == id).first()
 
     @staticmethod

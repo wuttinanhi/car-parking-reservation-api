@@ -154,5 +154,57 @@
     "headers": [],
     "params": [],
     "tests": []
+  },
+  {
+    "_id": "1f7bd7e6-a7d0-44ee-ba5f-4a6eb6c67fc6",
+    "colId": "012cf620-077a-4198-96bf-73ff5651e37d",
+    "containerId": "",
+    "name": "create",
+    "url": "{{BASE_API_URL}}/reservation/create",
+    "method": "POST",
+    "sortNum": 10000,
+    "created": "2022-09-22T17:32:40.902Z",
+    "modified": "2022-09-22T17:33:23.836Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"car_id\": 1,\n  \"parking_lot_id\": 1\n}\n",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "d3b2acc6-0f3f-407e-80ff-c1713655ac17",
+    "colId": "012cf620-077a-4198-96bf-73ff5651e37d",
+    "containerId": "",
+    "name": "remove",
+    "url": "{{BASE_API_URL}}/reservation/end",
+    "method": "DELETE",
+    "sortNum": 20000,
+    "created": "2022-09-22T17:32:40.903Z",
+    "modified": "2022-09-22T17:43:06.147Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"reservation_id\": 5\n}\n",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "3abb282d-365e-4a5c-bcb3-2d2f3cb4d005",
+    "colId": "012cf620-077a-4198-96bf-73ff5651e37d",
+    "containerId": "",
+    "name": "user_reservation",
+    "url": "{{BASE_API_URL}}/reservation/user_reservation",
+    "method": "GET",
+    "sortNum": 30000,
+    "created": "2022-09-22T17:32:40.905Z",
+    "modified": "2022-09-22T17:36:55.662Z",
+    "headers": [],
+    "params": [],
+    "tests": []
   }
 ]

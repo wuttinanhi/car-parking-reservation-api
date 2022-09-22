@@ -14,6 +14,7 @@ from car import car_blueprint
 from database.database import db_session, init_db
 from env_wrapper import load_env
 from parking_lot import parking_lot_blueprint
+from reservation.blueprint import blueprint as reservation_blueprint
 
 # load env
 load_env()
@@ -26,6 +27,7 @@ app = Flask(__name__)
 app.register_blueprint(auth_blueprint)
 app.register_blueprint(car_blueprint)
 app.register_blueprint(parking_lot_blueprint)
+app.register_blueprint(reservation_blueprint)
 
 
 # shutdown database session when request context end
@@ -46,6 +48,7 @@ def hello_world():
 
 @app.errorhandler(Exception)
 def error_handle(err: Exception):
+    print(str(err))
     if issubclass(type(err), ValidationError):
         return str(err), BAD_REQUEST
     if issubclass(type(err), HTTPException):
