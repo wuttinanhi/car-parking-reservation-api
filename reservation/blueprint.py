@@ -73,10 +73,10 @@ def end_reservation():
 
 @blueprint.route('/user_reservation', methods=['GET'])
 @login_required
-def all_user_reservation():
+def user_reservation():
     user = GetUser()
     response = []
-    all_reservations = ReservationService.get_all_user_reservation(user)
+    all_reservations = ReservationService.get_user_reservation(user)
     for car in all_reservations:
         response.append(car.json())
     return response

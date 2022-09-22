@@ -89,5 +89,5 @@ class ReservationService:
         return Reservation.query.filter(Reservation.id == id).first()
 
     @staticmethod
-    def get_all_user_reservation(user: User) -> List[Reservation]:
+    def get_user_reservation(user: User) -> List[Reservation]:
         return Reservation.query.where(Reservation.user_id == user.id).all()
