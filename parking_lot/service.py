@@ -26,7 +26,7 @@ class ParkingLotService:
         db_session.commit()
 
     @staticmethod
-    def find_by_id(id: int):
+    def find_by_id(id: int) -> ParkingLot:
         return ParkingLot.query.filter(ParkingLot.id == id).first()
 
     @staticmethod

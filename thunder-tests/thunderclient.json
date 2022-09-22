@@ -131,12 +131,12 @@
     "method": "DELETE",
     "sortNum": 20000,
     "created": "2022-09-20T19:16:56.661Z",
-    "modified": "2022-09-22T18:00:08.543Z",
+    "modified": "2022-09-22T18:06:50.285Z",
     "headers": [],
     "params": [],
     "body": {
       "type": "json",
-      "raw": "{\n  \"parking_lot_id\": 1\n}\n",
+      "raw": "{\n  \"parking_lot_id\": 2\n}\n",
       "form": []
     },
     "tests": []
@@ -178,7 +178,7 @@
     "_id": "d3b2acc6-0f3f-407e-80ff-c1713655ac17",
     "colId": "012cf620-077a-4198-96bf-73ff5651e37d",
     "containerId": "",
-    "name": "remove",
+    "name": "end",
     "url": "{{BASE_API_URL}}/reservation/end",
     "method": "DELETE",
     "sortNum": 20000,

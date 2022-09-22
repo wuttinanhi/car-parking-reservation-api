@@ -3,8 +3,8 @@
 '''
 
 
-from http.client import (BAD_REQUEST, CREATED, INTERNAL_SERVER_ERROR,
-                         NOT_FOUND, OK, HTTPException)
+from http.client import (BAD_REQUEST, CREATED, FORBIDDEN,
+                         INTERNAL_SERVER_ERROR, NOT_FOUND, OK)
 
 from auth.decorator import admin_only, login_required
 from flask import Blueprint, request
@@ -42,10 +42,18 @@ def add_parking_lot():
 def remove_parking_lot():
     data = ValidateRequest(ParkingLotDeleteDto, request)
     parking_lot = ParkingLotService.find_by_id(data.parking_lot_id)
-    if parking_lot:
-        ParkingLotService.remove(parking_lot)
-        return {"message": "Parking lot deleted."}, OK
-    return {"error": "Parking lot not found!"}, NOT_FOUND
+
+    # check is parking lot none
+    if parking_lot == None:
+        return {"error": "Parking lot not found!"}, NOT_FOUND
+
+    # check parking lot valid for delete
+    is_available = ParkingLotService.is_parking_lot_available(parking_lot)
+    if is_available == False:
+        return {"error": "Parking lot busy!"}, FORBIDDEN
+
+    ParkingLotService.remove(parking_lot)
+    return {"message": "Parking lot deleted."}, OK
 
 
 @blueprint.route('/available', methods=['GET'])
