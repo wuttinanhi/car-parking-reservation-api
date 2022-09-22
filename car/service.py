@@ -44,3 +44,26 @@ class CarService:
     @staticmethod
     def get_all_cars_by_user(user: User) -> List[Car]:
         return Car.query.filter(Car.car_owner_id == user.id).all()
+
+    @staticmethod
+    def is_car_parking(car: Car):
+        result = db_session.execute(
+            """
+                # check parking car
+
+                SELECT 
+                    *
+                FROM
+                    reservation
+                LEFT JOIN
+                    cars
+                ON
+                    reservation.car_id = cars.id
+                WHERE
+                    reservation.end_time IS NULL
+                    AND
+                    cars.id = :car_id
+            """,
+            {"car_id": car.id}
+        )
+        return len(result.all()) >= 1
