@@ -8,8 +8,7 @@ from parking_lot.model import ParkingLot
 from parking_lot.service import ParkingLotService
 from user.model import User
 from user.service import UserService
-from werkzeug.exceptions import (Conflict, Forbidden, InternalServerError,
-                                 NotFound)
+from werkzeug.exceptions import Conflict, Forbidden, NotFound
 
 from reservation.model import Reservation
 
@@ -35,13 +34,12 @@ class ReservationService:
             # commit to database
             db_session.add(reservation)
             db_session.commit()
+            # return created reservation
             return reservation
         except Exception as err:
             db_session.rollback()
-            print(err)
-            raise InternalServerError(
-                "Something error when creating reservation!"
-            )
+            # print(err)
+            raise err
 
     @staticmethod
     def end_reservation(reservation: Reservation) -> None:
@@ -60,7 +58,12 @@ class ReservationService:
         # check is car valid
         car = CarService.find_by_id(reservation.car_id)
         if car == None:
-            raise NotFound("Car not found!")
+            raise NotFound(f"Car #{reservation.car_id} not found!")
+
+        # check is car already park
+        is_car_parking = CarService.is_car_parking(car)
+        if is_car_parking == True:
+            raise Forbidden(f"Car #{car.id} already parking!")
 
         # check is user own this car
         user_own_car = car.car_owner_id == user.id
@@ -70,12 +73,13 @@ class ReservationService:
         # check is parking lot valid
         parking_lot = ParkingLotService.find_by_id(reservation.parking_lot_id)
         if parking_lot == None:
-            raise NotFound("Parking lot not found!")
+            raise NotFound(f"Parking lot #{parking_lot.id} not found!")
 
         # check is parking lot available
-        parking_lot_available = ParkingLotService.is_available(parking_lot)
+        parking_lot_available = ParkingLotService.is_parking_lot_available(
+            parking_lot)
         if parking_lot_available == False:
-            raise Conflict("Parking lot not available!")
+            raise Conflict(f"Parking lot #{parking_lot.id} not available!")
 
         # successful validation
         return True
