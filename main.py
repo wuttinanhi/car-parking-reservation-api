@@ -48,9 +48,11 @@ def hello_world():
 
 @app.errorhandler(Exception)
 def error_handle(err: Exception):
-    print(str(err))
+    # web error
     if issubclass(type(err), ValidationError):
         return str(err), BAD_REQUEST
     if issubclass(type(err), HTTPException):
         return {'error': err.description}, err.code
+    # internal error
+    print(err)
     return {'error': "Internal server exception!"}, INTERNAL_SERVER_ERROR
