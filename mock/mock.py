@@ -31,8 +31,9 @@ class Mock:
         user = UserService.find_by_email("test@example.com")
 
         # mock user car
-        car_a = CarService.add(user, "A11111", "Tesla")
-        car_b = CarService.add(user, "A22222", "Starship")
+        car_1 = CarService.add(user, "A11111", "Tesla")
+        car_2 = CarService.add(user, "A22222", "Starship")
+        car_3 = CarService.add(user, "A33333", "Falcon9")
 
         # get all car
         # user_cars = CarService.find_all_car_by_user(user)
@@ -46,10 +47,79 @@ class Mock:
 
         # mock reservation
         reservation_1 = ReservationService.create_reservation(
-            user, car_a, parking_lot_1, datetime.utcnow())
+            user,
+            car_1,
+            parking_lot_1,
+            datetime.utcnow()
+        )
 
         # end created reservation
         ReservationService.end_reservation(reservation_1)
+
+        # reservation_2 = ReservationService.create_reservation(
+        #     user,
+        #     car_1,
+        #     parking_lot_1,
+        #     datetime.utcnow()
+        # )
+
+        reservation_2 = ReservationService.create_reservation(
+            user,
+            car_2,
+            parking_lot_2,
+            datetime.utcnow()
+        )
+
+        reservation_3 = ReservationService.create_reservation(
+            user,
+            car_3,
+            parking_lot_3,
+            datetime.utcnow()
+        )
+
+        # debug
+        print(ParkingLotService.is_parking_lot_available(parking_lot_1))
+        print(ParkingLotService.is_parking_lot_available(parking_lot_2))
+        print(ParkingLotService.is_parking_lot_available(parking_lot_3))
+
+        # try create reservation on busy parking lot
+        try:
+            ReservationService.create_reservation(
+                user,
+                car_1,
+                parking_lot_1,
+                datetime.utcnow()
+            )
+        except Exception as e:
+            print(e)
+
+        try:
+            ReservationService.end_reservation(reservation_2)
+            t2_reserve = ReservationService.create_reservation(
+                user,
+                car_2,
+                parking_lot_2,
+                datetime.utcnow()
+            )
+            ReservationService.end_reservation(t2_reserve)
+        except Exception as e:
+            print(e)
+
+        try:
+            t_reserve = ReservationService.create_reservation(
+                user,
+                car_3,
+                parking_lot_3,
+                datetime.utcnow()
+            )
+            ReservationService.end_reservation(t_reserve)
+        except Exception as e:
+            print(e)
+
+        # debug
+        print(ParkingLotService.is_parking_lot_available(parking_lot_1))
+        print(ParkingLotService.is_parking_lot_available(parking_lot_2))
+        print(ParkingLotService.is_parking_lot_available(parking_lot_3))
 
         # remove database session
         db_session.remove()
