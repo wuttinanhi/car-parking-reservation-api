@@ -52,9 +52,14 @@ def remove_parking_lot():
 @login_required
 def all_parking_lot():
     response = []
-    all_parking_lots = ParkingLotService.get_all_parking_lot()
-    for car in all_parking_lots:
-        response.append(car.json())
+    parking_lots = ParkingLotService.get_all_parking_lot_with_available_status()
+    for row in parking_lots:
+        response.append({
+            'id': row['id'],
+            'location': row["location"],
+            'open_status': row["open_status"],
+            'available': row["available"]
+        })
     return response
 
 
