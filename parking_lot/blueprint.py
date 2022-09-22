@@ -6,7 +6,7 @@
 from http.client import (BAD_REQUEST, CREATED, INTERNAL_SERVER_ERROR,
                          NOT_FOUND, OK, HTTPException)
 
-from auth.decorator import login_required
+from auth.decorator import admin_only, login_required
 from flask import Blueprint, request
 from marshmallow import Schema, ValidationError, fields, validate
 from util.validate_request import ValidateRequest
@@ -30,7 +30,7 @@ class ParkingLotDeleteDto(Schema):
 
 
 @blueprint.route('/add', methods=['POST'])
-@login_required
+@admin_only
 def add_parking_lot():
     data = ValidateRequest(ParkingLotAddDto, request)
     ParkingLotService.add(data.location, data.open_status)
@@ -38,7 +38,7 @@ def add_parking_lot():
 
 
 @blueprint.route('/remove', methods=['DELETE'])
-@login_required
+@admin_only
 def remove_parking_lot():
     data = ValidateRequest(ParkingLotDeleteDto, request)
     parking_lot = ParkingLotService.find_by_id(data.parking_lot_id)
