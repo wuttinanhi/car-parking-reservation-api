@@ -48,7 +48,7 @@ def remove_parking_lot():
     return {"error": "Parking lot not found!"}, NOT_FOUND
 
 
-@blueprint.route('/all', methods=['GET'])
+@blueprint.route('/available', methods=['GET'])
 @login_required
 def all_parking_lot():
     response = []
