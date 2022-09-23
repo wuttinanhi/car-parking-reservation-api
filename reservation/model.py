@@ -6,7 +6,7 @@ from sqlalchemy import Column, DateTime, Integer
 
 
 class Reservation(Base):
-    __tablename__ = 'reservation'
+    __tablename__ = 'reservations'
 
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer())

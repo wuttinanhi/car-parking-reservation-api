@@ -46,15 +46,15 @@ class ParkingLotService:
                 FROM 
                     (
                         SELECT
-                            reservation.*,
+                            reservations.*,
                             (
                                 CASE
-                                    WHEN reservation.end_time IS NULL THEN "parking"
+                                    WHEN reservations.end_time IS NULL THEN "parking"
                                     ELSE "ended"
                                 END
                             ) AS parking_status
                         FROM 
-                            reservation
+                            reservations
                     ) AS t1 
                 WHERE
                     t1.parking_status = "parking"
@@ -77,23 +77,23 @@ class ParkingLotService:
                 ANY_VALUE(t1.available) AS available
             FROM (
                 SELECT 
-                    parking_lot.id,
-                    parking_lot.location,
-                    parking_lot.open_status,
+                    parking_lots.id,
+                    parking_lots.location,
+                    parking_lots.open_status,
                     (
                         CASE
-                            WHEN reservation.end_time IS NOT NULL AND parking_lot.open_status = 1 THEN 1
+                            WHEN reservations.end_time IS NOT NULL AND parking_lots.open_status = 1 THEN 1
                             ELSE 0
                         END
                     ) AS available
                 FROM
-                    parking_lot
+                    parking_lots
                 LEFT JOIN
-                    reservation
+                    reservations
                 ON 
-                    parking_lot.id = reservation.parking_lot_id
+                    parking_lots.id = reservations.parking_lots_id
                 ORDER BY
-                    parking_lot.id ASC
+                    parking_lots.id ASC
             )  AS t1
             GROUP BY
                 t1.id

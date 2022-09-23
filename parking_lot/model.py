@@ -3,7 +3,7 @@ from sqlalchemy import Boolean, Column, Integer, String
 
 
 class ParkingLot(Base):
-    __tablename__ = 'parking_lot'
+    __tablename__ = 'parking_lots'
 
     id = Column(Integer, primary_key=True)
     location = Column(String(100))

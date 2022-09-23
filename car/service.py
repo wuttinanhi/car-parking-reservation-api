@@ -54,13 +54,13 @@ class CarService:
                 SELECT 
                     *
                 FROM
-                    reservation
+                    reservations
                 LEFT JOIN
                     cars
                 ON
-                    reservation.car_id = cars.id
+                    reservations.car_id = cars.id
                 WHERE
-                    reservation.end_time IS NULL
+                    reservations.end_time IS NULL
                     AND
                     cars.id = :car_id
             """,
