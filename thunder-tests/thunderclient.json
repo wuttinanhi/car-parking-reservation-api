@@ -206,5 +206,38 @@
     "headers": [],
     "params": [],
     "tests": []
+  },
+  {
+    "_id": "f2428533-565e-4672-891b-d49cb42d66d4",
+    "colId": "f90ee781-3c54-402d-91c9-a42b2294ec99",
+    "containerId": "",
+    "name": "set",
+    "url": "{{BASE_API_URL}}/settings/set",
+    "method": "POST",
+    "sortNum": 10000,
+    "created": "2022-09-23T13:08:25.887Z",
+    "modified": "2022-09-23T13:12:13.848Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"charge_within_hour\": 1,\n  \"charge_more_than_a_hour\": 2.00,\n  \"charge_more_than_a_day\": 3.14\n}\n",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "3d3f5fd0-3afb-4b24-82bf-063ca2b77c25",
+    "colId": "f90ee781-3c54-402d-91c9-a42b2294ec99",
+    "containerId": "",
+    "name": "get",
+    "url": "{{BASE_API_URL}}/settings/get",
+    "method": "GET",
+    "sortNum": 15000,
+    "created": "2022-09-23T13:11:42.519Z",
+    "modified": "2022-09-23T13:11:57.330Z",
+    "headers": [],
+    "params": [],
+    "tests": []
   }
 ]

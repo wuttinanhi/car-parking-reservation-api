@@ -15,6 +15,7 @@ from database.database import db_session, init_db
 from env_wrapper import load_env
 from parking_lot import parking_lot_blueprint
 from reservation.blueprint import blueprint as reservation_blueprint
+from settings.blueprint import blueprint as settings_blueprint
 
 # load env
 load_env()
@@ -28,9 +29,11 @@ app.register_blueprint(auth_blueprint)
 app.register_blueprint(car_blueprint)
 app.register_blueprint(parking_lot_blueprint)
 app.register_blueprint(reservation_blueprint)
-
+app.register_blueprint(settings_blueprint)
 
 # shutdown database session when request context end
+
+
 @app.teardown_appcontext
 def shutdown_session(__exception=None):
     db_session.remove()

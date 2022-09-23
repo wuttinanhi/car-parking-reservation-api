@@ -67,5 +67,26 @@
       "tests": [],
       "envId": "99e59d5a-e5fa-450f-9cc1-4ade3a66969b"
     }
+  },
+  {
+    "_id": "f90ee781-3c54-402d-91c9-a42b2294ec99",
+    "colName": "settings",
+    "created": "2022-09-23T13:08:25.885Z",
+    "sortNum": 50000,
+    "folders": [],
+    "settings": {
+      "headers": [
+        {
+          "name": "X-API-KEY",
+          "value": "@Dev12345"
+        }
+      ],
+      "auth": {
+        "type": "bearer",
+        "bearer": "{{JWT_TOKEN}}"
+      },
+      "tests": [],
+      "envId": "99e59d5a-e5fa-450f-9cc1-4ade3a66969b"
+    }
   }
 ]
