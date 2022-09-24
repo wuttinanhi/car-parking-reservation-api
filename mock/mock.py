@@ -62,11 +62,11 @@ class Mock:
 
         # end created reservation
         ReservationService.end_reservation(
-            reservation_1, reservation_1 + timedelta(minutes=5))
+            reservation_1,
+            reservation_1.start_time + timedelta(hours=8)
+        )
 
-        charge = PaymentService.calculate_charge(reservation_1)
-        to_hour = charge.seconds / 3600
-        print(to_hour)
+        PaymentService.create_invoice(reservation_1)
 
         # reservation_2 = ReservationService.create_reservation(
         #     user,
@@ -75,19 +75,19 @@ class Mock:
         #     datetime.utcnow()
         # )
 
-        reservation_2 = ReservationService.create_reservation(
-            user,
-            car_2,
-            parking_lot_2,
-            datetime.utcnow()
-        )
+        # reservation_2 = ReservationService.create_reservation(
+        #     user,
+        #     car_2,
+        #     parking_lot_2,
+        #     datetime.utcnow()
+        # )
 
-        reservation_3 = ReservationService.create_reservation(
-            user,
-            car_3,
-            parking_lot_3,
-            datetime.utcnow()
-        )
+        # reservation_3 = ReservationService.create_reservation(
+        #     user,
+        #     car_3,
+        #     parking_lot_3,
+        #     datetime.utcnow()
+        # )
 
         # debug
         # print(ParkingLotService.is_parking_lot_available(parking_lot_1))

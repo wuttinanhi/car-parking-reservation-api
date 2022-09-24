@@ -1,0 +1,53 @@
+import enum
+from datetime import datetime
+
+from database import Base
+from sqlalchemy import Column, DateTime, Enum, Float, Integer, String
+
+
+class InvoiceStatus(enum.Enum):
+    UNPAID = "UNPAID"
+    PAID = "PAID"
+    CANCELED = "CANCELED"
+    REFUNDED = "REFUNDED"
+
+
+class Invoice(Base):
+    __tablename__ = 'invoices'
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(String(100), nullable=False)
+    reservation_id = Column(Integer(), nullable=False)
+    charge_amount = Column(Float(), nullable=False)
+    create_date = Column(DateTime(), nullable=False)
+    status = Column(Enum(InvoiceStatus), nullable=False)
+    description = Column(String(100))
+
+    def __init__(
+        self,
+        user_id: int,
+        reservation_id: int,
+        charge_amount: float,
+        create_date: datetime,
+        status: enum,
+        description: str
+    ):
+        self.user_id = user_id
+        self.reservation_id = reservation_id
+        self.charge_amount = charge_amount
+        self.create_date = create_date
+        self.status = status
+        self.description = description
+
+    def __repr__(self):
+        return f'<Invoice {self.id}>'
+
+    def json(self):
+        return {
+            'invoice_id': self.id,
+            'invoice_user_id': self.user_id,
+            'invoice_reservation_id': self.reservation_id,
+            'invoice_charge_amount': self.charge_amount,
+            'invoice_create_date': self.create_date,
+            "invoice_status": self.status
+        }
