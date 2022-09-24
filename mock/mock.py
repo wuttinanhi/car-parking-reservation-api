@@ -2,11 +2,12 @@
     mock class
 """
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from car.service import CarService
 from database.database import Base, db_session, engine, init_db
 from parking_lot.service import ParkingLotService
+from payment.service import PaymentService
 from reservation.service import ReservationService
 from settings.model import Setting
 from settings.service import SettingService
@@ -60,7 +61,12 @@ class Mock:
         )
 
         # end created reservation
-        ReservationService.end_reservation(reservation_1)
+        ReservationService.end_reservation(
+            reservation_1, reservation_1 + timedelta(minutes=5))
+
+        charge = PaymentService.calculate_charge(reservation_1)
+        to_hour = charge.seconds / 3600
+        print(to_hour)
 
         # reservation_2 = ReservationService.create_reservation(
         #     user,
@@ -84,48 +90,43 @@ class Mock:
         )
 
         # debug
-        print(ParkingLotService.is_parking_lot_available(parking_lot_1))
-        print(ParkingLotService.is_parking_lot_available(parking_lot_2))
-        print(ParkingLotService.is_parking_lot_available(parking_lot_3))
+        # print(ParkingLotService.is_parking_lot_available(parking_lot_1))
+        # print(ParkingLotService.is_parking_lot_available(parking_lot_2))
+        # print(ParkingLotService.is_parking_lot_available(parking_lot_3))
 
         # try create reservation on busy parking lot
-        try:
-            ReservationService.create_reservation(
-                user,
-                car_1,
-                parking_lot_1,
-                datetime.utcnow()
-            )
-        except Exception as e:
-            print(e)
+        # try:
+        #     ReservationService.create_reservation(
+        #         user,
+        #         car_1,
+        #         parking_lot_1,
+        #         datetime.utcnow()
+        #     )
+        # except Exception as e:
+        #     print(e)
 
-        try:
-            ReservationService.end_reservation(reservation_2)
-            t2_reserve = ReservationService.create_reservation(
-                user,
-                car_2,
-                parking_lot_2,
-                datetime.utcnow()
-            )
-            ReservationService.end_reservation(t2_reserve)
-        except Exception as e:
-            print(e)
+        # try:
+        #     ReservationService.end_reservation(reservation_2)
+        #     t2_reserve = ReservationService.create_reservation(
+        #         user,
+        #         car_2,
+        #         parking_lot_2,
+        #         datetime.utcnow()
+        #     )
+        #     ReservationService.end_reservation(t2_reserve)
+        # except Exception as e:
+        #     print(e)
 
-        try:
-            t_reserve = ReservationService.create_reservation(
-                user,
-                car_3,
-                parking_lot_3,
-                datetime.utcnow()
-            )
-            ReservationService.end_reservation(t_reserve)
-        except Exception as e:
-            print(e)
-
-        # debug
-        print(ParkingLotService.is_parking_lot_available(parking_lot_1))
-        print(ParkingLotService.is_parking_lot_available(parking_lot_2))
-        print(ParkingLotService.is_parking_lot_available(parking_lot_3))
+        # try:
+        #     t_reserve = ReservationService.create_reservation(
+        #         user,
+        #         car_3,
+        #         parking_lot_3,
+        #         datetime.utcnow()
+        #     )
+        #     ReservationService.end_reservation(t_reserve)
+        # except Exception as e:
+        #     print(e)
 
         # remove database session
         db_session.remove()

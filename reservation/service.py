@@ -42,10 +42,10 @@ class ReservationService:
             raise err
 
     @staticmethod
-    def end_reservation(reservation: Reservation) -> None:
+    def end_reservation(reservation: Reservation, end_time=datetime.utcnow()) -> None:
         db_session.query(Reservation).filter(
             Reservation.id == reservation.id
-        ).update({"end_time": reservation.start_time + timedelta(minutes=5)})
+        ).update({"end_time": end_time})
         db_session.commit()
 
     @staticmethod
