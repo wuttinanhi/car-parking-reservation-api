@@ -11,6 +11,7 @@ from auth.function import GetUser
 from car.service import CarService
 from flask import Blueprint, request
 from marshmallow import Schema, fields
+from payment.service import PaymentService
 from util.validate_request import ValidateRequest
 
 from reservation.service import ParkingLotService, ReservationService
@@ -65,6 +66,11 @@ def end_reservation():
 
         # end reservation
         ReservationService.end_reservation(reservation)
+
+        # create invoice
+        PaymentService.create_invoice(reservation)
+
+        # return success response
         return {"message": "Reservation ended."}, OK
 
     # reservation not found

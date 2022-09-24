@@ -28,7 +28,7 @@ class Mock:
     @staticmethod
     def mock():
         # mock setting
-        setting = Setting(0.0, 1.0, 100.0)
+        setting = Setting(0.0, 10.0, 100.0)
         SettingService.set_settings(setting)
 
         # mock user
@@ -63,10 +63,15 @@ class Mock:
         # end created reservation
         ReservationService.end_reservation(
             reservation_1,
-            reservation_1.start_time + timedelta(hours=8)
+            reservation_1.start_time + timedelta(hours=1)
         )
 
-        PaymentService.create_invoice(reservation_1)
+        PaymentService.setup_payment()
+
+        invoice = PaymentService.create_invoice(reservation_1)
+        cs = PaymentService.create_pay_token(invoice)
+
+        print(cs)
 
         # reservation_2 = ReservationService.create_reservation(
         #     user,

@@ -15,12 +15,13 @@ class InvoiceStatus(enum.Enum):
 class Invoice(Base):
     __tablename__ = 'invoices'
 
-    id = Column(Integer, primary_key=True)
-    user_id = Column(String(100), nullable=False)
+    id = Column(Integer(), primary_key=True)
+    user_id = Column(Integer(), nullable=False)
     reservation_id = Column(Integer(), nullable=False)
     charge_amount = Column(Float(), nullable=False)
     create_date = Column(DateTime(), nullable=False)
     status = Column(Enum(InvoiceStatus), nullable=False)
+    stripe_payment_id = Column(String(100))
     description = Column(String(100))
 
     def __init__(

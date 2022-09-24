@@ -88,5 +88,21 @@
       "tests": [],
       "envId": "99e59d5a-e5fa-450f-9cc1-4ade3a66969b"
     }
+  },
+  {
+    "_id": "e9e3d3d8-d79c-43e7-b6ea-dbb24aa38d46",
+    "colName": "payment",
+    "created": "2022-09-24T22:50:51.699Z",
+    "sortNum": 60000,
+    "folders": [],
+    "settings": {
+      "headers": [],
+      "auth": {
+        "type": "bearer",
+        "bearer": "{{JWT_TOKEN}}"
+      },
+      "tests": [],
+      "envId": "99e59d5a-e5fa-450f-9cc1-4ade3a66969b"
+    }
   }
 ]

@@ -183,12 +183,12 @@
     "method": "DELETE",
     "sortNum": 20000,
     "created": "2022-09-22T17:32:40.903Z",
-    "modified": "2022-09-22T17:43:06.147Z",
+    "modified": "2022-09-24T22:50:38.422Z",
     "headers": [],
     "params": [],
     "body": {
       "type": "json",
-      "raw": "{\n  \"reservation_id\": 5\n}\n",
+      "raw": "{\n  \"reservation_id\": 2\n}\n",
       "form": []
     },
     "tests": []
@@ -236,6 +236,58 @@
     "sortNum": 15000,
     "created": "2022-09-23T13:11:42.519Z",
     "modified": "2022-09-23T13:11:57.330Z",
+    "headers": [],
+    "params": [],
+    "tests": []
+  },
+  {
+    "_id": "ea8d60ea-e825-402b-ab7e-c8184188a17b",
+    "colId": "e9e3d3d8-d79c-43e7-b6ea-dbb24aa38d46",
+    "containerId": "",
+    "name": "create",
+    "url": "{{BASE_API_URL}}/reservation/create",
+    "method": "POST",
+    "sortNum": 10000,
+    "created": "2022-09-24T22:50:51.699Z",
+    "modified": "2022-09-24T22:50:51.699Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"car_id\": 1,\n  \"parking_lot_id\": 1\n}\n",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "9d35bec7-afd7-4c42-9cd9-520a15ec94e9",
+    "colId": "e9e3d3d8-d79c-43e7-b6ea-dbb24aa38d46",
+    "containerId": "",
+    "name": "end",
+    "url": "{{BASE_API_URL}}/reservation/end",
+    "method": "DELETE",
+    "sortNum": 20000,
+    "created": "2022-09-24T22:50:51.700Z",
+    "modified": "2022-09-24T22:50:51.700Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"reservation_id\": 2\n}\n",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "06a50f2e-eeee-4419-99b7-11feb2eaf8c2",
+    "colId": "e9e3d3d8-d79c-43e7-b6ea-dbb24aa38d46",
+    "containerId": "",
+    "name": "user_reservation",
+    "url": "{{BASE_API_URL}}/reservation/user_reservation",
+    "method": "GET",
+    "sortNum": 30000,
+    "created": "2022-09-24T22:50:51.701Z",
+    "modified": "2022-09-24T22:50:51.701Z",
     "headers": [],
     "params": [],
     "tests": []

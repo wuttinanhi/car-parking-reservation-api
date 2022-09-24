@@ -14,6 +14,8 @@ from car import car_blueprint
 from database.database import db_session, init_db
 from env_wrapper import load_env
 from parking_lot import parking_lot_blueprint
+from payment.blueprint import blueprint as payment_blueprint
+from payment.service import PaymentService
 from reservation.blueprint import blueprint as reservation_blueprint
 from settings.blueprint import blueprint as settings_blueprint
 
@@ -24,12 +26,19 @@ load_env()
 # create app
 app = Flask(__name__)
 
+# initialize database
+init_db()
+
+# setup payment
+PaymentService.setup_payment()
+
 # register blueprint
 app.register_blueprint(auth_blueprint)
 app.register_blueprint(car_blueprint)
 app.register_blueprint(parking_lot_blueprint)
 app.register_blueprint(reservation_blueprint)
 app.register_blueprint(settings_blueprint)
+app.register_blueprint(payment_blueprint)
 
 # shutdown database session when request context end
 
@@ -39,16 +48,13 @@ def shutdown_session(__exception=None):
     db_session.remove()
 
 
-# initialize database
-init_db()
-
-
 # root path
 @app.route("/")
 def hello_world():
     return "<p>Hello, World!</p>"
 
 
+# global error handler
 @app.errorhandler(Exception)
 def error_handle(err: Exception):
     # web error

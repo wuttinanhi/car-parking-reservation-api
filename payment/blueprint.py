@@ -3,26 +3,21 @@
 '''
 
 
+from http.client import FORBIDDEN, NOT_FOUND
+
 from auth.decorator import login_required
 from auth.function import GetUser
-from flask import Blueprint
-from marshmallow import Schema, fields, validate
+from flask import Blueprint, request
+from marshmallow import Schema, fields
+from util.validate_request import ValidateRequest
 
 from payment.service import PaymentService
 
 blueprint = Blueprint("payment", __name__, url_prefix="/payment")
 
 
-class Payment(Schema):
-    location = fields.Str(
-        required=True,
-        validate=validate.Length(min=1, max=100)
-    )
-    open_status = fields.Boolean(required=True)
-
-
-class ParkingLotDeleteDto(Schema):
-    parking_lot_id = fields.Int(required=True)
+class PayInvoiceDto(Schema):
+    invoice_id = fields.Int(required=True)
 
 
 @blueprint.route('/user_invoice', methods=['GET'])
@@ -39,6 +34,14 @@ def list_user_invoice():
 @blueprint.route('/pay', methods=['POST'])
 @login_required
 def pay_invoice():
-    # TODO: need implement
     user = GetUser()
-    return None
+    data = ValidateRequest(PayInvoiceDto, request)
+    invoice = PaymentService.get_invoice_by_id(data.invoice_id)
+
+    if invoice == None:
+        return {"error": "Invoice not found!"}, NOT_FOUND
+    if invoice.user_id == user.id:
+        return {"error": "Invoice not own by user!"}, FORBIDDEN
+    if invoice:
+        stripe_client_secret = PaymentService.create_pay_token(invoice)
+        return {"stripe_client_secret": stripe_client_secret}
