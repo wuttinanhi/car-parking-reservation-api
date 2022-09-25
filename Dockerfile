@@ -1,5 +1,5 @@
 # For more information, please refer to https://aka.ms/vscode-docker-python
-FROM python:3.8-slim
+FROM python:3.9.14-slim-buster
 
 EXPOSE 5000
 
@@ -9,7 +9,12 @@ ENV PYTHONDONTWRITEBYTECODE=1
 # Turns off buffering for easier container logging
 ENV PYTHONUNBUFFERED=1
 
+# install dependencies for mysqlclient
+RUN apt update -y
+RUN apt install python3-dev default-libmysqlclient-dev build-essential -y
+
 # Install pip requirements
+RUN python -m pip install gunicorn
 COPY requirements.txt .
 RUN python -m pip install -r requirements.txt
 
