@@ -66,15 +66,18 @@ class Mock:
             reservation_1.start_time + timedelta(hours=1)
         )
 
-        PaymentService.setup_payment()
+        try:
+            PaymentService.setup_payment()
+            invoice = PaymentService.create_invoice(reservation_1)
 
-        invoice = PaymentService.create_invoice(reservation_1)
-        intent = PaymentService.create_pay_token(invoice)
+            intent = PaymentService.create_pay_token(invoice)
 
-        print(intent.client_secret)
-        print(intent.id)
+            print(intent.client_secret)
+            print(intent.id)
 
-        PaymentService.handle_stripe_payment(intent)
+            PaymentService.handle_stripe_payment(intent)
+        except Exception as e:
+            print(str(e))
 
         # reservation_2 = ReservationService.create_reservation(
         #     user,

@@ -91,7 +91,7 @@ class ParkingLotService:
                 LEFT JOIN
                     reservations
                 ON 
-                    parking_lots.id = reservations.parking_lots_id
+                    parking_lots.id = reservations.parking_lot_id
                 ORDER BY
                     parking_lots.id ASC
             )  AS t1
