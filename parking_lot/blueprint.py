@@ -3,14 +3,12 @@
 '''
 
 
-from http.client import (BAD_REQUEST, CREATED, FORBIDDEN,
-                         INTERNAL_SERVER_ERROR, NOT_FOUND, OK)
+from http.client import CREATED, FORBIDDEN, NOT_FOUND, OK
 
 from auth.decorator import admin_only, login_required
 from flask import Blueprint, request
-from marshmallow import Schema, ValidationError, fields, validate
+from marshmallow import Schema, fields, validate
 from util.validate_request import ValidateRequest
-from werkzeug.exceptions import HTTPException
 
 from parking_lot.service import ParkingLotService
 
@@ -69,12 +67,3 @@ def all_parking_lot():
             'available': row["available"]
         })
     return response
-
-
-@blueprint.errorhandler(Exception)
-def error_handle(err: Exception):
-    if issubclass(type(err), ValidationError):
-        return str(err), BAD_REQUEST
-    if issubclass(type(err), HTTPException):
-        return {'error': err.description}, err.code
-    return {'error': "Internal server exception!"}, INTERNAL_SERVER_ERROR
