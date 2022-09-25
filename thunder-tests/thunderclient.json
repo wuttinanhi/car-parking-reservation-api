@@ -183,12 +183,12 @@
     "method": "DELETE",
     "sortNum": 20000,
     "created": "2022-09-22T17:32:40.903Z",
-    "modified": "2022-09-24T22:50:38.422Z",
+    "modified": "2022-09-25T18:44:46.535Z",
     "headers": [],
     "params": [],
     "body": {
       "type": "json",
-      "raw": "{\n  \"reservation_id\": 2\n}\n",
+      "raw": "{\n  \"reservation_id\": 3\n}\n",
       "form": []
     },
     "tests": []
@@ -249,31 +249,12 @@
     "method": "POST",
     "sortNum": 10000,
     "created": "2022-09-24T22:50:51.699Z",
-    "modified": "2022-09-25T00:21:34.778Z",
+    "modified": "2022-09-25T18:52:05.405Z",
     "headers": [],
     "params": [],
     "body": {
       "type": "json",
-      "raw": "{\n  \"invoice_id\": 2\n}\n",
-      "form": []
-    },
-    "tests": []
-  },
-  {
-    "_id": "9d35bec7-afd7-4c42-9cd9-520a15ec94e9",
-    "colId": "e9e3d3d8-d79c-43e7-b6ea-dbb24aa38d46",
-    "containerId": "",
-    "name": "end",
-    "url": "{{BASE_API_URL}}/reservation/end",
-    "method": "DELETE",
-    "sortNum": 20000,
-    "created": "2022-09-24T22:50:51.700Z",
-    "modified": "2022-09-24T22:50:51.700Z",
-    "headers": [],
-    "params": [],
-    "body": {
-      "type": "json",
-      "raw": "{\n  \"reservation_id\": 2\n}\n",
+      "raw": "{\n  \"invoice_id\": 1\n}\n",
       "form": []
     },
     "tests": []
@@ -282,12 +263,12 @@
     "_id": "06a50f2e-eeee-4419-99b7-11feb2eaf8c2",
     "colId": "e9e3d3d8-d79c-43e7-b6ea-dbb24aa38d46",
     "containerId": "",
-    "name": "user_reservation",
-    "url": "{{BASE_API_URL}}/reservation/user_reservation",
+    "name": "user_invoice",
+    "url": "{{BASE_API_URL}}/payment/user_invoice",
     "method": "GET",
     "sortNum": 30000,
     "created": "2022-09-24T22:50:51.701Z",
-    "modified": "2022-09-24T22:50:51.701Z",
+    "modified": "2022-09-25T18:41:12.372Z",
     "headers": [],
     "params": [],
     "tests": []

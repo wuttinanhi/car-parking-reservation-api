@@ -11,6 +11,9 @@ class InvoiceStatus(enum.Enum):
     CANCELED = "CANCELED"
     REFUNDED = "REFUNDED"
 
+    def __str__(self):
+        return str(self.value)
+
 
 class Invoice(Base):
     __tablename__ = 'invoices'
@@ -50,5 +53,5 @@ class Invoice(Base):
             'invoice_reservation_id': self.reservation_id,
             'invoice_charge_amount': self.charge_amount,
             'invoice_create_date': self.create_date,
-            "invoice_status": self.status
+            "invoice_status":  str(self.status)
         }
