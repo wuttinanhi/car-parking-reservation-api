@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import List
 
 from car.model import Car
@@ -38,7 +38,7 @@ class ReservationService:
             return reservation
         except Exception as err:
             db_session.rollback()
-            # print(err)
+            print(err)
             raise err
 
     @staticmethod
@@ -77,7 +77,8 @@ class ReservationService:
 
         # check is parking lot available
         parking_lot_available = ParkingLotService.is_parking_lot_available(
-            parking_lot)
+            parking_lot
+        )
         if parking_lot_available == False:
             raise Conflict(f"Parking lot #{parking_lot.id} not available!")
 

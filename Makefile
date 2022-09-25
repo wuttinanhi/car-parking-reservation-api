@@ -1,4 +1,4 @@
-.PHONY: mock run dev
+.PHONY: mock run dev stripe-listen stripe-trigger
 
 mock:
 	python -m mock.run
@@ -14,3 +14,9 @@ run:
 
 dev:
 	flask --app main:app --debug run
+
+stripe-listen:
+	stripe listen --forward-to 127.0.0.1:5000/payment/stripe/webhook
+
+stripe-trigger:
+	stripe trigger payment_intent.succeeded

@@ -2,12 +2,13 @@
     payment blueprint
 '''
 
-
+import json
 from http.client import FORBIDDEN, NOT_FOUND
 
+import stripe
 from auth.decorator import login_required
 from auth.function import GetUser
-from flask import Blueprint, request
+from flask import Blueprint, jsonify, request
 from marshmallow import Schema, fields
 from util.validate_request import ValidateRequest
 
@@ -40,8 +41,56 @@ def pay_invoice():
 
     if invoice == None:
         return {"error": "Invoice not found!"}, NOT_FOUND
-    if invoice.user_id == user.id:
+
+    if invoice.user_id != user.id:
         return {"error": "Invoice not own by user!"}, FORBIDDEN
+
     if invoice:
-        stripe_client_secret = PaymentService.create_pay_token(invoice)
-        return {"stripe_client_secret": stripe_client_secret}
+        intent = PaymentService.create_pay_token(invoice)
+        return {"stripe_client_secret": intent.client_secret}
+
+
+@blueprint.route('/stripe/webhook', methods=['POST'])
+def stripe_webhook():
+    event = None
+    payload = request.data
+
+    # try load json payload
+    try:
+        event = json.loads(payload)
+    except:
+        print('⚠️  Webhook error while parsing basic request.' + str(e))
+        return jsonify(success=False)
+
+    # get signature header
+    sig_header = request.headers.get('stripe-signature')
+    try:
+        event = stripe.Webhook.construct_event(
+            payload,
+            sig_header,
+            PaymentService.stripe_webhook_secret
+        )
+    except stripe.error.SignatureVerificationError as e:
+        print('⚠️  Webhook signature verification failed.' + str(e))
+        return jsonify(success=False)
+
+    # check event is none
+    if event == None:
+        raise jsonify(success=False)
+
+    # handle event
+    if event and event['type'] == 'payment_intent.succeeded':
+        payment_intent: stripe.PaymentIntent = event['data']['object']
+        PaymentService.handle_stripe_payment(payment_intent)
+        print('Payment for {} succeeded'.format(payment_intent['amount']))
+    else:
+        # Unexpected event type
+        print('Unhandled event type {}'.format(event['type']))
+
+    # return success
+    return jsonify(success=True)
+
+
+@blueprint.route('/stripe/public_key', methods=['GET'])
+def stripe_public_key():
+    return PaymentService.stripe_public_key

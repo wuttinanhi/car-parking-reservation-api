@@ -10,15 +10,23 @@ from database.database import db_session
 from reservation.model import Reservation
 from settings.service import SettingService
 from user.model import User
-from werkzeug.exceptions import BadRequest, InternalServerError
+from werkzeug.exceptions import BadRequest, InternalServerError, NotFound
 
 from payment.model import Invoice, InvoiceStatus
 
 
 class PaymentService:
+    stripe_public_key: str
+    stripe_secret_key: str
+    stripe_webhook_secret: str
+
     @staticmethod
     def setup_payment():
-        stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
+        PaymentService.stripe_public_key = os.getenv("STRIPE_PUBLIC_KEY")
+        PaymentService.stripe_secret_key = os.getenv("STRIPE_SECRET_KEY")
+        stripe.api_key = PaymentService.stripe_secret_key
+        PaymentService.stripe_webhook_secret = os.getenv(
+            "STRIPE_WEBHOOK_SECRET")
 
     @staticmethod
     def calculate_charge(reservation: Reservation):
@@ -72,7 +80,7 @@ class PaymentService:
     @staticmethod
     def update_invoice(invoice: Invoice):
         try:
-            db_session.query(Invoice).update({
+            db_session.query(Invoice).filter(Invoice.id == invoice.id).update({
                 "charge_amount": invoice.charge_amount,
                 "status": invoice.status,
                 "description": invoice.description
@@ -101,7 +109,7 @@ class PaymentService:
         return Invoice.query.filter(Invoice.user_id == user.id).all()
 
     @staticmethod
-    def create_pay_token(invoice: Invoice):
+    def create_pay_token(invoice: Invoice) -> stripe.PaymentIntent:
         charge_amount = invoice.charge_amount
 
         if invoice.status != InvoiceStatus.UNPAID:
@@ -119,4 +127,17 @@ class PaymentService:
         invoice.stripe_payment_id = intent.id
         PaymentService.update_invoice(invoice)
 
-        return intent.client_secret
+        return intent
+
+    @staticmethod
+    def get_invoice_by_stripe_id(id: int) -> Invoice:
+        return Invoice.query.filter(Invoice.stripe_payment_id == id).first()
+
+    @staticmethod
+    def handle_stripe_payment(intent: stripe.PaymentIntent):
+        invoice = PaymentService.get_invoice_by_stripe_id(intent['id'])
+        if invoice:
+            invoice.status = InvoiceStatus.PAID
+            PaymentService.update_invoice(invoice)
+        else:
+            raise NotFound("Invoice not found!")

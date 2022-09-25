@@ -24,7 +24,12 @@ load_env()
 
 
 # create app
-app = Flask(__name__)
+app = Flask(
+    __name__,
+    static_folder="static",
+    template_folder="static",
+    static_url_path=""
+)
 
 # initialize database
 init_db()

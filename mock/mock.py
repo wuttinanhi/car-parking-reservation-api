@@ -69,9 +69,12 @@ class Mock:
         PaymentService.setup_payment()
 
         invoice = PaymentService.create_invoice(reservation_1)
-        cs = PaymentService.create_pay_token(invoice)
+        intent = PaymentService.create_pay_token(invoice)
 
-        print(cs)
+        print(intent.client_secret)
+        print(intent.id)
+
+        PaymentService.handle_stripe_payment(intent)
 
         # reservation_2 = ReservationService.create_reservation(
         #     user,
