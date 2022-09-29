@@ -9,7 +9,6 @@ from database.database import Base, db_session, engine, init_db
 from parking_lot.service import ParkingLotService
 from payment.service import PaymentService
 from reservation.service import ReservationService
-from settings.model import Setting
 from settings.service import SettingService
 from user.service import UserService
 
@@ -28,8 +27,7 @@ class Mock:
     @staticmethod
     def mock():
         # mock setting
-        setting = Setting(0.0, 10.0, 100.0)
-        SettingService.set_settings(setting)
+        SettingService.setup_default_settings()
 
         # mock user
         UserService.register("test@example.com", "@Test12345")

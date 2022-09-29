@@ -18,6 +18,7 @@ from payment.blueprint import blueprint as payment_blueprint
 from payment.service import PaymentService
 from reservation.blueprint import blueprint as reservation_blueprint
 from settings.blueprint import blueprint as settings_blueprint
+from settings.service import SettingService
 
 # load env
 load_env()
@@ -33,6 +34,9 @@ app = Flask(
 
 # initialize database
 init_db()
+
+# if settings not exists then create new one 
+SettingService.setup_default_settings()
 
 # setup payment
 PaymentService.setup_payment()

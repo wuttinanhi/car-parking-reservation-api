@@ -33,3 +33,13 @@ class SettingService:
         if settings is None:
             raise NotFound("Settings not found!")
         return settings
+
+    @staticmethod
+    def setup_default_settings():
+        try:
+            SettingService.get_settings()
+        except NotFound as __e:
+            setting = Setting(0.0, 10.0, 100.0)
+            SettingService.set_settings(setting)
+        except Exception as err:
+            raise Exception("Failed to create default settings!")
