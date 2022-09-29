@@ -2,13 +2,13 @@
     settings model
 """
 from database import Base
-from sqlalchemy import Column, Float
+from sqlalchemy import Column, Float, Integer
 
 
 class Setting(Base):
     __tablename__ = 'settings'
 
-    id = Column(Float, primary_key=True)
+    id = Column(Integer, primary_key=True)
     charge_within_hour = Column(Float)
     charge_more_than_a_hour = Column(Float)
     charge_more_than_a_day = Column(Float)

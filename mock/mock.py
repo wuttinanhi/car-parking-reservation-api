@@ -76,8 +76,8 @@ class Mock:
             print(intent.id)
 
             PaymentService.handle_stripe_payment(intent)
-        except Exception as e:
-            print(str(e))
+        except Exception as err:
+            print(err)
 
         # reservation_2 = ReservationService.create_reservation(
         #     user,
