@@ -1,6 +1,6 @@
-'''
+"""
     payment blueprint
-'''
+"""
 
 import json
 from http.client import FORBIDDEN, NOT_FOUND
@@ -10,6 +10,7 @@ from auth.decorator import login_required
 from auth.function import GetUser
 from flask import Blueprint, jsonify, request
 from marshmallow import Schema, fields
+from pagination.pagination import create_pagination_options_from_request
 from util.validate_request import ValidateRequest
 
 from payment.service import PaymentService
@@ -21,18 +22,19 @@ class PayInvoiceDto(Schema):
     invoice_id = fields.Int(required=True)
 
 
-@blueprint.route('/user_invoice', methods=['GET'])
+@blueprint.route("/user_invoice", methods=["GET"])
 @login_required
 def list_user_invoice():
     user = GetUser()
-    response = []
-    list = PaymentService.get_all_user_invoice(user)
-    for invoice in list:
-        response.append(invoice.json())
-    return response
+    response_list = []
+    pagination_options = create_pagination_options_from_request(request)
+    result = PaymentService.paginate_user_invoice(user, pagination_options)
+    for invoice in result:
+        response_list.append(invoice.json())
+    return response_list
 
 
-@blueprint.route('/pay', methods=['POST'])
+@blueprint.route("/pay", methods=["POST"])
 @login_required
 def pay_invoice():
     user = GetUser()
@@ -50,7 +52,7 @@ def pay_invoice():
         return {"stripe_client_secret": intent.client_secret}
 
 
-@blueprint.route('/stripe/webhook', methods=['POST'])
+@blueprint.route("/stripe/webhook", methods=["POST"])
 def stripe_webhook():
     event = None
     payload = request.data
@@ -59,19 +61,17 @@ def stripe_webhook():
     try:
         event = json.loads(payload)
     except:
-        print('⚠️  Webhook error while parsing basic request.' + str(e))
+        print("⚠️  Webhook error while parsing basic request." + str(e))
         return jsonify(success=False)
 
     # get signature header
-    sig_header = request.headers.get('stripe-signature')
+    sig_header = request.headers.get("stripe-signature")
     try:
         event = stripe.Webhook.construct_event(
-            payload,
-            sig_header,
-            PaymentService.stripe_webhook_secret
+            payload, sig_header, PaymentService.stripe_webhook_secret
         )
     except stripe.error.SignatureVerificationError as e:
-        print('⚠️  Webhook signature verification failed.' + str(e))
+        print("⚠️  Webhook signature verification failed." + str(e))
         return jsonify(success=False)
 
     # check event is none
@@ -79,18 +79,18 @@ def stripe_webhook():
         raise jsonify(success=False)
 
     # handle event
-    if event and event['type'] == 'payment_intent.succeeded':
-        payment_intent: stripe.PaymentIntent = event['data']['object']
+    if event and event["type"] == "payment_intent.succeeded":
+        payment_intent: stripe.PaymentIntent = event["data"]["object"]
         PaymentService.handle_stripe_payment(payment_intent)
-        print('Payment for {} succeeded'.format(payment_intent['amount']))
+        print("Payment for {} succeeded".format(payment_intent["amount"]))
     else:
         # Unexpected event type
-        print('Unhandled event type {}'.format(event['type']))
+        print("Unhandled event type {}".format(event["type"]))
 
     # return success
     return jsonify(success=True)
 
 
-@blueprint.route('/stripe/public_key', methods=['GET'])
+@blueprint.route("/stripe/public_key", methods=["GET"])
 def stripe_public_key():
     return PaymentService.stripe_public_key

@@ -50,32 +50,32 @@ class Mock:
         parking_lot_2 = ParkingLotService.add("Floor 2", True)
         parking_lot_3 = ParkingLotService.add("Floor 3", False)
 
-        # mock reservation
-        reservation_1 = ReservationService.create_reservation(
-            user,
-            car_1,
-            parking_lot_1,
-            datetime.utcnow()
-        )
+        for _ in range(50):
+            # mock reservation
+            reservation = ReservationService.create_reservation(
+                user, car_1, parking_lot_1, datetime.utcnow()
+            )
 
-        # end created reservation
-        ReservationService.end_reservation(
-            reservation_1,
-            reservation_1.start_time + timedelta(hours=1)
-        )
+            # end created reservation
+            ReservationService.end_reservation(
+                reservation, reservation.start_time + timedelta(hours=1)
+            )
 
-        try:
-            PaymentService.setup_payment()
-            invoice = PaymentService.create_invoice(reservation_1)
+            # create invoice
+            PaymentService.create_invoice(reservation)
 
-            intent = PaymentService.create_pay_token(invoice)
+        # try:
+        #     PaymentService.setup_payment()
+        #     invoice = PaymentService.create_invoice(reservation)
 
-            print(intent.client_secret)
-            print(intent.id)
+        #     intent = PaymentService.create_pay_token(invoice)
 
-            PaymentService.handle_stripe_payment(intent)
-        except Exception as err:
-            print(err)
+        #     print(intent.client_secret)
+        #     print(intent.id)
+
+        #     PaymentService.handle_stripe_payment(intent)
+        # except Exception as err:
+        #     print(err)
 
         # reservation_2 = ReservationService.create_reservation(
         #     user,

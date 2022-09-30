@@ -8,6 +8,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.orm.query import Query
+from sqlalchemy.orm.scoping import scoped_session
 from sqlalchemy.orm.session import Session
 
 load_env()
@@ -24,7 +25,7 @@ def get_db_session() -> Session:
     return scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))
 
 
-db_session: Session = get_db_session()
+db_session: scoped_session = get_db_session()
 
 
 class Base():

@@ -7,6 +7,7 @@ from typing import List
 
 import stripe
 from database.database import db_session
+from pagination.pagination import Pagination, PaginationOptions
 from reservation.model import Reservation
 from settings.service import SettingService
 from user.model import User
@@ -25,8 +26,7 @@ class PaymentService:
         PaymentService.stripe_public_key = os.getenv("STRIPE_PUBLIC_KEY")
         PaymentService.stripe_secret_key = os.getenv("STRIPE_SECRET_KEY")
         stripe.api_key = PaymentService.stripe_secret_key
-        PaymentService.stripe_webhook_secret = os.getenv(
-            "STRIPE_WEBHOOK_SECRET")
+        PaymentService.stripe_webhook_secret = os.getenv("STRIPE_WEBHOOK_SECRET")
 
     @staticmethod
     def calculate_charge(reservation: Reservation):
@@ -61,7 +61,7 @@ class PaymentService:
                 charge_amount,
                 datetime.utcnow(),
                 InvoiceStatus.UNPAID,
-                description
+                description,
             )
 
             # if charge amount is 0 set to paid
@@ -80,11 +80,13 @@ class PaymentService:
     @staticmethod
     def update_invoice(invoice: Invoice):
         try:
-            db_session.query(Invoice).filter(Invoice.id == invoice.id).update({
-                "charge_amount": invoice.charge_amount,
-                "status": invoice.status,
-                "description": invoice.description
-            })
+            db_session.query(Invoice).filter(Invoice.id == invoice.id).update(
+                {
+                    "charge_amount": invoice.charge_amount,
+                    "status": invoice.status,
+                    "description": invoice.description,
+                }
+            )
             db_session.commit()
         except Exception as e:
             print(e)
@@ -100,9 +102,11 @@ class PaymentService:
         return Invoice.query.filter(Invoice.reservation_id == reservation.id).first()
 
     @staticmethod
-    def paginate_invoice():
-        # TODO: need implement
-        pass
+    def paginate_user_invoice(user: User, options: PaginationOptions):
+        query = Invoice.query.filter(Invoice.user_id == user.id)
+        pagination = Pagination(query)
+        pagination.set_options(options)
+        return pagination.result()
 
     @staticmethod
     def get_all_user_invoice(user: User) -> List[Invoice]:
@@ -121,7 +125,7 @@ class PaymentService:
         intent = stripe.PaymentIntent.create(
             amount=round(charge_amount * 100),
             currency="thb",
-            payment_method_types=["card"]
+            payment_method_types=["card"],
         )
 
         invoice.stripe_payment_id = intent.id
@@ -135,7 +139,7 @@ class PaymentService:
 
     @staticmethod
     def handle_stripe_payment(intent: stripe.PaymentIntent):
-        invoice = PaymentService.get_invoice_by_stripe_id(intent['id'])
+        invoice = PaymentService.get_invoice_by_stripe_id(intent["id"])
         if invoice:
             invoice.status = InvoiceStatus.PAID
             PaymentService.update_invoice(invoice)

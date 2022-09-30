@@ -12,6 +12,7 @@
             "type": "python",
             "request": "launch",
             "module": "flask",
+            "console": "internalConsole",
             "env": {
                 "FLASK_APP": "main.py",
                 "FLASK_DEBUG": "1",
