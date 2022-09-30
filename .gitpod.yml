@@ -10,8 +10,9 @@ tasks:
       python -m venv venv
       . venv/bin/activate
     init: |
+      /workspace/car-parking-reservation-api/venv/bin/python -m pip install --upgrade pip
       make install
-    command: | 
+    command: |
       docker compose -f "docker-compose.dev.yml" up -d --build
 
 ports:
