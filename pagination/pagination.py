@@ -6,9 +6,10 @@ from enum import Enum
 
 from flask import Request
 from marshmallow import Schema, fields, validate
-from sqlalchemy import text
+from sqlalchemy import desc
 from sqlalchemy.orm.query import Query
 from util.validate_request import ValidateRequest
+from werkzeug.exceptions import BadRequest
 
 
 class PaginationSortOptions(Enum):
@@ -19,9 +20,18 @@ class PaginationSortOptions(Enum):
         return str(self.value)
 
 
+def create_order_by(model, key: str, sort: PaginationSortOptions):
+    if hasattr(model, key):
+        result = model.__dict__.get(key)
+        if sort == PaginationSortOptions.DESC:
+            result = desc(result)
+        return result
+    raise BadRequest(f"Invalid order by key!: {key}")
+
+
 class PaginationOptions(Schema):
     page = fields.Integer(required=True, validate=validate.Range(min=1))
-    limit = fields.Integer(required=True, validate=validate.Range(min=1))
+    limit = fields.Integer(required=True, validate=validate.Range(min=1, max=100))
     sort = fields.Integer(required=True, validate=validate.Range(min=0, max=1))
     order_by = fields.String(required=True)
 
@@ -33,7 +43,6 @@ def create_pagination_options_from_request(request: Request):
     options.page = int(data.page)
     options.limit = int(data.limit)
     options.order_by = data.order_by
-
 
     if int(data.sort) == 1:
         options.sort = PaginationSortOptions.DESC
@@ -55,7 +64,8 @@ def create_pagination_options(
 
 
 class Pagination:
-    def __init__(self, query: Query) -> None:
+    def __init__(self, model, query: Query) -> None:
+        self.__model = model
         self.__query = query
 
     def set_options(self, opt: PaginationOptions):
@@ -69,11 +79,13 @@ class Pagination:
         ):
             self.__sort = opt.sort
         else:
-            raise Exception(f"Invalid pagination sorting option!: {opt.sort}")
+            raise BadRequest(f"Invalid pagination sorting option!: {opt.sort}")
 
     def result(self):
         return (
-            self.__query.order_by(text(f"{self.__order_by} {self.__sort}"))
+            self.__query.order_by(
+                create_order_by(self.__model, self.__order_by, self.__sort)
+            )
             .offset(self.__offset)
             .limit(self.__limit)
             .all()

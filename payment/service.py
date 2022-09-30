@@ -104,7 +104,7 @@ class PaymentService:
     @staticmethod
     def paginate_user_invoice(user: User, options: PaginationOptions):
         query = Invoice.query.filter(Invoice.user_id == user.id)
-        pagination = Pagination(query)
+        pagination = Pagination(Invoice, query)
         pagination.set_options(options)
         return pagination.result()
 

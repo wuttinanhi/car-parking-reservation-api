@@ -50,7 +50,7 @@ class Mock:
         parking_lot_2 = ParkingLotService.add("Floor 2", True)
         parking_lot_3 = ParkingLotService.add("Floor 3", False)
 
-        for _ in range(50):
+        for i in range(1, 50):
             # mock reservation
             reservation = ReservationService.create_reservation(
                 user, car_1, parking_lot_1, datetime.utcnow()
@@ -62,7 +62,9 @@ class Mock:
             )
 
             # create invoice
-            PaymentService.create_invoice(reservation)
+            invoice = PaymentService.create_invoice(reservation)
+            invoice.charge_amount = i * 10
+            PaymentService.update_invoice(invoice)
 
         # try:
         #     PaymentService.setup_payment()

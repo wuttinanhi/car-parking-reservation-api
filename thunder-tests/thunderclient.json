@@ -264,11 +264,11 @@
     "colId": "e9e3d3d8-d79c-43e7-b6ea-dbb24aa38d46",
     "containerId": "",
     "name": "user_invoice",
-    "url": "{{BASE_API_URL}}/payment/user_invoice?page=1&limit=5&sort=0&order_by=id",
+    "url": "{{BASE_API_URL}}/payment/user_invoice?page=1&limit=10&sort=0&order_by=charge_amount",
     "method": "GET",
     "sortNum": 30000,
     "created": "2022-09-24T22:50:51.701Z",
-    "modified": "2022-09-30T07:36:59.534Z",
+    "modified": "2022-09-30T17:41:02.909Z",
     "headers": [],
     "params": [
       {
@@ -278,7 +278,7 @@
       },
       {
         "name": "limit",
-        "value": "5",
+        "value": "10",
         "isPath": false
       },
       {
@@ -288,7 +288,7 @@
       },
       {
         "name": "order_by",
-        "value": "id",
+        "value": "charge_amount",
         "isPath": false
       }
     ],
