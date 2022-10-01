@@ -1,16 +1,18 @@
-'''
+"""
     main
-'''
+"""
 
 
 from http.client import BAD_REQUEST, INTERNAL_SERVER_ERROR
 
-from flask import Flask
+from flask import Flask, request
+from flask_socketio import SocketIO, emit
 from marshmallow import ValidationError
 from werkzeug.exceptions import HTTPException
 
 from auth import auth_blueprint
 from car import car_blueprint
+from chat.handler import ChatHandler
 from database.database import db_session, init_db
 from env_wrapper import load_env
 from parking_lot import parking_lot_blueprint
@@ -26,16 +28,13 @@ load_env()
 
 # create app
 app = Flask(
-    __name__,
-    static_folder="static",
-    template_folder="static",
-    static_url_path=""
+    __name__, static_folder="static", template_folder="static", static_url_path=""
 )
 
 # initialize database
 init_db()
 
-# if settings not exists then create new one 
+# if settings not exists then create new one
 SettingService.setup_default_settings()
 
 # setup payment
@@ -70,7 +69,24 @@ def error_handle(err: Exception):
     if issubclass(type(err), ValidationError):
         return str(err), BAD_REQUEST
     if issubclass(type(err), HTTPException):
-        return {'error': err.description}, err.code
+        return {"error": err.description}, err.code
     # internal error
     print(err)
-    return {'error': "Internal server exception!"}, INTERNAL_SERVER_ERROR
+    return {"error": "Internal server exception!"}, INTERNAL_SERVER_ERROR
+
+
+# socketio setup
+app.config["SECRET_KEY"] = "secret!"
+socketio = SocketIO(app, logger=False)
+
+# register socketio chat handler
+socketio.on_namespace(ChatHandler())
+
+# socketio error handler
+@socketio.on_error()
+def on_error(err: Exception):
+    emit("exception", {"exception": str(err)}, to=request.sid)
+
+# if __name__ == "__main__":
+#     print("===== START =====")
+#     socketio.run(app)

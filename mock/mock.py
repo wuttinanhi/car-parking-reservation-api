@@ -12,11 +12,14 @@ from reservation.service import ReservationService
 from settings.service import SettingService
 from user.service import UserService
 
+from mock.seed_chat import seed_chat
+
 
 class Mock:
     # drop all
     @staticmethod
     def clean_db():
+        init_db()
         Base.metadata.drop_all(bind=engine)
 
     # setup database
@@ -65,6 +68,8 @@ class Mock:
             invoice = PaymentService.create_invoice(reservation)
             invoice.charge_amount = i * 10
             PaymentService.update_invoice(invoice)
+
+        seed_chat()
 
         # try:
         #     PaymentService.setup_payment()

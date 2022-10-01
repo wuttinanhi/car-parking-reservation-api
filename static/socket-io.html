@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Socket-IO test</title>
+</head>
+<body>
+    <h1>Chat Test:</h1>
+    <label for="">JWT Token:</label>
+    <input type="text" name="jwt_token" id="jwt_token">
+    <br><br>
+    <label for="">To User:</label>
+    <input type="text" name="to_user" id="to_user" value="3">
+    <br><br>
+    <button onclick="getChat()">getChat</button>
+    <div id="chat_history"></div>
+    <br><br>
+    <input type="text" name="chat_input" id="chat_input">
+    <button onclick="sendChat()">sendChat</button>
+</body>
+<script src="https://cdn.socket.io/4.5.0/socket.io.min.js" integrity="sha384-7EyYLQZgWBi67fBtVxw60/OWl1kjsfrPFcaU0pp0nAh+i8FD068QogUvg85Ewy1k" crossorigin="anonymous"></script>
+<script type="text/javascript" charset="utf-8">
+    var socket = io();
+
+    function getJwtToken(){
+        return document.querySelector("#jwt_token").value;
+    }
+
+    function getToUser(){
+        return document.querySelector("#to_user").value;
+    }
+
+    function getChatInput(){
+        return document.querySelector("#chat_input").value;
+    }
+
+    function loginUser(){
+        socket.emit("login", { jwt_token: getJwtToken() }, () => {
+            console.log("Logged in!");
+        })
+    }
+
+    function clearChat(){
+        var chat_history_element = document.querySelector('#chat_history');
+        chat_history_element.innerHTML="";
+    }
+
+    function appendChat(text) {
+        var ul = document.createElement('ul');
+        ul.innerHTML += text;
+
+        var chat_history_element = document.querySelector('#chat_history');
+        chat_history_element.appendChild(ul);
+    }
+
+    function getChat(){
+        loginUser()
+        
+        socket.emit("chat_list", { jwt_token: getJwtToken(), to_user: getToUser() }, (response) => {
+            if (!response) return console.log("chat_list return null!");
+
+            const chat_history = response; 
+            // console.table(chat_history)
+
+            clearChat();
+
+            chat_history.forEach((chat) => {
+                appendChat(`<li>${chat.chat_from_user_id} => ${chat.chat_to_user_id} : ${chat.chat_message}</li>`);
+            })
+        });
+    }
+
+    function sendChat(){
+        const chatMessage = getChatInput();
+        socket.emit("chat_send", { jwt_token: getJwtToken(), to_user: getToUser(), message: chatMessage }, (response)=>{
+            console.log("chat_send", response)
+        })
+    }
+
+    socket.on('connect', function() {
+        console.log("Connected!");
+    });
+
+    socket.on('chat_receive', (response) => {
+        console.log(response)
+        const chat = response
+        
+        if (chat.chat_from_system === true){
+            appendChat(`<li>SYSTEM: ${chat.chat_message}</li>`);
+        }else{
+            appendChat(`<li>${chat.chat_from_user_id} => ${chat.chat_to_user_id} : ${chat.chat_message}</li>`);
+        }
+    });
+
+    socket.on('exception', (response) => {
+        console.error(response);
+    });
+</script>
+</html>

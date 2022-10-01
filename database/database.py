@@ -15,7 +15,7 @@ load_env()
 
 
 def get_engine():
-    return create_engine(os.getenv("DATABASE_URI"))
+    return create_engine(os.getenv("DATABASE_URI"), echo=False)
 
 
 engine = get_engine()
@@ -28,10 +28,11 @@ def get_db_session() -> Session:
 db_session: scoped_session = get_db_session()
 
 
-class Base():
+class Base:
     """
-        class for type hint
+    class for type hint
     """
+
     query: Query
 
 
@@ -43,4 +44,6 @@ def init_db():
     # import all modules here that might define models so that
     # they will be registered properly on the metadata.  Otherwise
     # you will have to import them first before calling init_db()
+    from chat.model import Chat
+
     Base.metadata.create_all(bind=engine)

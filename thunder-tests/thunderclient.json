@@ -293,5 +293,43 @@
       }
     ],
     "tests": []
+  },
+  {
+    "_id": "26a2d09e-9cb1-43e2-a13b-a7aa845064e2",
+    "colId": "55d84e90-6849-46a6-b752-48f30ef9a83c",
+    "containerId": "",
+    "name": "login annie",
+    "url": "{{BASE_API_URL}}/auth/login",
+    "method": "POST",
+    "sortNum": 12500,
+    "created": "2022-10-01T14:54:35.260Z",
+    "modified": "2022-10-01T14:54:52.992Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"email\": \"annie@example.com\",\n  \"password\": \"annie-password\"\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "40cc4329-abd3-4c4c-befc-24000a710506",
+    "colId": "55d84e90-6849-46a6-b752-48f30ef9a83c",
+    "containerId": "",
+    "name": "login bobbie",
+    "url": "{{BASE_API_URL}}/auth/login",
+    "method": "POST",
+    "sortNum": 13750,
+    "created": "2022-10-01T16:21:36.228Z",
+    "modified": "2022-10-01T16:21:55.799Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"email\": \"bobbie@example.com\",\n  \"password\": \"bobbie-password\"\n}",
+      "form": []
+    },
+    "tests": []
   }
 ]
