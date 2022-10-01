@@ -5,6 +5,7 @@
 from typing import List
 
 from database.database import db_session
+from sqlalchemy import text
 from sqlalchemy.orm.query import Query
 from sqlalchemy.sql import and_, or_
 from user.model import User
@@ -44,7 +45,8 @@ class ChatService:
                     ),
                 )
             )
-            chat_history = chat_history.limit(10)
+            chat_history = chat_history.order_by(text("id DESC")).limit(10)
+            chat_history = Chat.query.select_from(chat_history).order_by(text("id ASC"))
             chat_history = chat_history.all()
             return chat_history
         except Exception as e:

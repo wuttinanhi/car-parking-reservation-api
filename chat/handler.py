@@ -73,6 +73,7 @@ class ChatHandler(ChatMapper):
         user = ChatHandler.auth_user(data)
         sid = request.sid
         ChatHandler.register(user, sid)
+        return user.json()
 
     def on_chat_list(self, data):
         user = ChatHandler.auth_user(data)
@@ -96,6 +97,8 @@ class ChatHandler(ChatMapper):
 
         from_user = UserService.find_by_id(user.id)
         to_user = UserService.find_by_id(to_user_id)
+
+        ChatService.send_chat(from_user, to_user, message)
 
         # send to self
         ChatHandler.emit(

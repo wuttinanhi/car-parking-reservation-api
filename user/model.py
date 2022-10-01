@@ -7,7 +7,7 @@ from sqlalchemy import Column, Integer, String
 
 
 class User(Base):
-    __tablename__ = 'users'
+    __tablename__ = "users"
 
     id = Column(Integer, primary_key=True)
     email = Column(String(100), unique=True)
@@ -18,4 +18,10 @@ class User(Base):
         self.password = password
 
     def __repr__(self):
-        return f'<User {self.email!r}>'
+        return f"<User {self.email!r}>"
+
+    def json(self):
+        return {
+            "id": self.id,
+            "email": self.email,
+        }
