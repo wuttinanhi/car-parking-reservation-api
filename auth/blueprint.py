@@ -1,6 +1,6 @@
-'''
+"""
     auth blueprint
-'''
+"""
 
 
 import os
@@ -21,17 +21,14 @@ blueprint = Blueprint("auth", __name__, url_prefix="/auth")
 
 class LoginDto(Schema):
     email = fields.Email(required=True)
-    password = fields.Str(
-        required=True,
-        validate=validate.Length(min=8, max=50)
-    )
+    password = fields.Str(required=True, validate=validate.Length(min=8, max=50))
 
 
 class RegisterDto(LoginDto):
     pass
 
 
-@blueprint.route('/login', methods=['POST'])
+@blueprint.route("/login", methods=["POST"])
 def login():
     data = ValidateRequest(LoginDto, request)
     check = UserService.login(data.email, data.password)
@@ -41,25 +38,25 @@ def login():
         jwt = {"user_id": user.id}
         token: str
         if os.getenv("ENV") != "production":
-            token = JwtService.encode(jwt, 86400*5)  # 5 days
+            token = JwtService.encode(jwt, 86400 * 5)  # 5 days
         else:
-            token = JwtService.encode(jwt, 60*5)  # 5 minutes
-        return {'token': token}, 200
+            token = JwtService.encode(jwt, 60 * 5)  # 5 minutes
+        return {"token": token}, 200
     return {"error": "Invalid login!"}, 401
 
 
-@blueprint.route('/register', methods=['POST'])
+@blueprint.route("/register", methods=["POST"])
 def register():
     data = ValidateRequest(LoginDto, request)
     UserService.register(data.email, data.password)
-    return {'message': "Successfully registered"}, 201
+    return {"message": "Successfully registered"}, 201
 
 
-@blueprint.route('/user', methods=['GET'])
+@blueprint.route("/user", methods=["GET"])
 @login_required
 def user():
     user = GetUser()
-    return user.email
+    return {"id": user.id, "email": user.email}
 
 
 @blueprint.errorhandler(Exception)
@@ -67,5 +64,5 @@ def error_handle(err: Exception):
     if issubclass(type(err), ValidationError):
         return str(err), BAD_REQUEST
     if issubclass(type(err), HTTPException):
-        return {'error': err.description}, err.code
-    return {'error': "Internal server exception!"}, INTERNAL_SERVER_ERROR
+        return {"error": err.description}, err.code
+    return {"error": "Internal server exception!"}, INTERNAL_SERVER_ERROR
