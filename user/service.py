@@ -8,10 +8,19 @@ from user import User
 
 class UserService:
     @staticmethod
-    def register(email: str, password: str):
+    def register(
+        email: str,
+        password: str,
+        username: str,
+        firstname: str,
+        lastname: str,
+        phone_number: str,
+    ):
         try:
             hashed_password = BcryptService.hash(password)
-            user = User(email, hashed_password)
+            user = User(
+                email, hashed_password, username, firstname, lastname, phone_number
+            )
             db_session.add(user)
             db_session.commit()
             return user

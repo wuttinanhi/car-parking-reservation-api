@@ -20,12 +20,15 @@ blueprint = Blueprint("auth", __name__, url_prefix="/auth")
 
 
 class LoginDto(Schema):
-    email = fields.Email(required=True)
+    email = fields.Email(required=True, validate=validate.Length(min=5, max=50))
     password = fields.Str(required=True, validate=validate.Length(min=8, max=50))
 
 
 class RegisterDto(LoginDto):
-    pass
+    username = fields.Str(required=True, validate=validate.Length(min=3, max=30))
+    firstname = fields.Str(required=True, validate=validate.Length(min=1, max=50))
+    lastname = fields.Str(required=True, validate=validate.Length(min=1, max=50))
+    phone_number = fields.Str(required=True, validate=validate.Length(min=10, max=10))
 
 
 @blueprint.route("/login", methods=["POST"])
@@ -47,8 +50,15 @@ def login():
 
 @blueprint.route("/register", methods=["POST"])
 def register():
-    data = ValidateRequest(LoginDto, request)
-    UserService.register(data.email, data.password)
+    data = ValidateRequest(RegisterDto, request)
+    UserService.register(
+        data.email,
+        data.password,
+        data.username,
+        data.firstname,
+        data.lastname,
+        data.phone_number,
+    )
     return {"message": "Successfully registered"}, 201
 
 
@@ -56,7 +66,7 @@ def register():
 @login_required
 def user():
     user = GetUser()
-    return {"id": user.id, "email": user.email}
+    return user.json()
 
 
 @blueprint.errorhandler(Exception)

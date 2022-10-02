@@ -1,13 +1,6 @@
 {
     "configurations": [
         {
-            "name": "Debug Mock",
-            "type": "python",
-            "request": "launch",
-            "module": "mock.run",
-            "justMyCode": true
-        },
-        {
             "name": "Python: Flask",
             "type": "python",
             "request": "launch",
@@ -24,6 +17,13 @@
             ],
             "jinja": true,
             "justMyCode": true,
+        },
+        {
+            "name": "Debug Mock",
+            "type": "python",
+            "request": "launch",
+            "module": "mock.run",
+            "justMyCode": true
         },
         // {
         //     "name": "Docker: Python - Flask",

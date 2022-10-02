@@ -27,12 +27,12 @@
     "method": "POST",
     "sortNum": 20000,
     "created": "2022-09-19T03:43:42.770Z",
-    "modified": "2022-09-19T03:46:32.753Z",
+    "modified": "2022-10-02T03:26:36.587Z",
     "headers": [],
     "params": [],
     "body": {
       "type": "json",
-      "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"@Test12345\"\n}",
+      "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"test-password\",\n  \"username\": \"test\",\n  \"firstname\": \"test-firstname\",\n  \"lastname\": \"test-lastname\",\n  \"phone_number\": \"0000000000\"\n}",
       "form": []
     },
     "tests": []

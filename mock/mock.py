@@ -13,6 +13,7 @@ from settings.service import SettingService
 from user.service import UserService
 
 from mock.seed_chat import seed_chat
+from mock.seed_user import seed_user
 
 
 class Mock:
@@ -33,10 +34,13 @@ class Mock:
         SettingService.setup_default_settings()
 
         # mock user
-        UserService.register("test@example.com", "@Test12345")
+        seed_user()
 
-        # get user
-        user = UserService.find_by_email("test@example.com")
+        # mock chat
+        seed_chat()
+
+        # get root user
+        user = UserService.find_by_email("root@example.com")
 
         # mock user car
         car_1 = CarService.add(user, "A11111", "Tesla")
