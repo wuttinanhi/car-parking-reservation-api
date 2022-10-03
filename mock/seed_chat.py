@@ -4,6 +4,8 @@
 
 
 def seed_chat():
+    print("Mocking chat...")
+
     from chat.service import ChatService
     from user.service import UserService
 

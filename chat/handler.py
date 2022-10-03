@@ -132,4 +132,8 @@ class ChatHandler(ChatMapper):
                 },
             )
 
+        # update chat head
+        ChatService.update_chat_head(to_user, from_user)
+
+        # return true
         return True

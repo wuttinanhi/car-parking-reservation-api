@@ -12,6 +12,7 @@ from werkzeug.exceptions import HTTPException
 
 from auth import auth_blueprint
 from car import car_blueprint
+from chat.blueprint import blueprint as chat_blueprint
 from chat.handler import ChatHandler
 from database.database import db_session, init_db
 from env_wrapper import load_env
@@ -47,10 +48,10 @@ app.register_blueprint(parking_lot_blueprint)
 app.register_blueprint(reservation_blueprint)
 app.register_blueprint(settings_blueprint)
 app.register_blueprint(payment_blueprint)
+app.register_blueprint(chat_blueprint)
+
 
 # shutdown database session when request context end
-
-
 @app.teardown_appcontext
 def shutdown_session(__exception=None):
     db_session.remove()
@@ -86,6 +87,7 @@ socketio.on_namespace(ChatHandler())
 @socketio.on_error()
 def on_error(err: Exception):
     emit("exception", {"exception": str(err)}, to=request.sid)
+
 
 # if __name__ == "__main__":
 #     print("===== START =====")

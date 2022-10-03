@@ -27,7 +27,7 @@ def login_required(f):
             request.user = user
 
             return f(*args, **kwargs)
-        except Exception as e:
+        except Unauthorized as e:
             raise Unauthorized("Unauthorized!")
 
     return decorated_function

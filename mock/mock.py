@@ -5,6 +5,7 @@
 from datetime import datetime, timedelta
 
 from car.service import CarService
+from chat.service import ChatService as _
 from database.database import Base, db_session, engine, init_db
 from parking_lot.service import ParkingLotService
 from payment.service import PaymentService
@@ -20,7 +21,6 @@ class Mock:
     # drop all
     @staticmethod
     def clean_db():
-        init_db()
         Base.metadata.drop_all(bind=engine)
 
     # setup database
@@ -40,7 +40,7 @@ class Mock:
         seed_chat()
 
         # get root user
-        user = UserService.find_by_email("root@example.com")
+        user = UserService.find_by_email("annie@example.com")
 
         # mock user car
         car_1 = CarService.add(user, "A11111", "Tesla")
@@ -72,8 +72,6 @@ class Mock:
             invoice = PaymentService.create_invoice(reservation)
             invoice.charge_amount = i * 10
             PaymentService.update_invoice(invoice)
-
-        seed_chat()
 
         # try:
         #     PaymentService.setup_payment()

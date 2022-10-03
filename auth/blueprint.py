@@ -66,7 +66,7 @@ def register():
 @login_required
 def user():
     user = GetUser()
-    return user.json()
+    return user.json_full()
 
 
 @blueprint.errorhandler(Exception)
