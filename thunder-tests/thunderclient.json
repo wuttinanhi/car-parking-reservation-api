@@ -487,5 +487,24 @@
       "form": []
     },
     "tests": []
+  },
+  {
+    "_id": "fd6f3b31-b408-4449-9379-90ce6c4a4927",
+    "colId": "912c87d0-1a78-47ba-8947-574d0f04b38f",
+    "containerId": "",
+    "name": "update",
+    "url": "{{BASE_API_URL}}/parking_lot/update",
+    "method": "PATCH",
+    "sortNum": 15000,
+    "created": "2022-10-03T23:43:05.101Z",
+    "modified": "2022-10-03T23:44:50.487Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"parking_lot_id\": 1,\n  \"location\": \"Floor 1, Sector A Update\",\n  \"open_status\": true\n}\n",
+      "form": []
+    },
+    "tests": []
   }
 ]

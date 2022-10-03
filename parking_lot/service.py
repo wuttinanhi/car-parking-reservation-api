@@ -17,8 +17,7 @@ class ParkingLotService:
         except Exception as err:
             db_session.rollback()
             print(err)
-            raise InternalServerError(
-                "Something error when adding parking lot")
+            raise InternalServerError("Something error when adding parking lot")
 
     @staticmethod
     def remove(parking_lot: ParkingLot):
@@ -61,7 +60,7 @@ class ParkingLotService:
                     AND
                     t1.parking_lot_id = :parking_lot_id
             """,
-            {"parking_lot_id": parking_lot.id}
+            {"parking_lot_id": parking_lot.id},
         )
 
         return len(result.all()) == 0
@@ -103,3 +102,18 @@ class ParkingLotService:
         )
 
         return result.all()
+
+    @staticmethod
+    def update(parking_lot: ParkingLot):
+        try:
+            ParkingLot.query.filter(ParkingLot.id == parking_lot.id).update(
+                {
+                    "location": parking_lot.location,
+                    "open_status": parking_lot.open_status,
+                }
+            )
+            db_session.commit()
+        except Exception as e:
+            print(e)
+            db_session.rollback()
+            raise InternalServerError("Failed to update parking lot!")
