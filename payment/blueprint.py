@@ -22,7 +22,7 @@ class PayInvoiceDto(Schema):
     invoice_id = fields.Int(required=True)
 
 
-@blueprint.route("/user_invoice", methods=["GET"])
+@blueprint.route("/my_invoice", methods=["GET"])
 @login_required
 def list_user_invoice():
     user = GetUser()

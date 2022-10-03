@@ -263,12 +263,12 @@
     "_id": "06a50f2e-eeee-4419-99b7-11feb2eaf8c2",
     "colId": "e9e3d3d8-d79c-43e7-b6ea-dbb24aa38d46",
     "containerId": "",
-    "name": "user_invoice",
-    "url": "{{BASE_API_URL}}/payment/user_invoice?page=1&limit=10&sort=0&order_by=id&search=Mon, 03 Oct 2022 03:23:06 GMT",
+    "name": "my_invoice",
+    "url": "{{BASE_API_URL}}/payment/my_invoice?page=1&limit=10&sort=0&order_by=id&search=Mon, 03 Oct 2022 03:23:06 GMT",
     "method": "GET",
     "sortNum": 30000,
     "created": "2022-09-24T22:50:51.701Z",
-    "modified": "2022-10-03T22:51:01.933Z",
+    "modified": "2022-10-03T23:47:48.241Z",
     "headers": [],
     "params": [
       {
