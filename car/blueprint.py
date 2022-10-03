@@ -1,17 +1,16 @@
-'''
+"""
     auth blueprint
-'''
+"""
 
 
-from http.client import (BAD_REQUEST, CREATED, FORBIDDEN,
-                         INTERNAL_SERVER_ERROR, NOT_FOUND, OK, HTTPException)
+from http.client import CREATED, FORBIDDEN, NOT_FOUND, OK
 
 from auth.decorator import login_required
 from auth.function import GetUser
 from flask import Blueprint, request
-from marshmallow import Schema, ValidationError, fields, validate
+from marshmallow import Schema, fields, validate
 from util.validate_request import ValidateRequest
-from werkzeug.exceptions import HTTPException
+from werkzeug.exceptions import Forbidden
 
 from car.service import CarService
 
@@ -20,20 +19,20 @@ blueprint = Blueprint("car", __name__, url_prefix="/car")
 
 class CarAddDto(Schema):
     car_license_plate = fields.Str(
-        required=True,
-        validate=validate.Length(min=2, max=10)
+        required=True, validate=validate.Length(min=2, max=10)
     )
-    car_type = fields.Str(
-        required=True,
-        validate=validate.Length(min=3, max=10)
-    )
+    car_type = fields.Str(required=True, validate=validate.Length(min=3, max=10))
+
+
+class CarUpdateDto(CarAddDto):
+    car_id = fields.Int(required=True)
 
 
 class CarDeleteDto(Schema):
     car_id = fields.Int(required=True)
 
 
-@blueprint.route('/add', methods=['POST'])
+@blueprint.route("/add", methods=["POST"])
 @login_required
 def add_car():
     user = GetUser()
@@ -42,7 +41,7 @@ def add_car():
     return {"message": "Car add."}, CREATED
 
 
-@blueprint.route('/remove', methods=['DELETE'])
+@blueprint.route("/remove", methods=["DELETE"])
 @login_required
 def remove_car():
     user = GetUser()
@@ -57,21 +56,29 @@ def remove_car():
     return {"error": "Car not found!"}, NOT_FOUND
 
 
-@blueprint.route('/my_car', methods=['GET'])
+@blueprint.route("/my_car", methods=["GET"])
 @login_required
 def my_car():
     response = []
     user = GetUser()
-    all_user_cars = CarService.get_all_cars_by_user(user)
+    all_user_cars = CarService.find_all_car_by_user(user)
     for car in all_user_cars:
         response.append(car.json())
     return response
 
 
-@blueprint.errorhandler(Exception)
-def error_handle(err: Exception):
-    if issubclass(type(err), ValidationError):
-        return str(err), BAD_REQUEST
-    if issubclass(type(err), HTTPException):
-        return {'error': err.description}, err.code
-    return {'error': "Internal server exception!"}, INTERNAL_SERVER_ERROR
+@blueprint.route("/update", methods=["PATCH"])
+@login_required
+def update_car():
+    user = GetUser()
+    data = ValidateRequest(CarUpdateDto, request)
+    car = CarService.find_by_id(data.car_id)
+
+    if car.car_owner_id != user.id:
+        raise Forbidden("Car not owned by user!")
+
+    car.car_license_plate = data.car_license_plate
+    car.car_type = data.car_type
+
+    CarService.update(car)
+    return {"message": "Successfully updated car."}, 200

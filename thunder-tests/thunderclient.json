@@ -79,7 +79,7 @@
     "method": "DELETE",
     "sortNum": 20000,
     "created": "2022-09-19T13:00:30.444Z",
-    "modified": "2022-09-20T19:03:01.644Z",
+    "modified": "2022-10-03T23:36:17.505Z",
     "headers": [],
     "params": [],
     "body": {
@@ -465,6 +465,25 @@
     "body": {
       "type": "json",
       "raw": "{\n  \"firstname\": \"annie-firstname-UPDATE\",\n  \"lastname\": \"annie-lastname-UPDATE\",\n  \"phone_number\": \"9999999999\",\n  \"citizen_id\": \"9999999999999\"\n}\n",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "2063ff6e-1288-4f93-a91f-a67a63acba90",
+    "colId": "e858eb49-2d8b-4bc5-bc1e-5eb5dcef9be0",
+    "containerId": "",
+    "name": "update",
+    "url": "{{BASE_API_URL}}/car/update",
+    "method": "PATCH",
+    "sortNum": 15000,
+    "created": "2022-10-03T23:30:39.232Z",
+    "modified": "2022-10-03T23:36:51.721Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"car_id\": 3,\n  \"car_license_plate\": \"A33333-UP\",\n  \"car_type\": \"Falcon9-UP\"\n}\n",
       "form": []
     },
     "tests": []
