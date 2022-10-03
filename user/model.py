@@ -18,6 +18,7 @@ class User(Base):
     firstname = Column(String(50))
     lastname = Column(String(50))
     phone_number = Column(String(10))
+    citizen_id = Column(String(13))
 
     def __init__(
         self,
@@ -27,6 +28,7 @@ class User(Base):
         firstname: str,
         lastname: str,
         phone_number: str,
+        citizen_id: str,
     ):
         self.email = email
         self.password = password
@@ -34,6 +36,7 @@ class User(Base):
         self.firstname = firstname
         self.lastname = lastname
         self.phone_number = phone_number
+        self.citizen_id = citizen_id
 
     def __repr__(self):
         return f"<User {self.username}>"
@@ -44,6 +47,16 @@ class User(Base):
             "username": self.username,
         }
 
+    def json_shareable(self):
+        return {
+            "id": self.id,
+            "email": self.email,
+            "username": self.username,
+            "firstname": self.firstname,
+            "lastname": self.lastname,
+            "phone_number": self.phone_number,
+        }
+
     def json_full(self):
         return {
             "id": self.id,
@@ -51,5 +64,6 @@ class User(Base):
             "username": self.username,
             "firstname": self.firstname,
             "lastname": self.lastname,
-            "phone_number": self.phone_number
+            "phone_number": self.phone_number,
+            "citizen_id": self.citizen_id,
         }

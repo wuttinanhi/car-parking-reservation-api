@@ -19,11 +19,18 @@ class UserService:
         firstname: str,
         lastname: str,
         phone_number: str,
+        citizen_id: str,
     ):
         try:
             hashed_password = BcryptService.hash(password)
             user = User(
-                email, hashed_password, username, firstname, lastname, phone_number
+                email,
+                hashed_password,
+                username,
+                firstname,
+                lastname,
+                phone_number,
+                citizen_id,
             )
             db_session.add(user)
             db_session.commit()
@@ -60,6 +67,7 @@ class UserService:
                 User.firstname.like(f"%{search_value}%"),
                 User.lastname.like(f"%{search_value}%"),
                 User.phone_number.like(f"%{search_value}%"),
+                User.citizen_id.like(f"%{search_value}%"),
             )
         )
 

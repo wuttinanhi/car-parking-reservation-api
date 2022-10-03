@@ -4,17 +4,12 @@
 
 
 import os
-from http.client import BAD_REQUEST, INTERNAL_SERVER_ERROR
 
 from flask import Blueprint, request
 from jwt_wrapper.service import JwtService
-from marshmallow import Schema, ValidationError, fields, validate
+from marshmallow import Schema, fields, validate
 from user.service import UserService
 from util.validate_request import ValidateRequest
-from werkzeug.exceptions import HTTPException
-
-from auth.decorator import login_required
-from auth.function import GetUser
 
 blueprint = Blueprint("auth", __name__, url_prefix="/auth")
 
@@ -29,6 +24,7 @@ class RegisterDto(LoginDto):
     firstname = fields.Str(required=True, validate=validate.Length(min=1, max=50))
     lastname = fields.Str(required=True, validate=validate.Length(min=1, max=50))
     phone_number = fields.Str(required=True, validate=validate.Length(min=10, max=10))
+    citizen_id = fields.Str(required=True, validate=validate.Length(min=13, max=13))
 
 
 @blueprint.route("/login", methods=["POST"])
@@ -58,21 +54,6 @@ def register():
         data.firstname,
         data.lastname,
         data.phone_number,
+        data.citizen_id,
     )
     return {"message": "Successfully registered"}, 201
-
-
-@blueprint.route("/user", methods=["GET"])
-@login_required
-def user():
-    user = GetUser()
-    return user.json_full()
-
-
-@blueprint.errorhandler(Exception)
-def error_handle(err: Exception):
-    if issubclass(type(err), ValidationError):
-        return str(err), BAD_REQUEST
-    if issubclass(type(err), HTTPException):
-        return {"error": err.description}, err.code
-    return {"error": "Internal server exception!"}, INTERNAL_SERVER_ERROR
