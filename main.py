@@ -22,6 +22,7 @@ from payment.service import PaymentService
 from reservation.blueprint import blueprint as reservation_blueprint
 from settings.blueprint import blueprint as settings_blueprint
 from settings.service import SettingService
+from user.blueprint import blueprint as user_blueprint
 
 # load env
 load_env()
@@ -49,7 +50,7 @@ app.register_blueprint(reservation_blueprint)
 app.register_blueprint(settings_blueprint)
 app.register_blueprint(payment_blueprint)
 app.register_blueprint(chat_blueprint)
-
+app.register_blueprint(user_blueprint)
 
 # shutdown database session when request context end
 @app.teardown_appcontext

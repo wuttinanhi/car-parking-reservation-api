@@ -264,11 +264,11 @@
     "colId": "e9e3d3d8-d79c-43e7-b6ea-dbb24aa38d46",
     "containerId": "",
     "name": "user_invoice",
-    "url": "{{BASE_API_URL}}/payment/user_invoice?page=1&limit=10&sort=0&order_by=charge_amount",
+    "url": "{{BASE_API_URL}}/payment/user_invoice?page=1&limit=10&sort=0&order_by=id&search=Mon, 03 Oct 2022 03:23:06 GMT",
     "method": "GET",
     "sortNum": 30000,
     "created": "2022-09-24T22:50:51.701Z",
-    "modified": "2022-09-30T17:41:02.909Z",
+    "modified": "2022-10-03T22:51:01.933Z",
     "headers": [],
     "params": [
       {
@@ -288,7 +288,12 @@
       },
       {
         "name": "order_by",
-        "value": "charge_amount",
+        "value": "id",
+        "isPath": false
+      },
+      {
+        "name": "search",
+        "value": "Mon, 03 Oct 2022 03:23:06 GMT",
         "isPath": false
       }
     ],
@@ -389,6 +394,61 @@
       "raw": "{\n  \"email\": \"charlie@example.com\",\n  \"password\": \"charlie-password\"\n}",
       "form": []
     },
+    "tests": []
+  },
+  {
+    "_id": "5fb35500-43ba-44dc-a239-380d9d901c51",
+    "colId": "26cc8262-6cb6-4041-9252-c478c78dcd80",
+    "containerId": "",
+    "name": "user",
+    "url": "{{BASE_API_URL}}/user/me",
+    "method": "GET",
+    "sortNum": 15000,
+    "created": "2022-10-03T22:16:56.381Z",
+    "modified": "2022-10-03T22:17:57.952Z",
+    "headers": [],
+    "params": [],
+    "tests": []
+  },
+  {
+    "_id": "774633f1-b345-45c9-b04b-98f281e5dd30",
+    "colId": "26cc8262-6cb6-4041-9252-c478c78dcd80",
+    "containerId": "",
+    "name": "admin/search",
+    "url": "{{BASE_API_URL}}/user/admin/search?page=1&limit=10&sort=0&order_by=id",
+    "method": "GET",
+    "sortNum": 16250,
+    "created": "2022-10-03T22:19:46.089Z",
+    "modified": "2022-10-03T22:55:00.232Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "page",
+        "value": "1",
+        "isPath": false
+      },
+      {
+        "name": "limit",
+        "value": "10",
+        "isPath": false
+      },
+      {
+        "name": "sort",
+        "value": "0",
+        "isPath": false
+      },
+      {
+        "name": "order_by",
+        "value": "id",
+        "isPath": false
+      },
+      {
+        "name": "search",
+        "value": "bob",
+        "isDisabled": true,
+        "isPath": false
+      }
+    ],
     "tests": []
   }
 ]

@@ -20,6 +20,16 @@ class PaginationSortOptions(Enum):
         return str(self.value)
 
 
+class PaginationOptions(Schema):
+    page = fields.Integer(required=True, validate=validate.Range(min=1))
+    limit = fields.Integer(required=True, validate=validate.Range(min=1, max=100))
+    sort = fields.Integer(required=True, validate=validate.Range(min=0, max=1))
+    order_by = fields.String(required=True, validate=validate.Length(min=1, max=50))
+    search = fields.String(
+        required=False, validate=validate.Length(min=1, max=50), default=""
+    )
+
+
 def create_order_by(model, key: str, sort: PaginationSortOptions):
     if hasattr(model, key):
         result = model.__dict__.get(key)
@@ -29,13 +39,6 @@ def create_order_by(model, key: str, sort: PaginationSortOptions):
     raise BadRequest(f"Invalid order by key!: {key}")
 
 
-class PaginationOptions(Schema):
-    page = fields.Integer(required=True, validate=validate.Range(min=1))
-    limit = fields.Integer(required=True, validate=validate.Range(min=1, max=100))
-    sort = fields.Integer(required=True, validate=validate.Range(min=0, max=1))
-    order_by = fields.String(required=True)
-
-
 def create_pagination_options_from_request(request: Request):
     data = ValidateRequest(PaginationOptions, request, "GET")
 
@@ -43,6 +46,10 @@ def create_pagination_options_from_request(request: Request):
     options.page = int(data.page)
     options.limit = int(data.limit)
     options.order_by = data.order_by
+    if hasattr(data, "search"):
+        options.search = data.search
+    else:
+        options.search = ""
 
     if int(data.sort) == 1:
         options.sort = PaginationSortOptions.DESC
@@ -73,6 +80,7 @@ class Pagination:
         self.__limit = opt.limit
         self.__offset = self.__page * self.__limit
         self.__order_by = opt.order_by
+        self.__search = opt.search
         if (
             opt.sort == PaginationSortOptions.ASC
             or opt.sort == PaginationSortOptions.DESC
