@@ -5,7 +5,7 @@ from database.database import db_session
 from pagination.pagination import Pagination, PaginationOptions
 from sqlalchemy import or_
 from sqlalchemy.exc import IntegrityError
-from werkzeug.exceptions import Conflict
+from werkzeug.exceptions import Conflict, InternalServerError
 
 from user import User
 
@@ -74,3 +74,20 @@ class UserService:
         pagination = Pagination(User, query)
         pagination.set_options(options)
         return pagination.result()
+
+    @staticmethod
+    def update(user: User):
+        try:
+            User.query.filter(User.id == user.id).update(
+                {
+                    "firstname": user.firstname,
+                    "lastname": user.lastname,
+                    "phone_number": user.phone_number,
+                    "citizen_id": user.citizen_id,
+                }
+            )
+            db_session.commit()
+        except Exception as e:
+            print(e)
+            db_session.rollback()
+            raise InternalServerError("Failed to update user!")
