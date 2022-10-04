@@ -9,6 +9,7 @@ from auth.decorator import login_required
 from auth.function import GetUser
 from flask import Blueprint, request
 from marshmallow import Schema, fields, validate
+from user.service import UserService
 from util.validate_request import ValidateRequest
 from werkzeug.exceptions import Forbidden
 
@@ -30,6 +31,12 @@ class CarUpdateDto(CarAddDto):
 
 class CarDeleteDto(Schema):
     car_id = fields.Int(required=True)
+
+
+class CarSearchDto(Schema):
+    car_license_plate = fields.Str(
+        required=True, validate=validate.Length(min=2, max=10)
+    )
 
 
 @blueprint.route("/add", methods=["POST"])
@@ -82,3 +89,13 @@ def update_car():
 
     CarService.update(car)
     return {"message": "Successfully updated car."}, 200
+
+
+@blueprint.route("/search", methods=["GET"])
+@login_required
+def search_car_by_license_plate():
+    data = ValidateRequest(CarSearchDto, request)
+    car = CarService.find_by_license_plate(data.car_license_plate)
+    response = car.json()
+    response["car_owner"] = UserService.find_by_id(car.car_owner_id).json_shareable()
+    return response

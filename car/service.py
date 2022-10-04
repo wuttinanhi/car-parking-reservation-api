@@ -24,14 +24,14 @@ class CarService:
         db_session.commit()
 
     @staticmethod
-    def find_by_license_plate(car_license_plate: str):
+    def find_by_license_plate(car_license_plate: str) -> Car:
         car = Car.query.filter(Car.car_license_plate == car_license_plate).first()
         if car == None:
             raise NotFound("Car not found!")
         return car
 
     @staticmethod
-    def find_all_car_by_user(user: User):
+    def find_all_car_by_user(user: User)-> Car:
         return Car.query.filter(Car.car_owner_id == user.id).all()
 
     @staticmethod

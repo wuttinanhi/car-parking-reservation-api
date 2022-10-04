@@ -506,5 +506,24 @@
       "form": []
     },
     "tests": []
+  },
+  {
+    "_id": "999bb343-4d98-4a4a-9e6b-55e0d9f3b6f0",
+    "colId": "e858eb49-2d8b-4bc5-bc1e-5eb5dcef9be0",
+    "containerId": "",
+    "name": "search",
+    "url": "{{BASE_API_URL}}/car/search",
+    "method": "GET",
+    "sortNum": 40000,
+    "created": "2022-10-03T23:54:54.040Z",
+    "modified": "2022-10-03T23:56:43.725Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"car_license_plate\": \"A11111\"\n}",
+      "form": []
+    },
+    "tests": []
   }
 ]
