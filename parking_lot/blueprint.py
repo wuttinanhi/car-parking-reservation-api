@@ -57,18 +57,11 @@ def remove_parking_lot():
 
 @blueprint.route("/available", methods=["GET"])
 @login_required
-def all_parking_lot():
+def available_parking_lot():
     response = []
     parking_lots = ParkingLotService.get_all_parking_lot_with_available_status()
-    for row in parking_lots:
-        response.append(
-            {
-                "id": row["id"],
-                "location": row["location"],
-                "open_status": row["open_status"],
-                "available": row["available"],
-            }
-        )
+    for obj in parking_lots:
+        response.append(obj.json())
     return response
 
 
@@ -83,3 +76,13 @@ def update_parking_lot():
 
     ParkingLotService.update(parking_lot)
     return {"message": "Successfully updated parking lot."}, 200
+
+
+@blueprint.route("/admin/available", methods=["GET"])
+@admin_only
+def admin_available_parking_lot():
+    response = []
+    parking_lots = ParkingLotService.get_all_parking_lot_with_available_status()
+    for obj in parking_lots:
+        response.append(obj.json())
+    return response

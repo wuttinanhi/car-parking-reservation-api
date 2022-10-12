@@ -566,5 +566,19 @@
       }
     ],
     "tests": []
+  },
+  {
+    "_id": "fcb347c3-77ec-40ee-b2ba-9564a43e6ea3",
+    "colId": "912c87d0-1a78-47ba-8947-574d0f04b38f",
+    "containerId": "",
+    "name": "admin available",
+    "url": "{{BASE_API_URL}}/parking_lot/admin/available",
+    "method": "GET",
+    "sortNum": 40000,
+    "created": "2022-10-12T08:21:21.927Z",
+    "modified": "2022-10-12T08:21:27.040Z",
+    "headers": [],
+    "params": [],
+    "tests": []
   }
 ]
