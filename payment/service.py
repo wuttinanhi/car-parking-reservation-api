@@ -7,13 +7,26 @@ from typing import List
 
 import stripe
 from database.database import db_session
-from pagination.pagination import Pagination, PaginationOptions
+from pagination.pagination import Pagination, PaginationOptions, PaginationRaw
 from reservation.model import Reservation
 from settings.service import SettingService
 from user.model import User
+from user.service import UserService
 from werkzeug.exceptions import BadRequest, InternalServerError, NotFound
 
 from payment.model import Invoice, InvoiceStatus
+
+
+class CustomInvoiceUserModel:
+    invoice: Invoice
+    user: User
+
+    def __init__(self, invoice_id: int, user_id: str):
+        self.invoice = PaymentService.get_invoice_by_id(invoice_id)
+        self.user = UserService.find_by_id(user_id)
+
+    def json(self):
+        return {**self.invoice.json(), **self.user.json_full()}
 
 
 class PaymentService:
@@ -145,3 +158,47 @@ class PaymentService:
             PaymentService.update_invoice(invoice)
         else:
             raise NotFound("Invoice not found!")
+
+    @staticmethod
+    def admin_list_payment(
+        pagination_options: PaginationOptions,
+    ) -> List[CustomInvoiceUserModel]:
+        pagination = PaginationRaw(
+            """
+            SELECT  
+                invoices.id, users.id,
+                invoices.id `invoice_id`,
+                users.id `user_id`
+            FROM invoices
+            LEFT JOIN users
+            ON invoices.user_id = users.id
+            WHERE 
+                CONVERT(invoices.id, CHAR) LIKE :search OR
+                CONVERT(invoices.reservation_id, CHAR) LIKE :search OR
+                CONVERT(invoices.charge_amount, CHAR) LIKE :search OR
+                CONVERT(invoices.create_date, CHAR(50)) LIKE :search OR
+                CONVERT(invoices.status, CHAR) LIKE :search OR
+                CONVERT(invoices.stripe_payment_id , CHAR) LIKE :search OR
+                CONVERT(invoices.description, CHAR) LIKE :search OR
+                CONVERT(users.id, CHAR) LIKE :search OR
+                CONVERT(users.email, CHAR) LIKE :search OR
+                CONVERT(users.username, CHAR) LIKE :search OR
+                CONVERT(users.firstname, CHAR) LIKE :search OR
+                CONVERT(users.lastname, CHAR) LIKE :search OR
+                CONVERT(users.phone_number, CHAR) LIKE :search OR
+                CONVERT(users.citizen_id, CHAR) LIKE :search
+            ORDER BY :order_by :sort
+            LIMIT :limit
+            OFFSET :offset
+        """
+        )
+
+        pagination.set_options(pagination_options)
+        raw_result = pagination.result()
+        result = []
+
+        for obj in raw_result:
+            mapped = CustomInvoiceUserModel(obj[0], obj[1])
+            result.append(mapped)
+
+        return result

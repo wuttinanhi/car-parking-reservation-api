@@ -525,5 +525,46 @@
       "form": []
     },
     "tests": []
+  },
+  {
+    "_id": "ec98922c-73e9-4ede-b6c8-effb960a57a0",
+    "colId": "e9e3d3d8-d79c-43e7-b6ea-dbb24aa38d46",
+    "containerId": "",
+    "name": "admin/invoice",
+    "url": "{{BASE_API_URL}}/payment/admin/invoice?page=1&limit=5&sort=1&order_by=invoice_id",
+    "method": "GET",
+    "sortNum": 40000,
+    "created": "2022-10-11T06:49:53.245Z",
+    "modified": "2022-10-12T08:09:11.059Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "page",
+        "value": "1",
+        "isPath": false
+      },
+      {
+        "name": "limit",
+        "value": "5",
+        "isPath": false
+      },
+      {
+        "name": "sort",
+        "value": "1",
+        "isPath": false
+      },
+      {
+        "name": "order_by",
+        "value": "invoice_id",
+        "isPath": false
+      },
+      {
+        "name": "search",
+        "value": "2022-10-03",
+        "isDisabled": true,
+        "isPath": false
+      }
+    ],
+    "tests": []
   }
 ]

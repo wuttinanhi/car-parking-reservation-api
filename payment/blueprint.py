@@ -6,7 +6,7 @@ import json
 from http.client import FORBIDDEN, NOT_FOUND
 
 import stripe
-from auth.decorator import login_required
+from auth.decorator import admin_only, login_required
 from auth.function import GetUser
 from flask import Blueprint, jsonify, request
 from marshmallow import Schema, fields
@@ -94,3 +94,14 @@ def stripe_webhook():
 @blueprint.route("/stripe/public_key", methods=["GET"])
 def stripe_public_key():
     return PaymentService.stripe_public_key
+
+
+@blueprint.route("/admin/invoice", methods=["GET"])
+@admin_only
+def admin_list_invoice():
+    response_list = []
+    pagination_options = create_pagination_options_from_request(request)
+    result = PaymentService.admin_list_payment(pagination_options)
+    for obj in result:
+        response_list.append(obj.json())
+    return response_list
