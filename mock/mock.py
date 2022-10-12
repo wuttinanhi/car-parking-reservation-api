@@ -5,12 +5,16 @@
 from datetime import datetime, timedelta
 
 from car.service import CarService
+from chat.service import ChatService as _
 from database.database import Base, db_session, engine, init_db
 from parking_lot.service import ParkingLotService
 from payment.service import PaymentService
 from reservation.service import ReservationService
 from settings.service import SettingService
 from user.service import UserService
+
+from mock.seed_chat import seed_chat
+from mock.seed_user import seed_user
 
 
 class Mock:
@@ -30,10 +34,13 @@ class Mock:
         SettingService.setup_default_settings()
 
         # mock user
-        UserService.register("test@example.com", "@Test12345")
+        seed_user()
 
-        # get user
-        user = UserService.find_by_email("test@example.com")
+        # mock chat
+        seed_chat()
+
+        # get root user
+        user = UserService.find_by_email("annie@example.com")
 
         # mock user car
         car_1 = CarService.add(user, "A11111", "Tesla")

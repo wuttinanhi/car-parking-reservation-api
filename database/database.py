@@ -15,7 +15,7 @@ load_env()
 
 
 def get_engine():
-    return create_engine(os.getenv("DATABASE_URI"))
+    return create_engine(os.getenv("DATABASE_URI"), echo=False)
 
 
 engine = get_engine()
@@ -28,10 +28,11 @@ def get_db_session() -> Session:
 db_session: scoped_session = get_db_session()
 
 
-class Base():
+class Base:
     """
-        class for type hint
+    class for type hint
     """
+
     query: Query
 
 

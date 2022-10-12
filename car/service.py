@@ -1,9 +1,7 @@
-from typing import List
-
 from database.database import db_session
 from sqlalchemy.exc import IntegrityError
 from user.model import User
-from werkzeug.exceptions import Conflict
+from werkzeug.exceptions import Conflict, InternalServerError, NotFound
 
 from car.model import Car
 
@@ -26,24 +24,26 @@ class CarService:
         db_session.commit()
 
     @staticmethod
-    def find_by_license_plate(car_license_plate: str):
-        return Car.query.filter(Car.car_license_plate == car_license_plate).first()
+    def find_by_license_plate(car_license_plate: str) -> Car:
+        car = Car.query.filter(Car.car_license_plate == car_license_plate).first()
+        if car == None:
+            raise NotFound("Car not found!")
+        return car
 
     @staticmethod
-    def find_all_car_by_user(user: User):
+    def find_all_car_by_user(user: User)-> Car:
         return Car.query.filter(Car.car_owner_id == user.id).all()
 
     @staticmethod
     def find_by_id(id: int) -> Car:
-        return Car.query.filter(Car.id == id).first()
+        car = Car.query.filter(Car.id == id).first()
+        if car == None:
+            raise NotFound("Car not found!")
+        return car
 
     @staticmethod
     def is_user_own_car(user: User, car: Car):
         return car.car_owner_id == user.id
-
-    @staticmethod
-    def get_all_cars_by_user(user: User) -> List[Car]:
-        return Car.query.filter(Car.car_owner_id == user.id).all()
 
     @staticmethod
     def is_car_parking(car: Car):
@@ -64,6 +64,21 @@ class CarService:
                     AND
                     cars.id = :car_id
             """,
-            {"car_id": car.id}
+            {"car_id": car.id},
         )
         return len(result.all()) >= 1
+
+    @staticmethod
+    def update(car: Car):
+        try:
+            Car.query.filter(Car.id == car.id).update(
+                {
+                    "car_license_plate": car.car_license_plate,
+                    "car_type": car.car_type,
+                }
+            )
+            db_session.commit()
+        except Exception as e:
+            print(e)
+            db_session.rollback()
+            raise InternalServerError("Failed to update user!")

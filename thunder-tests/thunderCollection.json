@@ -78,7 +78,7 @@
       "headers": [
         {
           "name": "X-API-KEY",
-          "value": "@Dev12345"
+          "value": "{{ADMIN_KEY}}"
         }
       ],
       "auth": {
@@ -96,7 +96,49 @@
     "sortNum": 60000,
     "folders": [],
     "settings": {
+      "headers": [
+        {
+          "name": "X-API-KEY",
+          "value": "{{ADMIN_KEY}}"
+        }
+      ],
+      "auth": {
+        "type": "bearer",
+        "bearer": "{{JWT_TOKEN}}"
+      },
+      "tests": [],
+      "envId": "99e59d5a-e5fa-450f-9cc1-4ade3a66969b"
+    }
+  },
+  {
+    "_id": "5e14eaaa-71e3-4e6e-9d43-b268e6ae88bb",
+    "colName": "chat",
+    "created": "2022-10-02T03:40:34.514Z",
+    "sortNum": 70000,
+    "folders": [],
+    "settings": {
       "headers": [],
+      "auth": {
+        "type": "bearer",
+        "bearer": "{{JWT_TOKEN}}"
+      },
+      "tests": [],
+      "envId": "99e59d5a-e5fa-450f-9cc1-4ade3a66969b"
+    }
+  },
+  {
+    "_id": "26cc8262-6cb6-4041-9252-c478c78dcd80",
+    "colName": "user",
+    "created": "2022-10-03T22:16:56.378Z",
+    "sortNum": 80000,
+    "folders": [],
+    "settings": {
+      "headers": [
+        {
+          "name": "X-API-KEY",
+          "value": "{{ADMIN_KEY}}"
+        }
+      ],
       "auth": {
         "type": "bearer",
         "bearer": "{{JWT_TOKEN}}"

@@ -4,9 +4,10 @@
 
 from enum import Enum
 
+from database.database import db_session
 from flask import Request
 from marshmallow import Schema, fields, validate
-from sqlalchemy import desc
+from sqlalchemy import column, desc, text
 from sqlalchemy.orm.query import Query
 from util.validate_request import ValidateRequest
 from werkzeug.exceptions import BadRequest
@@ -20,6 +21,16 @@ class PaginationSortOptions(Enum):
         return str(self.value)
 
 
+class PaginationOptions(Schema):
+    page = fields.Integer(required=True, validate=validate.Range(min=1))
+    limit = fields.Integer(required=True, validate=validate.Range(min=1, max=100))
+    sort = fields.Integer(required=True, validate=validate.Range(min=0, max=1))
+    order_by = fields.String(required=True, validate=validate.Length(min=1, max=50))
+    search = fields.String(
+        required=False, validate=validate.Length(min=1, max=50), default=""
+    )
+
+
 def create_order_by(model, key: str, sort: PaginationSortOptions):
     if hasattr(model, key):
         result = model.__dict__.get(key)
@@ -29,13 +40,6 @@ def create_order_by(model, key: str, sort: PaginationSortOptions):
     raise BadRequest(f"Invalid order by key!: {key}")
 
 
-class PaginationOptions(Schema):
-    page = fields.Integer(required=True, validate=validate.Range(min=1))
-    limit = fields.Integer(required=True, validate=validate.Range(min=1, max=100))
-    sort = fields.Integer(required=True, validate=validate.Range(min=0, max=1))
-    order_by = fields.String(required=True)
-
-
 def create_pagination_options_from_request(request: Request):
     data = ValidateRequest(PaginationOptions, request, "GET")
 
@@ -43,6 +47,10 @@ def create_pagination_options_from_request(request: Request):
     options.page = int(data.page)
     options.limit = int(data.limit)
     options.order_by = data.order_by
+    if hasattr(data, "search"):
+        options.search = data.search
+    else:
+        options.search = ""
 
     if int(data.sort) == 1:
         options.sort = PaginationSortOptions.DESC
@@ -65,28 +73,52 @@ def create_pagination_options(
 
 class Pagination:
     def __init__(self, model, query: Query) -> None:
-        self.__model = model
-        self.__query = query
+        self._model = model
+        self._query = query
 
     def set_options(self, opt: PaginationOptions):
-        self.__page = opt.page - 1
-        self.__limit = opt.limit
-        self.__offset = self.__page * self.__limit
-        self.__order_by = opt.order_by
+        self._page = opt.page - 1
+        self._limit = opt.limit
+        self._offset = self._page * self._limit
+        self._order_by = opt.order_by
+        self._search = opt.search
         if (
             opt.sort == PaginationSortOptions.ASC
             or opt.sort == PaginationSortOptions.DESC
         ):
-            self.__sort = opt.sort
+            self._sort = opt.sort
         else:
             raise BadRequest(f"Invalid pagination sorting option!: {opt.sort}")
 
     def result(self):
         return (
-            self.__query.order_by(
-                create_order_by(self.__model, self.__order_by, self.__sort)
+            self._query.order_by(
+                create_order_by(self._model, self._order_by, self._sort)
             )
-            .offset(self.__offset)
-            .limit(self.__limit)
+            .offset(self._offset)
+            .limit(self._limit)
             .all()
         )
+
+
+class PaginationRaw(Pagination):
+    def __init__(self, raw_query: str) -> None:
+        self._query = raw_query
+
+    def result(self):
+        statement = self._query
+        statement = statement.replace(":sort", str(self._sort))
+        statement = statement.replace(":order_by", str(self._order_by))
+
+        params = {
+            "limit": int(self._limit),
+            "offset": int(self._offset),
+            "order_by": column(self._order_by),
+            "sort": str(self._sort),
+            "search": str(f"%{self._search}%"),
+        }
+
+        exec = db_session.execute(text(statement), params)
+
+        result = exec.all()
+        return result

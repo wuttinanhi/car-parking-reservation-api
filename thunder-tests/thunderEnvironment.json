@@ -5,7 +5,7 @@
     "default": true,
     "sortNum": 10000,
     "created": "2022-09-19T03:40:08.517Z",
-    "modified": "2022-09-30T06:25:37.768Z",
+    "modified": "2022-10-12T08:12:40.580Z",
     "data": [
       {
         "name": "BASE_API_URL",
@@ -13,7 +13,7 @@
       },
       {
         "name": "JWT_TOKEN",
-        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE2NjQ1MTkxMzEsImV4cCI6MTY2NDk1MTEzMX0.fvclsNHMIurXu28j9Oan5LzYS-q0mQzJTP0hPNb2dJQ"
+        "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJpYXQiOjE2NjU1NjIzNTEsImV4cCI6MTY2NTk5NDM1MX0.OsamSZX2tldW6Z5ldjx5qepWOX2LTWKJ_gCJ8hO4C20"
       },
       {
         "name": "ADMIN_KEY",

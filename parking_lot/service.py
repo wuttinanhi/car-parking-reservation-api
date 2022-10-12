@@ -6,6 +6,30 @@ from werkzeug.exceptions import InternalServerError
 from parking_lot.model import ParkingLot
 
 
+class CustomAvailableParkingLot:
+    id: int
+    location: str
+    open_status: bool
+    available: bool
+
+    @classmethod
+    def from_raw(cls, raw):
+        obj = cls()
+        obj.id = raw["id"]
+        obj.location = raw["location"]
+        obj.open_status = raw["open_status"]
+        obj.available = raw["available"]
+        return obj
+
+    def json(self):
+        return {
+            "id": self.id,
+            "location": self.location,
+            "open_status": self.open_status,
+            "available": self.available,
+        }
+
+
 class ParkingLotService:
     @staticmethod
     def add(location: str, open_status=False):
@@ -17,8 +41,7 @@ class ParkingLotService:
         except Exception as err:
             db_session.rollback()
             print(err)
-            raise InternalServerError(
-                "Something error when adding parking lot")
+            raise InternalServerError("Something error when adding parking lot")
 
     @staticmethod
     def remove(parking_lot: ParkingLot):
@@ -61,14 +84,14 @@ class ParkingLotService:
                     AND
                     t1.parking_lot_id = :parking_lot_id
             """,
-            {"parking_lot_id": parking_lot.id}
+            {"parking_lot_id": parking_lot.id},
         )
 
         return len(result.all()) == 0
 
     @staticmethod
-    def get_all_parking_lot_with_available_status():
-        result = db_session.execute(
+    def get_all_parking_lot_with_available_status() -> List[CustomAvailableParkingLot]:
+        exec = db_session.execute(
             """
             SELECT
                 DISTINCT t1.id,
@@ -102,4 +125,26 @@ class ParkingLotService:
         """
         )
 
-        return result.all()
+        result = exec.all()
+        parsed = []
+
+        for obj in result:
+            new_obj = CustomAvailableParkingLot.from_raw(obj)
+            parsed.append(new_obj)
+
+        return parsed
+
+    @staticmethod
+    def update(parking_lot: ParkingLot):
+        try:
+            ParkingLot.query.filter(ParkingLot.id == parking_lot.id).update(
+                {
+                    "location": parking_lot.location,
+                    "open_status": parking_lot.open_status,
+                }
+            )
+            db_session.commit()
+        except Exception as e:
+            print(e)
+            db_session.rollback()
+            raise InternalServerError("Failed to update parking lot!")
