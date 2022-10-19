@@ -712,5 +712,24 @@
       "form": []
     },
     "tests": []
+  },
+  {
+    "_id": "38f09f2d-5c23-4e06-a1bc-d8a769e248c1",
+    "colId": "e9e3d3d8-d79c-43e7-b6ea-dbb24aa38d46",
+    "containerId": "",
+    "name": "admin/update",
+    "url": "{{BASE_API_URL}}/payment/admin/update",
+    "method": "PATCH",
+    "sortNum": 7500,
+    "created": "2022-10-19T07:59:41.812Z",
+    "modified": "2022-10-19T08:03:59.293Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"invoice_id\": 1,\n  \"charge_amount\": 99,\n  \"status\": \"PAID\",\n  \"description\": \"update-description\"\n}",
+      "form": []
+    },
+    "tests": []
   }
 ]

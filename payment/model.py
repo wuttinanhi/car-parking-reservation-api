@@ -16,16 +16,18 @@ class InvoiceStatus(enum.Enum):
 
 
 class Invoice(Base):
-    __tablename__ = 'invoices'
+    __tablename__ = "invoices"
 
     id = Column(Integer(), primary_key=True)
     user_id = Column(Integer(), nullable=False)
     reservation_id = Column(Integer(), nullable=False)
-    charge_amount = Column(Float(), nullable=False)
+
     create_date = Column(DateTime(), nullable=False)
-    status = Column(Enum(InvoiceStatus), nullable=False)
     stripe_payment_id = Column(String(100))
-    description = Column(String(100))
+
+    charge_amount = Column(Float(), nullable=False)
+    status = Column(Enum(InvoiceStatus), nullable=False)
+    description = Column(String(255))
 
     def __init__(
         self,
@@ -34,7 +36,7 @@ class Invoice(Base):
         charge_amount: float,
         create_date: datetime,
         status: enum,
-        description: str
+        description: str,
     ):
         self.user_id = user_id
         self.reservation_id = reservation_id
@@ -44,14 +46,14 @@ class Invoice(Base):
         self.description = description
 
     def __repr__(self):
-        return f'<Invoice {self.id}>'
+        return f"<Invoice {self.id}>"
 
     def json(self):
         return {
-            'invoice_id': self.id,
-            'invoice_user_id': self.user_id,
-            'invoice_reservation_id': self.reservation_id,
-            'invoice_charge_amount': self.charge_amount,
-            'invoice_create_date': self.create_date,
-            "invoice_status":  str(self.status)
+            "invoice_id": self.id,
+            "invoice_user_id": self.user_id,
+            "invoice_reservation_id": self.reservation_id,
+            "invoice_charge_amount": self.charge_amount,
+            "invoice_create_date": self.create_date,
+            "invoice_status": str(self.status),
         }

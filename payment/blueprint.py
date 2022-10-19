@@ -3,16 +3,17 @@
 """
 
 import json
-from http.client import FORBIDDEN, NOT_FOUND
+from http.client import FORBIDDEN, NOT_FOUND, OK
 
 import stripe
 from auth.decorator import admin_only, login_required
 from auth.function import GetUser
 from flask import Blueprint, jsonify, request
-from marshmallow import Schema, fields
+from marshmallow import Schema, fields, validate
 from pagination.pagination import create_pagination_options_from_request
 from util.validate_request import ValidateRequest
 
+from payment.model import InvoiceStatus
 from payment.service import PaymentService
 
 blueprint = Blueprint("payment", __name__, url_prefix="/payment")
@@ -20,6 +21,13 @@ blueprint = Blueprint("payment", __name__, url_prefix="/payment")
 
 class PayInvoiceDto(Schema):
     invoice_id = fields.Int(required=True)
+
+
+class InvoiceUpdateDto(Schema):
+    invoice_id = fields.Int(required=True)
+    charge_amount = fields.Float(required=True, validate=validate.Range(min=0))
+    status = fields.Enum(InvoiceStatus, required=True)
+    description = fields.String(required=True, validate=validate.Length(max=255))
 
 
 @blueprint.route("/my_invoice", methods=["GET"])
@@ -96,12 +104,26 @@ def stripe_public_key():
     return PaymentService.stripe_public_key
 
 
-@blueprint.route("/admin/invoice", methods=["GET"])
+@blueprint.route("/admin/list", methods=["GET"])
 @admin_only
-def admin_list_invoice():
+def admin_invoice_list():
     response_list = []
     pagination_options = create_pagination_options_from_request(request)
     result = PaymentService.admin_list_payment(pagination_options)
     for obj in result:
         response_list.append(obj.json())
     return response_list
+
+
+@blueprint.route("/admin/update", methods=["PATCH"])
+@admin_only
+def admin_invoice_update():
+    data = ValidateRequest(InvoiceUpdateDto, request)
+    invoice = PaymentService.get_invoice_by_id(data.invoice_id)
+
+    invoice.charge_amount = data.charge_amount
+    invoice.status = data.status
+    invoice.description = data.description
+
+    PaymentService.update_invoice(invoice)
+    return {"message": "Successfully updated invoice."}, OK
