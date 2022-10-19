@@ -43,27 +43,27 @@ class User(Base):
 
     def json(self):
         return {
-            "id": self.id,
-            "username": self.username,
+            "user_id": self.id,
+            "user_username": self.username,
         }
 
     def json_shareable(self):
         return {
-            "id": self.id,
-            "email": self.email,
-            "username": self.username,
-            "firstname": self.firstname,
-            "lastname": self.lastname,
-            "phone_number": self.phone_number,
+            "user_id": self.id,
+            "user_email": self.email,
+            "user_username": self.username,
+            "user_firstname": self.firstname,
+            "user_lastname": self.lastname,
+            "user_phone_number": self.phone_number,
         }
 
     def json_full(self):
         return {
-            "id": self.id,
-            "email": self.email,
-            "username": self.username,
-            "firstname": self.firstname,
-            "lastname": self.lastname,
-            "phone_number": self.phone_number,
-            "citizen_id": self.citizen_id,
+            "user_id": self.id,
+            "user_email": self.email,
+            "user_username": self.username,
+            "user_firstname": self.firstname,
+            "user_lastname": self.lastname,
+            "user_phone_number": self.phone_number,
+            "user_citizen_id": self.citizen_id,
         }
