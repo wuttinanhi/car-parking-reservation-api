@@ -428,11 +428,11 @@
     "colId": "26cc8262-6cb6-4041-9252-c478c78dcd80",
     "containerId": "",
     "name": "admin/search",
-    "url": "{{BASE_API_URL}}/user/admin/search?page=1&limit=10&sort=0&order_by=id&search=3333333",
+    "url": "{{BASE_API_URL}}/user/admin/search?page=1&limit=10&sort=0&order_by=id",
     "method": "GET",
     "sortNum": 7500,
     "created": "2022-10-03T22:19:46.089Z",
-    "modified": "2022-10-19T03:44:50.880Z",
+    "modified": "2022-10-19T07:44:13.437Z",
     "headers": [],
     "params": [
       {
@@ -458,6 +458,7 @@
       {
         "name": "search",
         "value": "3333333",
+        "isDisabled": true,
         "isPath": false
       }
     ],
@@ -691,6 +692,25 @@
         "isPath": false
       }
     ],
+    "tests": []
+  },
+  {
+    "_id": "ed695933-0f11-4e69-a61f-c16949bdd0aa",
+    "colId": "26cc8262-6cb6-4041-9252-c478c78dcd80",
+    "containerId": "",
+    "name": "admin/update",
+    "url": "{{BASE_API_URL}}/user/admin/update",
+    "method": "PATCH",
+    "sortNum": 36250,
+    "created": "2022-10-19T07:43:12.929Z",
+    "modified": "2022-10-19T07:44:44.106Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"user_id\": 4,\n  \"firstname\": \"firstname-UPDATE\",\n  \"lastname\": \"lastname-UPDATE\",\n  \"phone_number\": \"9999999999\",\n  \"citizen_id\": \"9999999999999\"\n}\n",
+      "form": []
+    },
     "tests": []
   }
 ]

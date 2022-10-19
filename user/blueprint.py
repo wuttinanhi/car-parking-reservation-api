@@ -22,6 +22,10 @@ class UpdateUserDto(Schema):
     citizen_id = fields.Str(required=True, validate=validate.Length(min=13, max=13))
 
 
+class AdminUpdateUserDto(UpdateUserDto):
+    user_id = fields.Int(required=True)
+
+
 @blueprint.route("/admin/search", methods=["GET"])
 @admin_only
 def admin_user_search():
@@ -45,6 +49,21 @@ def user_detail():
 def update_user():
     user = GetUser()
     data = ValidateRequest(UpdateUserDto, request)
+
+    user.firstname = data.firstname
+    user.lastname = data.lastname
+    user.phone_number = data.phone_number
+    user.citizen_id = data.citizen_id
+
+    UserService.update(user)
+    return {"message": "Successfully updated user."}, 200
+
+
+@blueprint.route("/admin/update", methods=["PATCH"])
+@admin_only
+def admin_update_user():
+    data = ValidateRequest(AdminUpdateUserDto, request)
+    user = UserService.find_by_id(data.user_id)
 
     user.firstname = data.firstname
     user.lastname = data.lastname
