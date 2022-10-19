@@ -81,11 +81,9 @@ def end_reservation():
 @login_required
 def user_reservation():
     user = GetUser()
-    response = []
-    all_reservations = ReservationService.get_user_reservation(user)
-    for car in all_reservations:
-        response.append(car.json())
-    return response
+    pagination_options = create_pagination_options_from_request(request)
+    result = ReservationService.get_user_reservation(user, pagination_options)
+    return result
 
 
 @blueprint.route("/admin/end", methods=["DELETE"])

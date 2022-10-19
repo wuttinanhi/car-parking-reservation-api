@@ -184,13 +184,39 @@
     "colId": "012cf620-077a-4198-96bf-73ff5651e37d",
     "containerId": "",
     "name": "user_reservation",
-    "url": "{{BASE_API_URL}}/reservation/user_reservation",
+    "url": "{{BASE_API_URL}}/reservation/user_reservation?order_by=id&page=1&limit=10&sort=0&search=12",
     "method": "GET",
     "sortNum": 30000,
     "created": "2022-09-22T17:32:40.905Z",
-    "modified": "2022-09-22T17:36:55.662Z",
+    "modified": "2022-10-19T05:32:33.193Z",
     "headers": [],
-    "params": [],
+    "params": [
+      {
+        "name": "order_by",
+        "value": "id",
+        "isPath": false
+      },
+      {
+        "name": "page",
+        "value": "1",
+        "isPath": false
+      },
+      {
+        "name": "limit",
+        "value": "10",
+        "isPath": false
+      },
+      {
+        "name": "sort",
+        "value": "0",
+        "isPath": false
+      },
+      {
+        "name": "search",
+        "value": "12",
+        "isPath": false
+      }
+    ],
     "tests": []
   },
   {
