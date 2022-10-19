@@ -10,6 +10,10 @@ from jwt_wrapper.service import JwtService
 from marshmallow import Schema, fields, validate
 from user.service import UserService
 from util.validate_request import ValidateRequest
+from werkzeug.exceptions import Unauthorized
+
+from auth.decorator import login_required
+from auth.function import GetUser
 
 blueprint = Blueprint("auth", __name__, url_prefix="/auth")
 
@@ -25,6 +29,11 @@ class RegisterDto(LoginDto):
     lastname = fields.Str(required=True, validate=validate.Length(min=1, max=50))
     phone_number = fields.Str(required=True, validate=validate.Length(min=10, max=10))
     citizen_id = fields.Str(required=True, validate=validate.Length(min=13, max=13))
+
+
+class ChangePasswordDto(Schema):
+    password = fields.Str(required=True, validate=validate.Length(min=8, max=50))
+    new_password = fields.Str(required=True, validate=validate.Length(min=8, max=50))
 
 
 @blueprint.route("/login", methods=["POST"])
@@ -57,3 +66,18 @@ def register():
         data.citizen_id,
     )
     return {"message": "Successfully registered"}, 201
+
+
+@blueprint.route("/changepassword", methods=["PATCH"])
+@login_required
+def change_password():
+    user = GetUser()
+    data = ValidateRequest(ChangePasswordDto, request)
+
+    check_password = UserService.compare_password(user, data.password)
+    if check_password is False:
+        raise Unauthorized("Invalid password!")
+
+    UserService.change_password(user, data.new_password)
+    
+    return {"message": "Successfully change password."}, 200

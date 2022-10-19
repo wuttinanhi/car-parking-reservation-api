@@ -40,10 +40,14 @@ class UserService:
             raise Conflict("User already registerd!")
 
     @staticmethod
+    def compare_password(user: User, password: str):
+        return BcryptService.validate(password, user.password)
+
+    @staticmethod
     def login(email: str, password: str):
         user: User = UserService.find_by_email(email)
         if user:
-            check_pwd = BcryptService.validate(password, user.password)
+            check_pwd = UserService.compare_password(user, password)
             return check_pwd
         return False
 
@@ -91,3 +95,16 @@ class UserService:
             print(e)
             db_session.rollback()
             raise InternalServerError("Failed to update user!")
+
+    @staticmethod
+    def change_password(user: User, password: str):
+        try:
+            new_hashed_password = BcryptService.hash(password)
+            User.query.filter(User.id == user.id).update(
+                {"password": new_hashed_password}
+            )
+            db_session.commit()
+        except Exception as e:
+            print(e)
+            db_session.rollback()
+            raise InternalServerError("Failed to change user password!")
