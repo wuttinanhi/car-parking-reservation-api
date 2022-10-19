@@ -1,9 +1,22 @@
+from typing import List
+
 from database.database import db_session
+from pagination.pagination import Pagination, PaginationOptions
+from sqlalchemy import or_
 from sqlalchemy.exc import IntegrityError
 from user.model import User
 from werkzeug.exceptions import Conflict, InternalServerError, NotFound
 
 from car.model import Car
+
+
+class CarPaginationResult:
+    def __init__(self, raw):
+        self.car: Car = raw[0]
+        self.user: User = raw[1]
+
+    def json(self):
+        return {"car": self.car.json(), "user": self.user.json_shareable()}
 
 
 class CarService:
@@ -31,7 +44,7 @@ class CarService:
         return car
 
     @staticmethod
-    def find_all_car_by_user(user: User)-> Car:
+    def find_all_car_by_user(user: User) -> Car:
         return Car.query.filter(Car.car_owner_id == user.id).all()
 
     @staticmethod
@@ -82,3 +95,37 @@ class CarService:
             print(e)
             db_session.rollback()
             raise InternalServerError("Failed to update user!")
+
+    @staticmethod
+    def admin_pagination_car(options: PaginationOptions) -> List[CarPaginationResult]:
+        query = (
+            db_session.query(Car, User)
+            .join(User, User.id == Car.car_owner_id)
+            .where(
+                or_(
+                    # find by user
+                    User.id.ilike(f"%{options.search}%"),
+                    User.email.ilike(f"%{options.search}%"),
+                    User.username.ilike(f"%{options.search}%"),
+                    User.firstname.ilike(f"%{options.search}%"),
+                    User.lastname.ilike(f"%{options.search}%"),
+                    User.phone_number.ilike(f"%{options.search}%"),
+                    User.citizen_id.ilike(f"%{options.search}%"),
+                    # find by car
+                    Car.car_license_plate.ilike(f"%{options.search}%"),
+                    Car.car_type.ilike(f"%{options.search}%"),
+                )
+            )
+        )
+
+        pagination = Pagination(Car, query)
+        pagination.set_options(options)
+        result = pagination.result()
+
+        new_result = []
+
+        for raw in result:
+            new_obj = CarPaginationResult(raw)
+            new_result.append(new_obj)
+
+        return new_result

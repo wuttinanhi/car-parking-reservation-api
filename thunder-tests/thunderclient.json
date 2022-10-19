@@ -184,11 +184,11 @@
     "colId": "012cf620-077a-4198-96bf-73ff5651e37d",
     "containerId": "",
     "name": "user_reservation",
-    "url": "{{BASE_API_URL}}/reservation/user_reservation?order_by=id&page=1&limit=10&sort=0&search=12",
+    "url": "{{BASE_API_URL}}/reservation/user_reservation?order_by=id&page=1&limit=10&sort=0",
     "method": "GET",
     "sortNum": 30000,
     "created": "2022-09-22T17:32:40.905Z",
-    "modified": "2022-10-19T05:32:33.193Z",
+    "modified": "2022-10-19T05:35:09.452Z",
     "headers": [],
     "params": [
       {
@@ -214,6 +214,7 @@
       {
         "name": "search",
         "value": "12",
+        "isDisabled": true,
         "isPath": false
       }
     ],
@@ -545,9 +546,9 @@
     "name": "admin/invoice",
     "url": "{{BASE_API_URL}}/payment/admin/invoice?page=1&limit=5&sort=1&order_by=invoice_id",
     "method": "GET",
-    "sortNum": 40000,
+    "sortNum": 5000,
     "created": "2022-10-11T06:49:53.245Z",
-    "modified": "2022-10-12T08:09:11.059Z",
+    "modified": "2022-10-19T05:38:03.672Z",
     "headers": [],
     "params": [
       {
@@ -586,9 +587,9 @@
     "name": "admin available",
     "url": "{{BASE_API_URL}}/parking_lot/admin/available",
     "method": "GET",
-    "sortNum": 40000,
+    "sortNum": 5000,
     "created": "2022-10-12T08:21:21.927Z",
-    "modified": "2022-10-12T08:21:27.040Z",
+    "modified": "2022-10-19T05:37:47.527Z",
     "headers": [],
     "params": [],
     "tests": []
@@ -647,6 +648,46 @@
       {
         "name": "search",
         "value": "annie",
+        "isPath": false
+      }
+    ],
+    "tests": []
+  },
+  {
+    "_id": "4f200ef5-d839-49c3-b47b-4045d6d1e577",
+    "colId": "e858eb49-2d8b-4bc5-bc1e-5eb5dcef9be0",
+    "containerId": "",
+    "name": "admin/list",
+    "url": "{{BASE_API_URL}}/car/admin/list?order_by=id&page=1&limit=10&sort=1&search=ar",
+    "method": "GET",
+    "sortNum": 5000,
+    "created": "2022-10-19T07:31:10.650Z",
+    "modified": "2022-10-19T07:37:05.987Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "order_by",
+        "value": "id",
+        "isPath": false
+      },
+      {
+        "name": "page",
+        "value": "1",
+        "isPath": false
+      },
+      {
+        "name": "limit",
+        "value": "10",
+        "isPath": false
+      },
+      {
+        "name": "sort",
+        "value": "1",
+        "isPath": false
+      },
+      {
+        "name": "search",
+        "value": "ar",
         "isPath": false
       }
     ],

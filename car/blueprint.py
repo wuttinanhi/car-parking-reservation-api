@@ -5,10 +5,11 @@
 
 from http.client import CREATED, FORBIDDEN, NOT_FOUND, OK
 
-from auth.decorator import login_required
+from auth.decorator import admin_only, login_required
 from auth.function import GetUser
 from flask import Blueprint, request
 from marshmallow import Schema, fields, validate
+from pagination.pagination import create_pagination_options_from_request
 from user.service import UserService
 from util.validate_request import ValidateRequest
 from werkzeug.exceptions import Forbidden
@@ -98,4 +99,15 @@ def search_car_by_license_plate():
     car = CarService.find_by_license_plate(data.car_license_plate)
     response = car.json()
     response["car_owner"] = UserService.find_by_id(car.car_owner_id).json_shareable()
+    return response
+
+
+@blueprint.route("/admin/list", methods=["GET"])
+@admin_only
+def admin_pagination_car():
+    pagination_options = create_pagination_options_from_request(request)
+    result = CarService.admin_pagination_car(pagination_options)
+    response = []
+    for obj in result:
+        response.append(obj.json())
     return response
