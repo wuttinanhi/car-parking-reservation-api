@@ -116,3 +116,9 @@ def admin_end_reservation():
     return {"error": "Reservation not found!"}, NOT_FOUND
 
 
+@blueprint.route("/admin/list", methods=["GET"])
+@admin_only
+def admin_pagination_reservation():
+    pagination_options = create_pagination_options_from_request(request)
+    result = ReservationService.admin_pagination_reservation(pagination_options)
+    return result

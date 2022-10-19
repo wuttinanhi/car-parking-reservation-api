@@ -6,9 +6,9 @@
     "name": "login",
     "url": "{{BASE_API_URL}}/auth/login",
     "method": "POST",
-    "sortNum": 10000,
+    "sortNum": 21250,
     "created": "2022-09-19T03:39:38.779Z",
-    "modified": "2022-09-19T03:46:43.666Z",
+    "modified": "2022-10-19T03:43:55.653Z",
     "headers": [],
     "params": [],
     "body": {
@@ -35,20 +35,6 @@
       "raw": "{\n  \"email\": \"test@example.com\",\n  \"password\": \"test-password\",\n  \"username\": \"test\",\n  \"firstname\": \"test-firstname\",\n  \"lastname\": \"test-lastname\",\n  \"phone_number\": \"0000000000\"\n}",
       "form": []
     },
-    "tests": []
-  },
-  {
-    "_id": "64f8db50-0575-4a5c-9089-0f15cb429069",
-    "colId": "55d84e90-6849-46a6-b752-48f30ef9a83c",
-    "containerId": "",
-    "name": "user",
-    "url": "{{BASE_API_URL}}/auth/user",
-    "method": "GET",
-    "sortNum": 15000,
-    "created": "2022-09-19T03:46:58.194Z",
-    "modified": "2022-09-19T13:09:15.749Z",
-    "headers": [],
-    "params": [],
     "tests": []
   },
   {
@@ -417,9 +403,9 @@
     "name": "admin/search",
     "url": "{{BASE_API_URL}}/user/admin/search?page=1&limit=10&sort=0&order_by=id&search=3333333",
     "method": "GET",
-    "sortNum": 16250,
+    "sortNum": 7500,
     "created": "2022-10-03T22:19:46.089Z",
-    "modified": "2022-10-03T23:07:47.977Z",
+    "modified": "2022-10-19T03:44:50.880Z",
     "headers": [],
     "params": [
       {
@@ -605,11 +591,11 @@
     "colId": "012cf620-077a-4198-96bf-73ff5651e37d",
     "containerId": "",
     "name": "admin/list",
-    "url": "{{BASE_API_URL}}/reservation/admin/list?order_by=id&page=1&limit=100&sort=1",
+    "url": "{{BASE_API_URL}}/reservation/admin/list?order_by=id&page=1&limit=100&sort=1&search=annie",
     "method": "GET",
     "sortNum": 5000,
     "created": "2022-10-19T03:29:01.770Z",
-    "modified": "2022-10-19T03:30:19.253Z",
+    "modified": "2022-10-19T04:11:40.510Z",
     "headers": [],
     "params": [
       {
@@ -630,6 +616,11 @@
       {
         "name": "sort",
         "value": "1",
+        "isPath": false
+      },
+      {
+        "name": "search",
+        "value": "annie",
         "isPath": false
       }
     ],
