@@ -59,7 +59,12 @@
     "sortNum": 40000,
     "folders": [],
     "settings": {
-      "headers": [],
+      "headers": [
+        {
+          "name": "X-API-KEY",
+          "value": "{{ADMIN_KEY}}"
+        }
+      ],
       "auth": {
         "type": "bearer",
         "bearer": "{{JWT_TOKEN}}"

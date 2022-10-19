@@ -42,7 +42,7 @@ class PaymentService:
         PaymentService.stripe_webhook_secret = os.getenv("STRIPE_WEBHOOK_SECRET")
 
     @staticmethod
-    def calculate_charge(reservation: Reservation):
+    def calculate_charge(reservation: Reservation) -> float:
         setting = SettingService.get_settings()
 
         start_time: datetime = reservation.start_time

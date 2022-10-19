@@ -23,6 +23,7 @@
             "type": "python",
             "request": "launch",
             "module": "mock.run",
+            "console": "internalConsole",
             "justMyCode": true
         },
         // {

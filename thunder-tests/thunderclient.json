@@ -580,5 +580,59 @@
     "headers": [],
     "params": [],
     "tests": []
+  },
+  {
+    "_id": "d0cc35f2-2069-4f28-9e97-4d55e6464dd5",
+    "colId": "012cf620-077a-4198-96bf-73ff5651e37d",
+    "containerId": "",
+    "name": "admin/end",
+    "url": "{{BASE_API_URL}}/reservation/admin/end",
+    "method": "DELETE",
+    "sortNum": 7500,
+    "created": "2022-10-19T03:14:02.620Z",
+    "modified": "2022-10-19T03:40:20.089Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"reservation_id\": 10,\n  \"create_invoice\": false\n}\n",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "85a56344-0fee-4768-8127-bdb84b398c28",
+    "colId": "012cf620-077a-4198-96bf-73ff5651e37d",
+    "containerId": "",
+    "name": "admin/list",
+    "url": "{{BASE_API_URL}}/reservation/admin/list?order_by=id&page=1&limit=100&sort=1",
+    "method": "GET",
+    "sortNum": 5000,
+    "created": "2022-10-19T03:29:01.770Z",
+    "modified": "2022-10-19T03:30:19.253Z",
+    "headers": [],
+    "params": [
+      {
+        "name": "order_by",
+        "value": "id",
+        "isPath": false
+      },
+      {
+        "name": "page",
+        "value": "1",
+        "isPath": false
+      },
+      {
+        "name": "limit",
+        "value": "100",
+        "isPath": false
+      },
+      {
+        "name": "sort",
+        "value": "1",
+        "isPath": false
+      }
+    ],
+    "tests": []
   }
 ]

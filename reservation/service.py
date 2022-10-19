@@ -23,12 +23,7 @@ class ReservationService:
     ):
         try:
             # create reservation
-            reservation = Reservation(
-                user.id,
-                car.id,
-                parking_lot.id,
-                start_time
-            )
+            reservation = Reservation(user.id, car.id, parking_lot.id, start_time)
             # validate reservation
             ReservationService.validate_reservation(reservation)
             # commit to database
@@ -43,9 +38,9 @@ class ReservationService:
 
     @staticmethod
     def end_reservation(reservation: Reservation, end_time=datetime.utcnow()) -> None:
-        db_session.query(Reservation).filter(
-            Reservation.id == reservation.id
-        ).update({"end_time": end_time})
+        db_session.query(Reservation).filter(Reservation.id == reservation.id).update(
+            {"end_time": end_time}
+        )
         db_session.commit()
 
     @staticmethod
@@ -76,9 +71,7 @@ class ReservationService:
             raise NotFound(f"Parking lot #{parking_lot.id} not found!")
 
         # check is parking lot available
-        parking_lot_available = ParkingLotService.is_parking_lot_available(
-            parking_lot
-        )
+        parking_lot_available = ParkingLotService.is_parking_lot_available(parking_lot)
         if parking_lot_available == False:
             raise Conflict(f"Parking lot #{parking_lot.id} not available!")
 
