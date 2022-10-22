@@ -321,7 +321,7 @@
     "method": "POST",
     "sortNum": 22500,
     "created": "2022-10-01T14:54:35.260Z",
-    "modified": "2022-10-02T03:41:38.346Z",
+    "modified": "2022-10-22T11:50:04.670Z",
     "headers": [],
     "params": [],
     "body": {
@@ -728,6 +728,63 @@
     "body": {
       "type": "json",
       "raw": "{\n  \"invoice_id\": 1,\n  \"charge_amount\": 99,\n  \"status\": \"PAID\",\n  \"description\": \"update-description\"\n}",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "217a3951-af42-430d-a2ae-8eab62eb46c6",
+    "colId": "55d84e90-6849-46a6-b752-48f30ef9a83c",
+    "containerId": "",
+    "name": "changepassword",
+    "url": "{{BASE_API_URL}}/auth/changepassword",
+    "method": "PATCH",
+    "sortNum": 10000,
+    "created": "2022-10-22T11:47:51.829Z",
+    "modified": "2022-10-22T11:49:59.653Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"password\": \"annie-password\",\n  \"new_password\": \"annie-password\"\n}\n",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "7e96d1fe-0310-4675-a071-5e8ffc38a65b",
+    "colId": "55d84e90-6849-46a6-b752-48f30ef9a83c",
+    "containerId": "",
+    "name": "admin/changepassword",
+    "url": "{{BASE_API_URL}}/auth/admin/changepassword",
+    "method": "PATCH",
+    "sortNum": 5000,
+    "created": "2022-10-22T11:53:14.849Z",
+    "modified": "2022-10-22T11:55:04.408Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"user_id\": 2,\n  \"password\": \"annie-password\",\n  \"new_password\": \"annie-password-new\"\n}\n",
+      "form": []
+    },
+    "tests": []
+  },
+  {
+    "_id": "76616e54-1c52-4c0b-bb41-8fca8db8ba23",
+    "colId": "55d84e90-6849-46a6-b752-48f30ef9a83c",
+    "containerId": "",
+    "name": "login annie (with new password)",
+    "url": "{{BASE_API_URL}}/auth/login",
+    "method": "POST",
+    "sortNum": 23750,
+    "created": "2022-10-22T11:55:10.172Z",
+    "modified": "2022-10-22T11:55:22.028Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"email\": \"annie@example.com\",\n  \"password\": \"annie-password-new\"\n}",
       "form": []
     },
     "tests": []

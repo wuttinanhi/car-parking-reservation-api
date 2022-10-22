@@ -15,7 +15,7 @@ load_env()
 
 
 def get_engine():
-    return create_engine(os.getenv("DATABASE_URI"), echo=True)
+    return create_engine(os.getenv("DATABASE_URI"), echo=False)
 
 
 engine = get_engine()

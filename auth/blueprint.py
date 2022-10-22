@@ -12,7 +12,7 @@ from user.service import UserService
 from util.validate_request import ValidateRequest
 from werkzeug.exceptions import Unauthorized
 
-from auth.decorator import login_required
+from auth.decorator import admin_only, login_required
 from auth.function import GetUser
 
 blueprint = Blueprint("auth", __name__, url_prefix="/auth")
@@ -34,6 +34,10 @@ class RegisterDto(LoginDto):
 class ChangePasswordDto(Schema):
     password = fields.Str(required=True, validate=validate.Length(min=8, max=50))
     new_password = fields.Str(required=True, validate=validate.Length(min=8, max=50))
+
+
+class AdminChangePasswordDto(ChangePasswordDto):
+    user_id = fields.Int(required=True)
 
 
 @blueprint.route("/login", methods=["POST"])
@@ -79,5 +83,14 @@ def change_password():
         raise Unauthorized("Invalid password!")
 
     UserService.change_password(user, data.new_password)
-    
+
+    return {"message": "Successfully change password."}, 200
+
+
+@blueprint.route("/admin/changepassword", methods=["PATCH"])
+@admin_only
+def admin_change_password():
+    data = ValidateRequest(AdminChangePasswordDto, request)
+    user = UserService.find_by_id(data.user_id)
+    UserService.change_password(user, data.new_password)
     return {"message": "Successfully change password."}, 200
