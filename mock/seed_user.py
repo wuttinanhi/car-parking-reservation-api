@@ -6,7 +6,9 @@
 def seed_user():
     from user.service import UserService
 
-    root = UserService.register(
+    print("Mocking user...")
+
+    UserService.register(
         "root@example.com",
         "root-password",
         "root",
@@ -15,7 +17,8 @@ def seed_user():
         "0000000000",
         "0000000000000",
     )
-    annie = UserService.register(
+
+    UserService.register(
         "annie@example.com",
         "annie-password",
         "annie",
@@ -24,7 +27,8 @@ def seed_user():
         "1111111111",
         "1111111111111",
     )
-    bobbie = UserService.register(
+
+    UserService.register(
         "bobbie@example.com",
         "bobbie-password",
         "bobbie",
@@ -33,7 +37,8 @@ def seed_user():
         "2222222222",
         "2222222222222",
     )
-    charlie = UserService.register(
+
+    UserService.register(
         "charlie@example.com",
         "charlie-password",
         "charlie",
@@ -42,3 +47,4 @@ def seed_user():
         "3333333333",
         "3333333333333",
     )
+

@@ -545,11 +545,11 @@
     "colId": "e9e3d3d8-d79c-43e7-b6ea-dbb24aa38d46",
     "containerId": "",
     "name": "admin/invoice",
-    "url": "{{BASE_API_URL}}/payment/admin/invoice?page=1&limit=5&sort=1&order_by=invoice_id",
+    "url": "{{BASE_API_URL}}/payment/admin/list?page=1&limit=10&sort=0&order_by=invoice_id",
     "method": "GET",
     "sortNum": 5000,
     "created": "2022-10-11T06:49:53.245Z",
-    "modified": "2022-10-19T05:38:03.672Z",
+    "modified": "2022-10-22T12:02:33.735Z",
     "headers": [],
     "params": [
       {
@@ -559,12 +559,12 @@
       },
       {
         "name": "limit",
-        "value": "5",
+        "value": "10",
         "isPath": false
       },
       {
         "name": "sort",
-        "value": "1",
+        "value": "0",
         "isPath": false
       },
       {
@@ -659,11 +659,11 @@
     "colId": "e858eb49-2d8b-4bc5-bc1e-5eb5dcef9be0",
     "containerId": "",
     "name": "admin/list",
-    "url": "{{BASE_API_URL}}/car/admin/list?order_by=id&page=1&limit=10&sort=1&search=ar",
+    "url": "{{BASE_API_URL}}/car/admin/list?order_by=id&page=1&limit=10&sort=1",
     "method": "GET",
     "sortNum": 5000,
     "created": "2022-10-19T07:31:10.650Z",
-    "modified": "2022-10-19T07:37:05.987Z",
+    "modified": "2022-10-22T11:56:26.094Z",
     "headers": [],
     "params": [
       {
@@ -689,6 +689,7 @@
       {
         "name": "search",
         "value": "ar",
+        "isDisabled": true,
         "isPath": false
       }
     ],

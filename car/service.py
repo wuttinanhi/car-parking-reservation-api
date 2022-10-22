@@ -44,7 +44,7 @@ class CarService:
         return car
 
     @staticmethod
-    def find_all_car_by_user(user: User) -> Car:
+    def find_all_car_by_user(user: User) -> List[Car]:
         return Car.query.filter(Car.car_owner_id == user.id).all()
 
     @staticmethod
