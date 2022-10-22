@@ -2,7 +2,7 @@ import enum
 from datetime import datetime
 
 from database import Base
-from sqlalchemy import Column, DateTime, Enum, Float, Integer, String
+from sqlalchemy import Column, DateTime, Enum, Float, ForeignKey, Integer, String
 
 
 class InvoiceStatus(enum.Enum):
@@ -19,8 +19,8 @@ class Invoice(Base):
     __tablename__ = "invoices"
 
     id = Column(Integer(), primary_key=True)
-    user_id = Column(Integer(), nullable=False)
-    reservation_id = Column(Integer(), nullable=False)
+    user_id = Column(Integer(), ForeignKey("users.id"), nullable=False)
+    reservation_id = Column(Integer(), ForeignKey("reservations.id"), nullable=False)
 
     create_date = Column(DateTime(), nullable=False)
     stripe_payment_id = Column(String(100))

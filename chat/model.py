@@ -5,7 +5,7 @@
 from datetime import datetime
 
 from database import Base
-from sqlalchemy import Column, DateTime, Integer, String
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, String
 from user.service import UserService
 
 
@@ -13,8 +13,8 @@ class Chat(Base):
     __tablename__ = "chats"
 
     id = Column(Integer(), primary_key=True)
-    from_user_id = Column(Integer(), nullable=False)
-    to_user_id = Column(Integer(), nullable=False)
+    from_user_id = Column(Integer(), ForeignKey("users.id"), nullable=False)
+    to_user_id = Column(Integer(), ForeignKey("users.id"), nullable=False)
     message = Column(String(255), nullable=False)
     send_date = Column(DateTime(), nullable=False)
 
@@ -47,8 +47,8 @@ class ChatHead(Base):
     __tablename__ = "chat_heads"
 
     id = Column(Integer(), primary_key=True)
-    user_id = Column(Integer(), nullable=False)
-    target_user_id = Column(Integer(), nullable=False)
+    user_id = Column(Integer(), ForeignKey("users.id"), nullable=False)
+    target_user_id = Column(Integer(), ForeignKey("users.id"), nullable=False)
     last_update_date = Column(DateTime(), nullable=False)
 
     def __init__(self, user_id: int, target_user_id: int, last_update=datetime.now()):

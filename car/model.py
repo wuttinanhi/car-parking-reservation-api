@@ -1,12 +1,12 @@
 from database import Base
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, ForeignKey, Integer, String
 
 
 class Car(Base):
     __tablename__ = "cars"
 
     id = Column(Integer, primary_key=True)
-    car_owner_id = Column(Integer())
+    car_owner_id = Column(Integer(), ForeignKey("users.id"))
     car_license_plate = Column(String(100), unique=True)
     car_type = Column(String(100))
 
