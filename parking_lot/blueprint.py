@@ -28,7 +28,7 @@ class ParkingLotDeleteDto(Schema):
     parking_lot_id = fields.Int(required=True)
 
 
-@blueprint.route("/add", methods=["POST"])
+@blueprint.route("/admin/add", methods=["POST"])
 @admin_only
 def add_parking_lot():
     data = ValidateRequest(ParkingLotAddDto, request)
@@ -36,7 +36,7 @@ def add_parking_lot():
     return {"message": "Parking lot added."}, CREATED
 
 
-@blueprint.route("/remove", methods=["DELETE"])
+@blueprint.route("/admin/remove", methods=["DELETE"])
 @admin_only
 def remove_parking_lot():
     data = ValidateRequest(ParkingLotDeleteDto, request)
@@ -55,17 +55,8 @@ def remove_parking_lot():
     return {"message": "Parking lot deleted."}, OK
 
 
-@blueprint.route("/available", methods=["GET"])
-@login_required
-def available_parking_lot():
-    response = []
-    parking_lots = ParkingLotService.get_all_parking_lot_with_available_status()
-    for obj in parking_lots:
-        response.append(obj.json())
-    return response
 
-
-@blueprint.route("/update", methods=["PATCH"])
+@blueprint.route("/admin/update", methods=["PATCH"])
 @admin_only
 def update_parking_lot():
     data = ValidateRequest(ParkingLotUpdateDto, request)
@@ -86,3 +77,13 @@ def admin_available_parking_lot():
     for obj in parking_lots:
         response.append(obj.json())
     return response
+
+@blueprint.route("/available", methods=["GET"])
+@login_required
+def available_parking_lot():
+    response = []
+    parking_lots = ParkingLotService.get_all_parking_lot_with_available_status()
+    for obj in parking_lots:
+        response.append(obj.json())
+    return response
+
