@@ -169,12 +169,12 @@
     "method": "DELETE",
     "sortNum": 20000,
     "created": "2022-09-22T17:32:40.903Z",
-    "modified": "2022-10-03T03:23:53.605Z",
+    "modified": "2022-10-23T10:17:23.780Z",
     "headers": [],
     "params": [],
     "body": {
       "type": "json",
-      "raw": "{\n  \"reservation_id\": 50\n}\n",
+      "raw": "{\n  \"reservation_id\": 10\n}\n",
       "form": []
     },
     "tests": []
@@ -184,11 +184,11 @@
     "colId": "012cf620-077a-4198-96bf-73ff5651e37d",
     "containerId": "",
     "name": "user_reservation",
-    "url": "{{BASE_API_URL}}/reservation/user_reservation?order_by=id&page=1&limit=10&sort=0",
+    "url": "{{BASE_API_URL}}/reservation/user_reservation?order_by=id&page=1&limit=10&sort=1",
     "method": "GET",
     "sortNum": 30000,
     "created": "2022-09-22T17:32:40.905Z",
-    "modified": "2022-10-19T05:35:09.452Z",
+    "modified": "2022-10-23T10:17:15.108Z",
     "headers": [],
     "params": [
       {
@@ -208,7 +208,7 @@
       },
       {
         "name": "sort",
-        "value": "0",
+        "value": "1",
         "isPath": false
       },
       {
@@ -619,11 +619,11 @@
     "colId": "012cf620-077a-4198-96bf-73ff5651e37d",
     "containerId": "",
     "name": "admin/list",
-    "url": "{{BASE_API_URL}}/reservation/admin/list?order_by=id&page=1&limit=100&sort=1&search=annie",
+    "url": "{{BASE_API_URL}}/reservation/admin/list?order_by=id&page=1&limit=100&sort=1",
     "method": "GET",
     "sortNum": 5000,
     "created": "2022-10-19T03:29:01.770Z",
-    "modified": "2022-10-19T04:11:40.510Z",
+    "modified": "2022-10-23T10:23:11.171Z",
     "headers": [],
     "params": [
       {
@@ -649,6 +649,7 @@
       {
         "name": "search",
         "value": "annie",
+        "isDisabled": true,
         "isPath": false
       }
     ],

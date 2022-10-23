@@ -7,7 +7,8 @@ from database.database import db_session
 from pagination.pagination import Pagination, PaginationOptions
 from parking_lot.model import ParkingLot
 from parking_lot.service import ParkingLotService
-from sqlalchemy import and_, or_
+from sqlalchemy import or_
+from sqlalchemy.orm import Query
 from user.model import User
 from user.service import UserService
 from werkzeug.exceptions import Conflict, Forbidden, NotFound
@@ -17,15 +18,21 @@ from reservation.model import Reservation
 
 class ReservationPaginationResult:
     def __init__(self, raw):
-        self.reservation: Reservation = raw[0]
-        self.user: User = raw[1]
-        self.car: Car = raw[2]
+        self.reservation: Reservation = raw[0] or None
+        self.user: User = raw[1] or None
+        self.car: Car = raw[2] or None
+        self.parking_lot: ParkingLot = raw[3] or None
 
     def json(self):
         return {
-            "reservation": self.reservation.json(),
-            "user": self.user.json_shareable(),
-            "car": self.car.json(),
+            "reservation": self.reservation.json()
+            if self.reservation is not None
+            else None,
+            "user": self.user.json_shareable() if self.user is not None else None,
+            "car": self.car.json() if self.car is not None else None,
+            "parking_lot": self.parking_lot.json()
+            if self.parking_lot is not None
+            else None,
         }
 
 
@@ -99,54 +106,14 @@ class ReservationService:
         return Reservation.query.filter(Reservation.id == id).first()
 
     @staticmethod
-    def get_user_reservation(
-        user: User, options: PaginationOptions
-    ) -> List[Reservation]:
-        query = (
-            db_session.query(Reservation, User, Car)
-            .join(User, User.id == Reservation.user_id)
-            .join(Car, Car.id == Reservation.car_id)
-            .where(
-                and_(
-                    or_(
-                        # find by id
-                        Reservation.id.ilike(f"%{options.search}%"),
-                        # find by user
-                        User.id.ilike(f"%{options.search}%"),
-                        User.email.ilike(f"%{options.search}%"),
-                        User.username.ilike(f"%{options.search}%"),
-                        User.firstname.ilike(f"%{options.search}%"),
-                        User.lastname.ilike(f"%{options.search}%"),
-                        User.phone_number.ilike(f"%{options.search}%"),
-                        User.citizen_id.ilike(f"%{options.search}%"),
-                        # find by car
-                        Car.car_license_plate.ilike(f"%{options.search}%"),
-                        Car.car_type.ilike(f"%{options.search}%"),
-                    ),
-                    User.id == user.id,
-                )
-            )
-        )
-        pagination = Pagination(Reservation, query)
-        pagination.set_options(options)
-        result = pagination.result()
-
-        response = []
-
-        for raw in result:
-            new_obj = ReservationPaginationResult(raw)
-            response.append(new_obj.json())
-
-        return response
-
-    @staticmethod
-    def admin_pagination_reservation(
-        options: PaginationOptions,
+    def pagination_reservation(
+        options: PaginationOptions, user: User = None
     ) -> List[ReservationPaginationResult]:
+        query: Query = db_session.query(Reservation, User, Car, ParkingLot)
         query = (
-            db_session.query(Reservation, User, Car)
-            .join(User, User.id == Reservation.user_id)
-            .join(Car, Car.id == Reservation.car_id)
+            query.join(User, User.id == Reservation.user_id, isouter=True)
+            .join(Car, Car.id == Reservation.car_id, isouter=True)
+            .join(ParkingLot, ParkingLot.id == Reservation.parking_lot_id, isouter=True)
             .where(
                 or_(
                     # find by id
@@ -165,6 +132,10 @@ class ReservationService:
                 )
             )
         )
+
+        if user is not None:
+            query = query.filter(Reservation.user_id == user.id)
+
         pagination = Pagination(Reservation, query)
         pagination.set_options(options)
         result = pagination.result()

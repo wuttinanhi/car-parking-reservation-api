@@ -9,8 +9,8 @@ class Reservation(Base):
 
     id = Column(Integer, primary_key=True)
     user_id = Column(Integer(), ForeignKey("users.id"))
-    car_id = Column(Integer(), ForeignKey("cars.id"))
-    parking_lot_id = Column(Integer(), ForeignKey("parking_lots.id"))
+    car_id = Column(Integer(), ForeignKey("cars.id", ondelete="SET NULL"))
+    parking_lot_id = Column(Integer(), ForeignKey("parking_lots.id", ondelete="SET NULL"))
     start_time = Column(DateTime, nullable=False)
     end_time = Column(DateTime)
 

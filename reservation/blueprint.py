@@ -77,15 +77,6 @@ def end_reservation():
     return {"error": "Reservation not found!"}, NOT_FOUND
 
 
-@blueprint.route("/user_reservation", methods=["GET"])
-@login_required
-def user_reservation():
-    user = GetUser()
-    pagination_options = create_pagination_options_from_request(request)
-    result = ReservationService.get_user_reservation(user, pagination_options)
-    return result
-
-
 @blueprint.route("/admin/end", methods=["DELETE"])
 @admin_only
 def admin_end_reservation():
@@ -114,9 +105,19 @@ def admin_end_reservation():
     return {"error": "Reservation not found!"}, NOT_FOUND
 
 
+@blueprint.route("/user_reservation", methods=["GET"])
+@login_required
+def user_reservation():
+    user = GetUser()
+    pagination_options = create_pagination_options_from_request(request)
+    result = ReservationService.pagination_reservation(pagination_options, user)
+    return result
+
+
+
 @blueprint.route("/admin/list", methods=["GET"])
 @admin_only
 def admin_pagination_reservation():
     pagination_options = create_pagination_options_from_request(request)
-    result = ReservationService.admin_pagination_reservation(pagination_options)
+    result = ReservationService.pagination_reservation(pagination_options)
     return result
