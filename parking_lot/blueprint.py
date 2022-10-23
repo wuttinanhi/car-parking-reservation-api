@@ -55,7 +55,6 @@ def remove_parking_lot():
     return {"message": "Parking lot deleted."}, OK
 
 
-
 @blueprint.route("/admin/update", methods=["PATCH"])
 @admin_only
 def update_parking_lot():
@@ -78,6 +77,7 @@ def admin_available_parking_lot():
         response.append(obj.json())
     return response
 
+
 @blueprint.route("/available", methods=["GET"])
 @login_required
 def available_parking_lot():
@@ -86,4 +86,3 @@ def available_parking_lot():
     for obj in parking_lots:
         response.append(obj.json())
     return response
-

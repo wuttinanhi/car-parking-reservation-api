@@ -7,25 +7,18 @@ from parking_lot.model import ParkingLot
 
 
 class CustomAvailableParkingLot:
-    id: int
-    location: str
-    open_status: bool
+    parking_lot: ParkingLot
     available: bool
 
-    @classmethod
-    def from_raw(cls, raw):
-        obj = cls()
-        obj.id = raw["id"]
-        obj.location = raw["location"]
-        obj.open_status = raw["open_status"]
-        obj.available = raw["available"]
-        return obj
+    def __init__(self, parking_lot: ParkingLot) -> None:
+        self.parking_lot = parking_lot
+        self.available = ParkingLotService.is_parking_lot_available(self.parking_lot)
 
     def json(self):
         return {
-            "id": self.id,
-            "location": self.location,
-            "open_status": self.open_status,
+            "id": self.parking_lot.id,
+            "location": self.parking_lot.location,
+            "open_status": self.parking_lot.open_status,
             "available": self.available,
         }
 
@@ -42,6 +35,21 @@ class ParkingLotService:
             db_session.rollback()
             print(err)
             raise InternalServerError("Something error when adding parking lot")
+
+    @staticmethod
+    def update(parking_lot: ParkingLot):
+        try:
+            ParkingLot.query.filter(ParkingLot.id == parking_lot.id).update(
+                {
+                    "location": parking_lot.location,
+                    "open_status": parking_lot.open_status,
+                }
+            )
+            db_session.commit()
+        except Exception as e:
+            print(e)
+            db_session.rollback()
+            raise InternalServerError("Failed to update parking lot!")
 
     @staticmethod
     def remove(parking_lot: ParkingLot):
@@ -91,60 +99,9 @@ class ParkingLotService:
 
     @staticmethod
     def get_all_parking_lot_with_available_status() -> List[CustomAvailableParkingLot]:
-        exec = db_session.execute(
-            """
-            SELECT
-                DISTINCT t1.id,
-                t1.location,
-                t1.open_status,
-                ANY_VALUE(t1.available) AS available
-            FROM (
-                SELECT 
-                    parking_lots.id,
-                    parking_lots.location,
-                    parking_lots.open_status,
-                    (
-                        CASE
-                            WHEN reservations.end_time IS NOT NULL AND parking_lots.open_status = 1 THEN 1
-                            ELSE 0
-                        END
-                    ) AS available
-                FROM
-                    parking_lots
-                LEFT JOIN
-                    reservations
-                ON 
-                    parking_lots.id = reservations.parking_lot_id
-                ORDER BY
-                    parking_lots.id ASC
-            )  AS t1
-            GROUP BY
-                t1.id
-            ORDER BY 
-                t1.id ASC
-        """
-        )
-
-        result = exec.all()
+        all_parking_lot = ParkingLotService.get_all_parking_lot()
         parsed = []
-
-        for obj in result:
-            new_obj = CustomAvailableParkingLot.from_raw(obj)
+        for parking_lot in all_parking_lot:
+            new_obj = CustomAvailableParkingLot(parking_lot)
             parsed.append(new_obj)
-
         return parsed
-
-    @staticmethod
-    def update(parking_lot: ParkingLot):
-        try:
-            ParkingLot.query.filter(ParkingLot.id == parking_lot.id).update(
-                {
-                    "location": parking_lot.location,
-                    "open_status": parking_lot.open_status,
-                }
-            )
-            db_session.commit()
-        except Exception as e:
-            print(e)
-            db_session.rollback()
-            raise InternalServerError("Failed to update parking lot!")
