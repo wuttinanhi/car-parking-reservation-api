@@ -2,7 +2,6 @@
     main
 """
 
-
 from http.client import BAD_REQUEST, INTERNAL_SERVER_ERROR
 
 from flask import Flask, request
@@ -69,9 +68,10 @@ def hello_world():
 def error_handle(err: Exception):
     # web error
     if issubclass(type(err), ValidationError):
-        return str(err), BAD_REQUEST
+        err: ValidationError = err
+        return err.messages_dict, BAD_REQUEST
     if issubclass(type(err), HTTPException):
-        return {"error": err.description}, err.code
+        return {"error": str(err.description)}, err.code
     # internal error
     print(err)
     return {"error": "Internal server exception!"}, INTERNAL_SERVER_ERROR

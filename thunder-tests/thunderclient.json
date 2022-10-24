@@ -790,5 +790,24 @@
       "form": []
     },
     "tests": []
+  },
+  {
+    "_id": "13d1c14c-7502-4200-9299-9987b434cc33",
+    "colId": "55d84e90-6849-46a6-b752-48f30ef9a83c",
+    "containerId": "",
+    "name": "login (invalid)",
+    "url": "{{BASE_API_URL}}/auth/login",
+    "method": "POST",
+    "sortNum": 40000,
+    "created": "2022-10-24T20:33:23.941Z",
+    "modified": "2022-10-24T20:33:45.643Z",
+    "headers": [],
+    "params": [],
+    "body": {
+      "type": "json",
+      "raw": "{\n  \"email\": \"annie@\",\n  \"password\": \"annie-password\"\n}",
+      "form": []
+    },
+    "tests": []
   }
 ]
