@@ -9,7 +9,7 @@ import bcrypt
 
 
 class BcryptService:
-    __salt_round = os.getenv("BCRYPT_SALT") or 10
+    __salt_round = int(os.getenv("BCRYPT_SALT") or 10)
     __salt = bcrypt.gensalt(rounds=__salt_round)
 
     @staticmethod
