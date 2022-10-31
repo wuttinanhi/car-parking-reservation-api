@@ -6,14 +6,20 @@ from datetime import datetime
 from typing import List
 
 from database.database import db_session
+from marshmallow import fields, validate
 from pagination.pagination import Pagination, PaginationOptions, PaginationSortOptions
-from sqlalchemy import text
 from sqlalchemy.orm.query import Query
 from sqlalchemy.sql import and_, or_
 from user.model import User
+from user.service import UserService
 from werkzeug.exceptions import InternalServerError
 
 from chat.model import Chat, ChatHead
+
+
+class ChatHistoryPaginationOptions(PaginationOptions):
+    from_user_id = fields.Integer(required=True, validate=validate.Range(min=1))
+    to_user_id = fields.Integer(required=True, validate=validate.Range(min=1))
 
 
 class ChatService:
@@ -36,9 +42,13 @@ class ChatService:
             ChatService.update_chat_head(to_user, from_user)
 
     @staticmethod
-    def list_chat_history(from_user: User, to_user: User) -> List[Chat]:
+    def list_chat_history(opts: ChatHistoryPaginationOptions) -> List[Chat]:
         try:
-            chat_history: Query = Chat.query.where(
+            from_user = UserService.find_by_id(opts.from_user_id)
+            to_user = UserService.find_by_id(opts.to_user_id)
+
+            query: Query = db_session.query(Chat)
+            query = query.where(
                 or_(
                     (
                         and_(
@@ -54,10 +64,12 @@ class ChatService:
                     ),
                 )
             )
-            chat_history = chat_history.order_by(text("id DESC")).limit(10)
-            chat_history = Chat.query.select_from(chat_history).order_by(text("id ASC"))
-            chat_history = chat_history.all()
-            return chat_history
+
+            pagination = Pagination(Chat, query)
+            pagination.set_options(opts)
+            result = pagination.result()
+
+            return result
         except Exception as e:
             print(e)
             raise InternalServerError("Failed to retrieve chat history!")

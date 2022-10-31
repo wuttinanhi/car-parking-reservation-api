@@ -47,6 +47,7 @@ def create_pagination_options_from_request(request: Request):
     options.page = int(data.page)
     options.limit = int(data.limit)
     options.order_by = data.order_by
+
     if hasattr(data, "search"):
         options.search = data.search
     else:
