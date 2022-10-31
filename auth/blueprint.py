@@ -9,11 +9,11 @@ from flask import Blueprint, request
 from jwt_wrapper.service import JwtService
 from marshmallow import Schema, fields, validate
 from user.service import UserService
-from util.validate_request import ValidateRequest
+from util.validate_request import validate_request
 from werkzeug.exceptions import Unauthorized
 
 from auth.decorator import admin_only, login_required
-from auth.function import GetUser
+from auth.function import get_user
 
 blueprint = Blueprint("auth", __name__, url_prefix="/auth")
 
@@ -42,7 +42,7 @@ class AdminChangePasswordDto(ChangePasswordDto):
 
 @blueprint.route("/login", methods=["POST"])
 def login():
-    data = ValidateRequest(LoginDto, request)
+    data = validate_request(LoginDto, request)
     check = UserService.login(data.email, data.password)
 
     if check:
@@ -59,7 +59,7 @@ def login():
 
 @blueprint.route("/register", methods=["POST"])
 def register():
-    data = ValidateRequest(RegisterDto, request)
+    data = validate_request(RegisterDto, request)
     UserService.register(
         data.email,
         data.password,
@@ -75,8 +75,8 @@ def register():
 @blueprint.route("/changepassword", methods=["PATCH"])
 @login_required
 def change_password():
-    user = GetUser()
-    data = ValidateRequest(ChangePasswordDto, request)
+    user = get_user()
+    data = validate_request(ChangePasswordDto, request)
 
     check_password = UserService.compare_password(user, data.password)
     if check_password is False:
@@ -90,7 +90,7 @@ def change_password():
 @blueprint.route("/admin/changepassword", methods=["PATCH"])
 @admin_only
 def admin_change_password():
-    data = ValidateRequest(AdminChangePasswordDto, request)
+    data = validate_request(AdminChangePasswordDto, request)
     user = UserService.find_by_id(data.user_id)
     UserService.change_password(user, data.new_password)
     return {"message": "Successfully change password."}, 200

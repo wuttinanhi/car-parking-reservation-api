@@ -9,7 +9,7 @@ from flask import Request
 from marshmallow import Schema, fields, validate
 from sqlalchemy import column, desc, text
 from sqlalchemy.orm.query import Query
-from util.validate_request import ValidateRequest
+from util.validate_request import validate_request
 from werkzeug.exceptions import BadRequest
 
 
@@ -41,7 +41,7 @@ def create_order_by(model, key: str, sort: PaginationSortOptions):
 
 
 def create_pagination_options_from_request(request: Request):
-    data = ValidateRequest(PaginationOptions, request, "GET")
+    data = validate_request(PaginationOptions, request, "GET")
 
     options = PaginationOptions()
     options.page = int(data.page)

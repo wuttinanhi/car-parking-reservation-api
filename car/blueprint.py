@@ -6,12 +6,12 @@
 from http.client import CREATED, FORBIDDEN, NOT_FOUND, OK
 
 from auth.decorator import admin_only, login_required
-from auth.function import GetUser
+from auth.function import get_user
 from flask import Blueprint, request
 from marshmallow import Schema, fields, validate
 from pagination.pagination import create_pagination_options_from_request
 from user.service import UserService
-from util.validate_request import ValidateRequest
+from util.validate_request import validate_request
 from werkzeug.exceptions import Forbidden
 
 from car.service import CarService
@@ -43,8 +43,8 @@ class CarSearchDto(Schema):
 @blueprint.route("/add", methods=["POST"])
 @login_required
 def add_car():
-    user = GetUser()
-    data = ValidateRequest(CarAddDto, request)
+    user = get_user()
+    data = validate_request(CarAddDto, request)
     CarService.add(user, data.car_license_plate, data.car_type)
     return {"message": "Car add."}, CREATED
 
@@ -52,8 +52,8 @@ def add_car():
 @blueprint.route("/remove", methods=["DELETE"])
 @login_required
 def remove_car():
-    user = GetUser()
-    data = ValidateRequest(CarDeleteDto, request)
+    user = get_user()
+    data = validate_request(CarDeleteDto, request)
     car = CarService.find_by_id(data.car_id)
     if car:
         car_owner_check = CarService.is_user_own_car(user, car)
@@ -68,7 +68,7 @@ def remove_car():
 @login_required
 def my_car():
     response = []
-    user = GetUser()
+    user = get_user()
     all_user_cars = CarService.find_all_car_by_user(user)
     for car in all_user_cars:
         response.append(car.json())
@@ -78,8 +78,8 @@ def my_car():
 @blueprint.route("/update", methods=["PATCH"])
 @login_required
 def update_car():
-    user = GetUser()
-    data = ValidateRequest(CarUpdateDto, request)
+    user = get_user()
+    data = validate_request(CarUpdateDto, request)
     car = CarService.find_by_id(data.car_id)
 
     if car.car_owner_id != user.id:
@@ -95,7 +95,7 @@ def update_car():
 @blueprint.route("/search", methods=["GET"])
 @login_required
 def search_car_by_license_plate():
-    data = ValidateRequest(CarSearchDto, request)
+    data = validate_request(CarSearchDto, request)
     car = CarService.find_by_license_plate(data.car_license_plate)
     response = car.json()
     response["car_owner"] = UserService.find_by_id(car.car_owner_id).json_shareable()

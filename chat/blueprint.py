@@ -4,7 +4,7 @@
 
 
 from auth.decorator import login_required
-from auth.function import GetUser
+from auth.function import get_user
 from flask import Blueprint, request
 from pagination.pagination import create_pagination_options_from_request
 
@@ -17,7 +17,7 @@ blueprint = Blueprint("chat", __name__, url_prefix="/chat")
 @login_required
 def list_chat():
     response = []
-    user = GetUser()
+    user = get_user()
     pagination_options = create_pagination_options_from_request(request)
     result = ChatService.list_chat_head(user, pagination_options)
     for chat_head in result:

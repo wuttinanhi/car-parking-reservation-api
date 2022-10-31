@@ -8,7 +8,7 @@ from http.client import CREATED, FORBIDDEN, NOT_FOUND, OK
 from auth.decorator import admin_only, login_required
 from flask import Blueprint, request
 from marshmallow import Schema, fields, validate
-from util.validate_request import ValidateRequest
+from util.validate_request import validate_request
 
 from parking_lot.service import ParkingLotService
 
@@ -31,7 +31,7 @@ class ParkingLotDeleteDto(Schema):
 @blueprint.route("/admin/add", methods=["POST"])
 @admin_only
 def add_parking_lot():
-    data = ValidateRequest(ParkingLotAddDto, request)
+    data = validate_request(ParkingLotAddDto, request)
     ParkingLotService.add(data.location, data.open_status)
     return {"message": "Parking lot added."}, CREATED
 
@@ -39,7 +39,7 @@ def add_parking_lot():
 @blueprint.route("/admin/remove", methods=["DELETE"])
 @admin_only
 def remove_parking_lot():
-    data = ValidateRequest(ParkingLotDeleteDto, request)
+    data = validate_request(ParkingLotDeleteDto, request)
     parking_lot = ParkingLotService.find_by_id(data.parking_lot_id)
 
     # check is parking lot none
@@ -58,7 +58,7 @@ def remove_parking_lot():
 @blueprint.route("/admin/update", methods=["PATCH"])
 @admin_only
 def update_parking_lot():
-    data = ValidateRequest(ParkingLotUpdateDto, request)
+    data = validate_request(ParkingLotUpdateDto, request)
     parking_lot = ParkingLotService.find_by_id(data.parking_lot_id)
 
     parking_lot.location = data.location

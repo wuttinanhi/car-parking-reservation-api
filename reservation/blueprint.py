@@ -7,13 +7,13 @@ from datetime import datetime
 from http.client import CONFLICT, CREATED, FORBIDDEN, NOT_FOUND, OK
 
 from auth.decorator import admin_only, login_required
-from auth.function import GetUser
+from auth.function import get_user
 from car.service import CarService
 from flask import Blueprint, request
 from marshmallow import Schema, fields
 from pagination.pagination import create_pagination_options_from_request
 from payment.service import PaymentService
-from util.validate_request import ValidateRequest
+from util.validate_request import validate_request
 
 from reservation.service import ParkingLotService, ReservationService
 
@@ -36,8 +36,8 @@ class ReservationAdminEndDto(ReservationEndDto):
 @blueprint.route("/create", methods=["POST"])
 @login_required
 def create_reservation():
-    user = GetUser()
-    data = ValidateRequest(ReservationCreateDto, request)
+    user = get_user()
+    data = validate_request(ReservationCreateDto, request)
     car = CarService.find_by_id(data.car_id)
     parking_lot = ParkingLotService.find_by_id(data.parking_lot_id)
     ReservationService.create_reservation(user, car, parking_lot, datetime.utcnow())
@@ -48,9 +48,9 @@ def create_reservation():
 @login_required
 def end_reservation():
     # get user
-    user = GetUser()
+    user = get_user()
     # validate request
-    data = ValidateRequest(ReservationEndDto, request)
+    data = validate_request(ReservationEndDto, request)
     # get reservation
     reservation = ReservationService.find_by_id(data.reservation_id)
 
@@ -81,7 +81,7 @@ def end_reservation():
 @admin_only
 def admin_end_reservation():
     # validate request
-    data = ValidateRequest(ReservationAdminEndDto, request)
+    data = validate_request(ReservationAdminEndDto, request)
     # get reservation
     reservation = ReservationService.find_by_id(data.reservation_id)
 
@@ -108,11 +108,10 @@ def admin_end_reservation():
 @blueprint.route("/user_reservation", methods=["GET"])
 @login_required
 def user_reservation():
-    user = GetUser()
+    user = get_user()
     pagination_options = create_pagination_options_from_request(request)
     result = ReservationService.pagination_reservation(pagination_options, user)
     return result
-
 
 
 @blueprint.route("/admin/list", methods=["GET"])

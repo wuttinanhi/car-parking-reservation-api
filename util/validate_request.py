@@ -11,8 +11,10 @@ from marshmallow import ValidationError
 
 T = TypeVar("T")
 
+def validate_object(schema: T, obj: Any) -> T:
+    pass
 
-def ValidateRequest(schema: T, request: Request, method="POST") -> T:
+def validate_request(schema: T, request: Request, method="POST") -> T:
     # create schema object
     template = schema()
 

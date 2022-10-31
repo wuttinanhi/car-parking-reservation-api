@@ -4,11 +4,11 @@
 
 
 from auth.decorator import admin_only, login_required
-from auth.function import GetUser
+from auth.function import get_user
 from flask import Blueprint, request
 from marshmallow import Schema, fields, validate
 from pagination.pagination import create_pagination_options_from_request
-from util.validate_request import ValidateRequest
+from util.validate_request import validate_request
 
 from user.service import UserService
 
@@ -40,15 +40,15 @@ def admin_user_search():
 @blueprint.route("/me", methods=["GET"])
 @login_required
 def user_detail():
-    user = GetUser()
+    user = get_user()
     return user.json_full()
 
 
 @blueprint.route("/update", methods=["PATCH"])
 @login_required
 def update_user():
-    user = GetUser()
-    data = ValidateRequest(UpdateUserDto, request)
+    user = get_user()
+    data = validate_request(UpdateUserDto, request)
 
     user.firstname = data.firstname
     user.lastname = data.lastname
@@ -62,7 +62,7 @@ def update_user():
 @blueprint.route("/admin/update", methods=["PATCH"])
 @admin_only
 def admin_update_user():
-    data = ValidateRequest(AdminUpdateUserDto, request)
+    data = validate_request(AdminUpdateUserDto, request)
     user = UserService.find_by_id(data.user_id)
 
     user.firstname = data.firstname

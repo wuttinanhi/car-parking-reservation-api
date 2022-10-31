@@ -7,11 +7,11 @@ from http.client import FORBIDDEN, NOT_FOUND, OK
 
 import stripe
 from auth.decorator import admin_only, login_required
-from auth.function import GetUser
+from auth.function import get_user
 from flask import Blueprint, jsonify, request
 from marshmallow import Schema, fields, validate
 from pagination.pagination import create_pagination_options_from_request
-from util.validate_request import ValidateRequest
+from util.validate_request import validate_request
 
 from payment.model import InvoiceStatus
 from payment.service import PaymentService
@@ -33,7 +33,7 @@ class InvoiceUpdateDto(Schema):
 @blueprint.route("/my_invoice", methods=["GET"])
 @login_required
 def list_user_invoice():
-    user = GetUser()
+    user = get_user()
     response_list = []
     pagination_options = create_pagination_options_from_request(request)
     result = PaymentService.paginate_user_invoice(user, pagination_options)
@@ -45,8 +45,8 @@ def list_user_invoice():
 @blueprint.route("/pay", methods=["POST"])
 @login_required
 def pay_invoice():
-    user = GetUser()
-    data = ValidateRequest(PayInvoiceDto, request)
+    user = get_user()
+    data = validate_request(PayInvoiceDto, request)
     invoice = PaymentService.get_invoice_by_id(data.invoice_id)
 
     if invoice == None:
@@ -118,7 +118,7 @@ def admin_invoice_list():
 @blueprint.route("/admin/update", methods=["PATCH"])
 @admin_only
 def admin_invoice_update():
-    data = ValidateRequest(InvoiceUpdateDto, request)
+    data = validate_request(InvoiceUpdateDto, request)
     invoice = PaymentService.get_invoice_by_id(data.invoice_id)
 
     invoice.charge_amount = data.charge_amount
