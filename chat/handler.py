@@ -1,14 +1,19 @@
 """
     chat socket handler
 """
+
+from typing import Any, Dict
+
 from auth.service import AuthService
 from flask import request
 from flask_socketio import Namespace, emit
+from pagination.pagination import int_to_sort
 from user.model import User
 from user.service import UserService
+from util.validate_request import validate_object
 from werkzeug.exceptions import NotFound, Unauthorized
 
-from chat.service import ChatService
+from chat.service import ChatHistoryPaginationOptions, ChatService
 
 
 class ChatMapper(Namespace):
@@ -75,16 +80,47 @@ class ChatHandler(ChatMapper):
         ChatHandler.register(user, sid)
         return user.json()
 
+    # retrieve chat history
+    # request data json:
+    # {
+    #     "jwt_token": "USER-JWT-TOKEN",
+    #     "to_user": 1,
+    #     "page": 1,
+    #     "limit": 20,
+    #     "sort": 1,
+    #     "order_by": "send_date",
+    #     "search": null,
+    # }
     def on_chat_list(self, data):
         user = ChatHandler.auth_user(data)
-        to_user_id = data["to_user"]
 
-        from_user = UserService.find_by_id(user.id)
-        to_user = UserService.find_by_id(to_user_id)
+        opts_dict: Dict[Any, Any] = {}
+        opts_dict["page"] = int(data["page"])
+        opts_dict["limit"] = int(data["limit"])
+        opts_dict["sort"] = int(data["sort"])
+        opts_dict["order_by"] = data["order_by"]
+        opts_dict["from_user_id"] = int(user.id)
+        opts_dict["to_user_id"] = int(data["to_user"])
+        if hasattr(data, "search"):
+            opts_dict["search"] = data["search"]
+
+        vobj = validate_object(ChatHistoryPaginationOptions, opts_dict)
+
+        opts = ChatHistoryPaginationOptions()
+        opts.page = int(vobj.page)
+        opts.limit = int(vobj.limit)
+        opts.sort = int_to_sort(int(vobj.sort))
+        opts.order_by = vobj.order_by
+        opts.from_user_id = int(vobj.from_user_id)
+        opts.to_user_id = int(vobj.to_user_id)
+        if hasattr(vobj, "search"):
+            opts.search = vobj.search
+        else:
+            opts.search = ""
+
+        chat_history = ChatService.list_chat_history(opts)
 
         response = []
-        chat_history = ChatService.list_chat_history(from_user, to_user)
-
         for chat in chat_history:
             response.append(chat.json())
 

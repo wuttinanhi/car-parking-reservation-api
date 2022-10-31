@@ -7,12 +7,19 @@ from collections import namedtuple
 from typing import Any, Dict, TypeVar
 
 from flask import Request
-from marshmallow import ValidationError
+from marshmallow import Schema, ValidationError
 
 T = TypeVar("T")
 
-def validate_object(schema: T, obj: Any) -> T:
-    pass
+
+def validate_object(schema: T, dict: Any) -> T:
+    template: Schema = schema()
+    err = template.validate(dict)
+    if err:
+        raise ValidationError(err)
+    result = namedtuple(template.__class__.__name__, dict.keys())(*dict.values())
+    return result
+
 
 def validate_request(schema: T, request: Request, method="POST") -> T:
     # create schema object

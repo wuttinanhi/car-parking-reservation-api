@@ -31,6 +31,14 @@ class PaginationOptions(Schema):
     )
 
 
+def int_to_sort(i: int):
+    if i == 0:
+        return PaginationSortOptions.ASC
+    if i == 1:
+        return PaginationSortOptions.DESC
+    raise BadRequest(f"Invalid pagination sort integer: {i}")
+
+
 def create_order_by(model, key: str, sort: PaginationSortOptions):
     if hasattr(model, key):
         result = model.__dict__.get(key)
@@ -40,9 +48,7 @@ def create_order_by(model, key: str, sort: PaginationSortOptions):
     raise BadRequest(f"Invalid order by key!: {key}")
 
 
-def create_pagination_options_from_request(request: Request):
-    data = validate_request(PaginationOptions, request, "GET")
-
+def create_pagination_options_from_schema(data):
     options = PaginationOptions()
     options.page = int(data.page)
     options.limit = int(data.limit)
@@ -60,6 +66,28 @@ def create_pagination_options_from_request(request: Request):
 
     return options
 
+def create_pagination_options_from_dict(data):
+    options = PaginationOptions()
+    options.page = int(data["page"])
+    options.limit = int(data["limit"])
+    options.order_by = data["order_by"]
+
+    if hasattr(data, "search"):
+        options.search = data["search"]
+    else:
+        options.search = ""
+
+    if int(data["sort"]) == 1:
+        options.sort = PaginationSortOptions.DESC
+    else:
+        options.sort = PaginationSortOptions.ASC
+
+    return options
+
+def create_pagination_options_from_request(request: Request):
+    data = validate_request(PaginationOptions, request, "GET")
+    options = create_pagination_options_from_schema(data)
+    return options
 
 def create_pagination_options(
     page=1, limit=10, sort=PaginationSortOptions.ASC, order_by="id"
