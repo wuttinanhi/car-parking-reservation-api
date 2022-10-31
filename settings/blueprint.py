@@ -28,18 +28,16 @@ class SettingDto(Schema):
 @admin_only
 def set_settings():
     data = validate_request(SettingDto, request)
-    SettingService.set_settings(
-        Setting(
-            data.charge_within_hour,
-            data.charge_more_than_a_hour,
-            data.charge_more_than_a_day,
-        )
+    settings = Setting(
+        data.charge_within_hour,
+        data.charge_more_than_a_hour,
+        data.charge_more_than_a_day,
     )
+    SettingService.set_settings(settings)
     return {"message": "Setting complete."}, OK
 
 
 @blueprint.route("/get", methods=["GET"])
-@admin_only
 def get_settings():
     setting = SettingService.get_settings()
     return setting.json()
