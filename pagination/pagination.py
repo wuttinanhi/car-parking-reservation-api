@@ -3,13 +3,14 @@
 """
 
 from enum import Enum
+from typing import TypeVar
 
 from database.database import db_session
 from flask import Request
 from marshmallow import Schema, fields, validate
 from sqlalchemy import column, desc, text
 from sqlalchemy.orm.query import Query
-from util.validate_request import validate_request
+from util.validate_request import validate_object, validate_request
 from werkzeug.exceptions import BadRequest
 
 
@@ -21,6 +22,9 @@ class PaginationSortOptions(Enum):
         return str(self.value)
 
 
+T = TypeVar("T")
+
+
 class PaginationOptions(Schema):
     page = fields.Integer(required=True, validate=validate.Range(min=1))
     limit = fields.Integer(required=True, validate=validate.Range(min=1, max=100))
@@ -29,6 +33,12 @@ class PaginationOptions(Schema):
     search = fields.String(
         required=False, validate=validate.Length(min=1, max=50), default=""
     )
+
+    @classmethod
+    def from_dict(cls, d: dict, schem: T) -> T:
+        template = cls if cls is None else schem
+        vobj = validate_object(template, d)
+        return vobj
 
 
 def int_to_sort(i: int):
@@ -66,6 +76,7 @@ def create_pagination_options_from_schema(data):
 
     return options
 
+
 def create_pagination_options_from_dict(data):
     options = PaginationOptions()
     options.page = int(data["page"])
@@ -84,10 +95,12 @@ def create_pagination_options_from_dict(data):
 
     return options
 
+
 def create_pagination_options_from_request(request: Request):
     data = validate_request(PaginationOptions, request, "GET")
     options = create_pagination_options_from_schema(data)
     return options
+
 
 def create_pagination_options(
     page=1, limit=10, sort=PaginationSortOptions.ASC, order_by="id"
@@ -106,18 +119,24 @@ class Pagination:
         self._query = query
 
     def set_options(self, opt: PaginationOptions):
-        self._page = opt.page - 1
-        self._limit = opt.limit
+        self._page = int(opt.page) - 1
+        self._limit = int(opt.limit)
         self._offset = self._page * self._limit
         self._order_by = opt.order_by
-        self._search = opt.search
-        if (
-            opt.sort == PaginationSortOptions.ASC
-            or opt.sort == PaginationSortOptions.DESC
-        ):
-            self._sort = opt.sort
+        self._sort = opt.sort
+
+        if hasattr(opt, "search"):
+            self._search = opt.search
         else:
-            raise BadRequest(f"Invalid pagination sorting option!: {opt.sort}")
+            self._search = ""
+
+        if type(self._sort) == int or type(self._sort) == str:
+            to_int = int(self._sort)
+            self._sort = int_to_sort(to_int)
+        elif isinstance(self._sort, PaginationSortOptions):
+            self._sort = self._sort
+        else:
+            raise BadRequest(f"Invalid pagination sorting option!: {self._sort}")
 
     def result(self):
         return (
