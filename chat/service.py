@@ -7,7 +7,9 @@ from typing import List
 
 from database.database import db_session
 from marshmallow import fields, validate
-from pagination.pagination import Pagination, PaginationOptions, PaginationSortOptions
+from pagination.pagination import (Pagination, PaginationOptions,
+                                   PaginationSortOptions)
+from sqlalchemy import desc
 from sqlalchemy.orm.query import Query
 from sqlalchemy.sql import and_, or_
 from user.model import User
@@ -97,6 +99,28 @@ class ChatService:
             print(e)
             db_session.rollback()
             raise InternalServerError("Failed to update chat head!")
+
+    @staticmethod
+    def get_last_chat_message(from_user: User, to_user: User) -> Chat:
+        query: Query = db_session.query(Chat)
+        query = query.where(
+            or_(
+                (
+                    and_(
+                        Chat.from_user_id == from_user.id,
+                        Chat.to_user_id == to_user.id,
+                    )
+                ),
+                (
+                    and_(
+                        Chat.from_user_id == to_user.id,
+                        Chat.to_user_id == from_user.id,
+                    )
+                ),
+            )
+        )
+        query = query.order_by(desc(Chat.id)).limit(1)
+        return query.one()
 
     @staticmethod
     def list_chat_head(

@@ -36,3 +36,12 @@ chats = ChatService.list_chat_history(opts)
 
 for chat in chats:
     print(chat)
+
+print("=" * 10)
+
+# get last chat message
+from_user = UserService.find_by_id(2)
+to_user = UserService.find_by_id(3)
+
+last_chat_message = ChatService.get_last_chat_message(from_user, to_user)
+print(last_chat_message)
