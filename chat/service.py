@@ -7,8 +7,7 @@ from typing import List
 
 from database.database import db_session
 from marshmallow import fields, validate
-from pagination.pagination import (Pagination, PaginationOptions,
-                                   PaginationSortOptions)
+from pagination.pagination import Pagination, PaginationOptions, PaginationSortOptions
 from sqlalchemy import desc
 from sqlalchemy.orm.query import Query
 from sqlalchemy.sql import and_, or_
@@ -20,6 +19,16 @@ from chat.model import Chat, ChatHead
 
 
 class ChatHistoryPaginationOptions(PaginationOptions):
+    @classmethod
+    def from_pagination_options(cls, opts: PaginationOptions):
+        new_opts = cls()
+        new_opts.page = opts.page
+        new_opts.limit = opts.limit
+        new_opts.sort = opts.sort
+        new_opts.order_by = opts.order_by
+        new_opts.search = opts.search
+        return new_opts
+
     from_user_id = fields.Integer(required=True, validate=validate.Range(min=1))
     to_user_id = fields.Integer(required=True, validate=validate.Range(min=1))
 
