@@ -7,10 +7,9 @@ from typing import Any, Dict
 from auth.service import AuthService
 from flask import request
 from flask_socketio import Namespace, emit
-from pagination.pagination import int_to_sort
+from pagination.pagination import PaginationOptions
 from user.model import User
 from user.service import UserService
-from util.validate_request import validate_object
 from werkzeug.exceptions import NotFound, Unauthorized
 
 from chat.service import ChatHistoryPaginationOptions, ChatService
@@ -101,23 +100,9 @@ class ChatHandler(ChatMapper):
         opts_dict["order_by"] = data["order_by"]
         opts_dict["from_user_id"] = int(user.id)
         opts_dict["to_user_id"] = int(data["to_user"])
-        if hasattr(data, "search"):
-            opts_dict["search"] = data["search"]
+        opts_dict["search"] = data["search"] if hasattr(data, "search") else ""
 
-        vobj = validate_object(ChatHistoryPaginationOptions, opts_dict)
-
-        opts = ChatHistoryPaginationOptions()
-        opts.page = int(vobj.page)
-        opts.limit = int(vobj.limit)
-        opts.sort = int_to_sort(int(vobj.sort))
-        opts.order_by = vobj.order_by
-        opts.from_user_id = int(vobj.from_user_id)
-        opts.to_user_id = int(vobj.to_user_id)
-        if hasattr(vobj, "search"):
-            opts.search = vobj.search
-        else:
-            opts.search = ""
-
+        opts = PaginationOptions.from_dict(opts_dict, ChatHistoryPaginationOptions)
         chat_history = ChatService.list_chat_history(opts)
 
         response = []

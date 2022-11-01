@@ -31,7 +31,7 @@ class PaginationOptions(Schema):
     sort = fields.Integer(required=True, validate=validate.Range(min=0, max=1))
     order_by = fields.String(required=True, validate=validate.Length(min=1, max=50))
     search = fields.String(
-        required=False, validate=validate.Length(min=1, max=50), default=""
+        required=False, validate=validate.Length(min=0, max=50), default=""
     )
 
     @classmethod
