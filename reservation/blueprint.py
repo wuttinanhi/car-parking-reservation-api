@@ -105,7 +105,7 @@ def admin_end_reservation():
     return {"error": "Reservation not found!"}, NOT_FOUND
 
 
-@blueprint.route("/user_reservation", methods=["GET"])
+@blueprint.route("/list", methods=["GET"])
 @login_required
 def user_reservation():
     user = get_user()
