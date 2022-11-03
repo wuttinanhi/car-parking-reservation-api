@@ -52,6 +52,8 @@ class ChatService:
         if success == True and update_target_chat_head == True:
             ChatService.update_chat_head(to_user, from_user)
 
+        return chat_message
+
     @staticmethod
     def list_chat_history(opts: ChatHistoryPaginationOptions) -> List[Chat]:
         try:

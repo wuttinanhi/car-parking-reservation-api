@@ -10,7 +10,7 @@ from flask_socketio import Namespace, emit
 from pagination.pagination import PaginationOptions
 from user.model import User
 from user.service import UserService
-from werkzeug.exceptions import NotFound, Unauthorized
+from werkzeug.exceptions import BadRequest, NotFound, Unauthorized
 
 from chat.service import ChatHistoryPaginationOptions, ChatService
 
@@ -38,14 +38,14 @@ class ChatMapper(Namespace):
     def from_user_to_sid(user: User) -> str:
         sid = ChatMapper.user_sid_map.get(user.id, None)
         if sid is None:
-            raise NotFound("user_to_sid")
+            raise NotFound(f"user_to_sid: {user.id}")
         return sid
 
     @staticmethod
     def from_sid_to_user(sid: str) -> User:
         user = ChatMapper.sid_user_map.get(sid, None)
         if user is None:
-            raise NotFound("sid_to_user")
+            raise NotFound(f"sid_to_user: {sid}")
         return user
 
     @staticmethod
@@ -116,45 +116,28 @@ class ChatHandler(ChatMapper):
         to_user_id = data["to_user"]
         message = data["message"]
 
+        if len(message) <= 0:
+            raise BadRequest("Empty message!")
+
         from_user = UserService.find_by_id(user.id)
         to_user = UserService.find_by_id(to_user_id)
 
-        ChatService.send_chat(from_user, to_user, message)
+        chat = ChatService.send_chat(from_user, to_user, message)
 
         # send to self
-        ChatHandler.emit(
-            user,
-            "chat_receive",
-            {
-                "chat_from_user_id": from_user.id,
-                "chat_to_user_id": to_user.id,
-                "chat_message": message,
-            },
-        )
+        try:
+            ChatHandler.emit(user, "chat_receive", chat.json())
+        except Exception as err:
+            print(err)
 
         # send to target user
         try:
-            ChatHandler.emit(
-                to_user,
-                "chat_receive",
-                {
-                    "chat_from_user_id": from_user.id,
-                    "chat_to_user_id": to_user.id,
-                    "chat_message": message,
-                },
-            )
-        except:
-            ChatHandler.emit(
-                user,
-                "chat_receive",
-                {
-                    "chat_from_system": True,
-                    "chat_message": "Target user is offline!",
-                },
-            )
+            ChatHandler.emit(to_user, "chat_receive", chat.json())
+        except Exception as err:
+            print(err)
 
         # update chat head
         ChatService.update_chat_head(to_user, from_user)
 
-        # return true
-        return True
+        # return chat
+        return chat
