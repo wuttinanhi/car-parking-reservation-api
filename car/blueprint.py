@@ -64,9 +64,9 @@ def remove_car():
     return {"error": "Car not found!"}, NOT_FOUND
 
 
-@blueprint.route("/my_car", methods=["GET"])
+@blueprint.route("/list", methods=["GET"])
 @login_required
-def my_car():
+def list_user_car():
     response = []
     user = get_user()
     all_user_cars = CarService.find_all_car_by_user(user)

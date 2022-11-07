@@ -30,7 +30,7 @@ class InvoiceUpdateDto(Schema):
     description = fields.String(required=True, validate=validate.Length(max=255))
 
 
-@blueprint.route("/my_invoice", methods=["GET"])
+@blueprint.route("/list", methods=["GET"])
 @login_required
 def list_user_invoice():
     user = get_user()
