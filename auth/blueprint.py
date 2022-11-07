@@ -52,7 +52,7 @@ def login():
         if os.getenv("ENV") != "production":
             token = JwtService.encode(jwt, 86400 * 5)  # 5 days
         else:
-            token = JwtService.encode(jwt, 60 * 5)  # 5 minutes
+            token = JwtService.encode(jwt, 86400)  # TEMP INCREASE TO 1 DAY
         return {"token": token}, 200
     return {"error": "Invalid login!"}, 401
 
