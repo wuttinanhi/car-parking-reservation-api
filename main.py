@@ -60,7 +60,7 @@ def shutdown_session(__exception=None):
 # root path
 @app.route("/")
 def hello_world():
-    return "<p>Hello, World!</p>"
+    return {"app": "car-parking-reservation-api", "version": "1.0"}
 
 
 # global error handler
