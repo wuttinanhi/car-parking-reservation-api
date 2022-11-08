@@ -40,8 +40,13 @@ def create_reservation():
     data = validate_request(ReservationCreateDto, request)
     car = CarService.find_by_id(data.car_id)
     parking_lot = ParkingLotService.find_by_id(data.parking_lot_id)
-    ReservationService.create_reservation(user, car, parking_lot, datetime.utcnow())
-    return {"message": "Reservation created."}, CREATED
+    reservation = ReservationService.create_reservation(
+        user, car, parking_lot, datetime.utcnow()
+    )
+    return {
+        "message": "Reservation created.",
+        "reservation": reservation.json(),
+    }, CREATED
 
 
 @blueprint.route("/end", methods=["DELETE"])
