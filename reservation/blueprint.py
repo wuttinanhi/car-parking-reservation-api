@@ -70,13 +70,13 @@ def end_reservation():
             return {"error": "Reservation already end!"}, CONFLICT
 
         # end reservation
-        ReservationService.end_reservation(reservation)
+        ReservationService.end_reservation(reservation, datetime.utcnow())
 
         # create invoice
-        PaymentService.create_invoice(reservation)
+        created_invoice = PaymentService.create_invoice(reservation)
 
         # return success response
-        return {"message": "Reservation ended."}, OK
+        return {"message": "Reservation ended.", "invoice": created_invoice.json()}, OK
 
     # reservation not found
     return {"error": "Reservation not found!"}, NOT_FOUND
