@@ -15,16 +15,19 @@ def seed_chat():
     charlie = UserService.find_by_email("charlie@example.com")
 
     # mock dummy chat
-    ChatService.send_chat(annie, bobbie, "1 start Hello Bobbie!")
-    ChatService.send_chat(bobbie, annie, "2 Hi Annie!")
-    ChatService.send_chat(annie, bobbie, "3 How are you?")
-    ChatService.send_chat(bobbie, annie, "4 end I'm good!")
+    # annie -> bobbie
+    ChatService.send_chat(annie, bobbie, "Hello Bobbie!")
+    ChatService.send_chat(bobbie, annie, "Hi Annie!")
+    ChatService.send_chat(annie, bobbie, "Can you move your car?")
+    ChatService.send_chat(bobbie, annie, "Sure!")
 
-    ChatService.send_chat(bobbie, charlie, "1 start Hello Charlie!")
-    ChatService.send_chat(charlie, bobbie, "2 end Hi Bobbie!")
+    # bobbie -> charlie
+    ChatService.send_chat(bobbie, charlie, "Hi Charlie!")
+    ChatService.send_chat(charlie, bobbie, "Hello Bobbie!")
 
-    ChatService.send_chat(annie, charlie, "1 start Hello Charlie!")
-    ChatService.send_chat(charlie, annie, "2 end Hi Annie!")
+    # annie -> charlie
+    ChatService.send_chat(annie, charlie, "Hello Charlie!")
+    ChatService.send_chat(charlie, annie, "Hi Annie!")
 
 
 if __name__ == "__main__":

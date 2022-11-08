@@ -8,6 +8,9 @@ def seed_parking_lot():
 
     print("Mocking parking lot...")
 
-    ParkingLotService.add("Floor 1", True)
-    ParkingLotService.add("Floor 2", True)
-    ParkingLotService.add("Floor 3", False)
+    for building in range(1, 5):
+        for floor in range(1, 5):
+            for lot in range(1, 10):
+                ParkingLotService.add(
+                    f"Building {building} Floor {floor} Lot {lot}", True
+                )

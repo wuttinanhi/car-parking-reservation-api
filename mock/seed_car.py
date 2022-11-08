@@ -13,6 +13,6 @@ def seed_car():
     user = UserService.find_by_email("annie@example.com")
 
     # mock user car
-    CarService.add(user, "A11111", "Tesla")
-    CarService.add(user, "A22222", "Starship")
-    CarService.add(user, "A33333", "Falcon9")
+    CarService.add(user, "A-11111", "Tesla Car")
+    CarService.add(user, "A-22222", "Starship Rocket")
+    CarService.add(user, "A-33333", "Falcon Nine Rocket")

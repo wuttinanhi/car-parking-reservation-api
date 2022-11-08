@@ -18,15 +18,15 @@ def seed_reservation():
     car_1 = CarService.find_by_id(1)
     parking_lot_1 = ParkingLotService.find_by_id(1)
 
-    for i in range(1, 11):
-        parking_date = datetime(year=2022, month=1, day=1, hour=i, minute=0, second=0)
+    for i in range(1, 5):
+        parking_date = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
 
         # mock reservation
         reservation = ReservationService.create_reservation(
             user, car_1, parking_lot_1, parking_date
         )
 
-        if i < 10:
+        if i < 4:
             # end created reservation
             ReservationService.end_reservation(
                 reservation, reservation.start_time + timedelta(hours=1)

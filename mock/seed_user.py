@@ -12,8 +12,8 @@ def seed_user():
         "root@example.com",
         "root-password",
         "root",
-        "root-firstname",
-        "root-lastname",
+        "Root",
+        "Admin",
         "0000000000",
         "0000000000000",
     )
@@ -22,9 +22,9 @@ def seed_user():
         "annie@example.com",
         "annie-password",
         "annie",
-        "annie-firstname",
-        "annie-lastname",
-        "1111111111",
+        "Annie",
+        "Carparker",
+        "0101234567",
         "1111111111111",
     )
 
@@ -32,9 +32,9 @@ def seed_user():
         "bobbie@example.com",
         "bobbie-password",
         "bobbie",
-        "bobbie-firstname",
-        "bobbie-lastname",
-        "2222222222",
+        "Bobbie",
+        "Carparker",
+        "0201234567",
         "2222222222222",
     )
 
@@ -42,9 +42,8 @@ def seed_user():
         "charlie@example.com",
         "charlie-password",
         "charlie",
-        "charlie-firstname",
-        "charlie-lastname",
-        "3333333333",
+        "Charlie",
+        "Carparker",
+        "0301234567",
         "3333333333333",
     )
-
