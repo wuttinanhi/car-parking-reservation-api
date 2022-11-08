@@ -97,7 +97,7 @@ def admin_end_reservation():
             return {"error": "Reservation already end!"}, CONFLICT
 
         # end reservation
-        ReservationService.end_reservation(reservation)
+        ReservationService.end_reservation(reservation, datetime.utcnow())
 
         # create invoice
         if data.create_invoice is True:
