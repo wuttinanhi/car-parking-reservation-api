@@ -12,7 +12,10 @@ class CustomAvailableParkingLot:
 
     def __init__(self, parking_lot: ParkingLot) -> None:
         self.parking_lot = parking_lot
-        self.available = ParkingLotService.is_parking_lot_available(self.parking_lot)
+        self.available = (
+            ParkingLotService.is_parking_lot_available(self.parking_lot)
+            and self.parking_lot.open_status
+        )
 
     def json(self):
         return {
