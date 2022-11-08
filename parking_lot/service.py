@@ -1,7 +1,7 @@
 from typing import List
 
 from database.database import db_session
-from werkzeug.exceptions import InternalServerError
+from werkzeug.exceptions import InternalServerError, NotFound
 
 from parking_lot.model import ParkingLot
 
@@ -61,7 +61,10 @@ class ParkingLotService:
 
     @staticmethod
     def find_by_id(id: int) -> ParkingLot:
-        return ParkingLot.query.filter(ParkingLot.id == id).first()
+        parking_lot = ParkingLot.query.filter(ParkingLot.id == id).first()
+        if parking_lot == None:
+            raise NotFound("Parking lot not found!")
+        return parking_lot
 
     @staticmethod
     def get_all_parking_lot() -> List[ParkingLot]:
