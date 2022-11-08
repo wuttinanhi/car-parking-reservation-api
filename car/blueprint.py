@@ -92,7 +92,7 @@ def update_car():
     return {"message": "Successfully updated car."}, 200
 
 
-@blueprint.route("/search", methods=["GET"])
+@blueprint.route("/search", methods=["POST"])
 @login_required
 def search_car_by_license_plate():
     data = validate_request(CarSearchDto, request)
