@@ -5,21 +5,28 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
+    restart: always
     ports:
-      - 5000:5000
+      - 80:5000
     environment:
-      ENV: dev
+      ENV: production
       PORT: 5000
-      DATABASE_URI: mysql+mysqldb://appuser:app-password@mysql:3306/appdb?charset=utf8mb4
+      DATABASE_URI: mysql+mysqldb://appuser${MYSQL_PASSWORD}@mysql:3306/appdb?charset=utf8mb4
+      ADMIN_KEY: ${MYSQL_PASSWORD}
+      BCRYPT_SALT: 10
+      STRIPE_PUBLIC_KEY: ${STRIPE_PUBLIC_KEY}
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET}
 
   mysql:
     image: mysql
+    restart: always
     command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_DATABASE: appdb
       MYSQL_USER: appuser
-      MYSQL_PASSWORD: app-password
-      MYSQL_ROOT_PASSWORD: app-root-password
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - db_storage:/var/lib/mysql
     ports:
@@ -27,10 +34,10 @@ services:
 
   phpmyadmin:
     image: phpmyadmin
+    restart: always
     environment:
       PMA_HOST: mysql
       PMA_USER: appuser
-      PMA_PASSWORD: app-password
       PMA_DATABASE: appdb
     ports:
       - 8080:80
