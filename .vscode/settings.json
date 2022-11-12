@@ -26,5 +26,6 @@
         "**/Thumbs.db": true,
         "**/__pycache__": true,
     },
-    "thunder-client.saveToWorkspace": true
+    "thunder-client.saveToWorkspace": true,
+    "python.linting.pylintPath": "venv/bin/pylint"
 }
