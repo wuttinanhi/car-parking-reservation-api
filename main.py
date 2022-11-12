@@ -5,6 +5,8 @@
 from http.client import BAD_REQUEST, INTERNAL_SERVER_ERROR
 
 from flask import Flask, request
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from flask_socketio import SocketIO, emit
 from marshmallow import ValidationError
 from werkzeug.exceptions import HTTPException
@@ -31,6 +33,20 @@ load_env()
 app = Flask(
     __name__, static_folder="static", template_folder="static", static_url_path=""
 )
+
+# apply rate limiter
+limiter = Limiter(
+    app,
+    key_func=get_remote_address,
+    default_limits=["1000/hour"],
+    storage_uri="memory://",
+)
+
+
+@app.errorhandler(429)
+def ratelimit_handler(__error):
+    return {"error": "rate limit exceeded!"}, 429
+
 
 # initialize database
 init_db()
