@@ -26,6 +26,7 @@ from reservation.blueprint import blueprint as reservation_blueprint
 from settings.blueprint import blueprint as settings_blueprint
 from settings.service import SettingService
 from user.blueprint import blueprint as user_blueprint
+from flask_cors import CORS
 
 # load env
 load_env()
@@ -36,6 +37,8 @@ app = Flask(
     __name__, static_folder="static", template_folder="static", static_url_path=""
 )
 
+# CORS setup
+CORS(app)
 
 # create logger
 app.logger = create_logger(app)
@@ -48,6 +51,8 @@ limiter = Limiter(
     default_limits=["1000/hour"],
     storage_uri="memory://",
 )
+
+
 
 
 # initialize database
