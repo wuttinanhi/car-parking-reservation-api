@@ -2,9 +2,11 @@
     main
 """
 
+from datetime import datetime
 from http.client import BAD_REQUEST, INTERNAL_SERVER_ERROR
 
 from flask import Flask, request
+from flask.logging import create_logger
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_socketio import SocketIO, emit
@@ -34,6 +36,11 @@ app = Flask(
     __name__, static_folder="static", template_folder="static", static_url_path=""
 )
 
+
+# create logger
+app.logger = create_logger(app)
+
+
 # apply rate limiter
 limiter = Limiter(
     app,
@@ -41,11 +48,6 @@ limiter = Limiter(
     default_limits=["1000/hour"],
     storage_uri="memory://",
 )
-
-
-@app.errorhandler(429)
-def ratelimit_handler(__error):
-    return {"error": "rate limit exceeded!"}, 429
 
 
 # initialize database
@@ -79,6 +81,26 @@ def hello_world():
     return {"app": "car-parking-reservation-api", "version": "1.0"}
 
 
+# log every request
+@app.before_request
+def log_request_info():
+    # get date
+    date = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    # get url
+    url = request.url
+    # get ip address
+    ip = request.remote_addr
+    # get request method
+    method = request.method
+    # logging request
+    app.logger.info("%s %s %s %s", date, ip, method, url)
+
+
+@app.errorhandler(429)
+def ratelimit_handler(__error):
+    return {"error": "rate limit exceeded!"}, 429
+
+
 # global error handler
 @app.errorhandler(Exception)
 def error_handle(err: Exception):
@@ -89,7 +111,7 @@ def error_handle(err: Exception):
     if issubclass(type(err), HTTPException):
         return {"error": str(err.description)}, err.code
     # internal error
-    print(err)
+    app.logger.error(err)
     return {"error": "Internal server exception!"}, INTERNAL_SERVER_ERROR
 
 
@@ -107,5 +129,4 @@ def on_error(err: Exception):
 
 
 # if __name__ == "__main__":
-#     print("===== START =====")
 #     socketio.run(app)

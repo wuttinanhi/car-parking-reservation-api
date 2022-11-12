@@ -6,15 +6,16 @@ from datetime import datetime
 from typing import List
 
 import stripe
+from flask import current_app
+from werkzeug.exceptions import BadRequest, InternalServerError, NotFound
+
 from database.database import db_session
 from pagination.pagination import Pagination, PaginationOptions, PaginationRaw
+from payment.model import Invoice, InvoiceStatus
 from reservation.model import Reservation
 from settings.service import SettingService
 from user.model import User
 from user.service import UserService
-from werkzeug.exceptions import BadRequest, InternalServerError, NotFound
-
-from payment.model import Invoice, InvoiceStatus
 
 
 class CustomInvoiceUserModel:
@@ -86,7 +87,7 @@ class PaymentService:
 
             return invoice
         except Exception as e:
-            print(e)
+            current_app.logger.error(e)
             db_session.rollback()
             raise InternalServerError("Failed to create invoice!")
 
@@ -102,7 +103,7 @@ class PaymentService:
             )
             db_session.commit()
         except Exception as e:
-            print(e)
+            current_app.logger.error(e)
             db_session.rollback()
             raise InternalServerError("Failed to update invoice!")
 

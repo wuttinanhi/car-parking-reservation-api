@@ -1,12 +1,13 @@
 from typing import List
 
-from bcrypt_wrapper.service import BcryptService
-from database.database import db_session
-from pagination.pagination import Pagination, PaginationOptions
+from flask import current_app
 from sqlalchemy import or_
 from sqlalchemy.exc import IntegrityError
 from werkzeug.exceptions import Conflict, InternalServerError
 
+from bcrypt_wrapper.service import BcryptService
+from database.database import db_session
+from pagination.pagination import Pagination, PaginationOptions
 from user import User
 
 
@@ -92,7 +93,7 @@ class UserService:
             )
             db_session.commit()
         except Exception as e:
-            print(e)
+            current_app.logger.error(e)
             db_session.rollback()
             raise InternalServerError("Failed to update user!")
 
@@ -105,6 +106,6 @@ class UserService:
             )
             db_session.commit()
         except Exception as e:
-            print(e)
+            current_app.logger.error(e)
             db_session.rollback()
             raise InternalServerError("Failed to change user password!")

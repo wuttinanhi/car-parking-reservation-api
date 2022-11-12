@@ -2,19 +2,18 @@
     auth blueprint
 """
 
-
 from http.client import CREATED, FORBIDDEN, NOT_FOUND, OK
+
+from flask import Blueprint, request
+from marshmallow import Schema, fields, validate
+from werkzeug.exceptions import Forbidden
 
 from auth.decorator import admin_only, login_required
 from auth.function import get_user
-from flask import Blueprint, request
-from marshmallow import Schema, fields, validate
+from car.service import CarService
 from pagination.pagination import create_pagination_options_from_request
 from user.service import UserService
 from util.validate_request import validate_request
-from werkzeug.exceptions import Forbidden
-
-from car.service import CarService
 
 blueprint = Blueprint("car", __name__, url_prefix="/car")
 

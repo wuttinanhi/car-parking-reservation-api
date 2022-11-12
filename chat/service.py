@@ -5,17 +5,19 @@
 from datetime import datetime
 from typing import List
 
-from database.database import db_session
+from flask import current_app
 from marshmallow import fields, validate
-from pagination.pagination import Pagination, PaginationOptions, PaginationSortOptions
 from sqlalchemy import desc
 from sqlalchemy.orm.query import Query
 from sqlalchemy.sql import and_, or_
-from user.model import User
-from user.service import UserService
 from werkzeug.exceptions import InternalServerError
 
 from chat.model import Chat, ChatHead
+from database.database import db_session
+from pagination.pagination import (Pagination, PaginationOptions,
+                                   PaginationSortOptions)
+from user.model import User
+from user.service import UserService
 
 
 class ChatHistoryPaginationOptions(PaginationOptions):
@@ -45,7 +47,7 @@ class ChatService:
             db_session.commit()
             success = True
         except Exception as e:
-            print(e)
+            current_app.logger.error(e)
             db_session.rollback()
             raise InternalServerError("Failed to send chat!")
 
@@ -84,7 +86,7 @@ class ChatService:
 
             return result
         except Exception as e:
-            print(e)
+            current_app.logger.error(e)
             raise InternalServerError("Failed to retrieve chat history!")
 
     @staticmethod
@@ -107,7 +109,7 @@ class ChatService:
 
             db_session.commit()
         except Exception as e:
-            print(e)
+            current_app.logger.error(e)
             db_session.rollback()
             raise InternalServerError("Failed to update chat head!")
 

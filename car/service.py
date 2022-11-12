@@ -1,13 +1,14 @@
 from typing import List
 
-from database.database import db_session
-from pagination.pagination import Pagination, PaginationOptions
+from flask import current_app
 from sqlalchemy import or_
 from sqlalchemy.exc import IntegrityError
-from user.model import User
 from werkzeug.exceptions import Conflict, InternalServerError, NotFound
 
 from car.model import Car
+from database.database import db_session
+from pagination.pagination import Pagination, PaginationOptions
+from user.model import User
 
 
 class CarPaginationResult:
@@ -92,7 +93,7 @@ class CarService:
             )
             db_session.commit()
         except Exception as e:
-            print(e)
+            current_app.logger.error(e)
             db_session.rollback()
             raise InternalServerError("Failed to update user!")
 

@@ -2,17 +2,18 @@
     chat socket handler
 """
 
+
 from typing import Any, Dict
 
-from auth.service import AuthService
-from flask import request
+from flask import current_app, request
 from flask_socketio import Namespace, emit
+from werkzeug.exceptions import BadRequest, NotFound, Unauthorized
+
+from auth.service import AuthService
+from chat.service import ChatHistoryPaginationOptions, ChatService
 from pagination.pagination import PaginationOptions
 from user.model import User
 from user.service import UserService
-from werkzeug.exceptions import BadRequest, NotFound, Unauthorized
-
-from chat.service import ChatHistoryPaginationOptions, ChatService
 
 
 class ChatMapper(Namespace):
@@ -65,13 +66,13 @@ class ChatHandler(ChatMapper):
             raise Unauthorized("Invalid Jwt")
 
     def on_connect(self):
-        print(f"Chat Client connected: {request.sid}")
+        current_app.logger.info(f"Chat Client connected: {request.sid}")
 
     def on_disconnect(self):
         sid = request.sid
         user = ChatHandler.from_sid_to_user(sid)
         ChatHandler.remove(user)
-        print(f"Chat Client disconnected: {user.id} {user.email} {request.sid}")
+        current_app.logger.info(f"Chat Client disconnected: {user.id} {user.email} {request.sid}")
 
     def on_login(self, data):
         user = ChatHandler.auth_user(data)
@@ -128,13 +129,13 @@ class ChatHandler(ChatMapper):
         try:
             ChatHandler.emit(user, "chat_receive", chat.json())
         except Exception as err:
-            print(err)
+            current_app.logger.error(err)
 
         # send to target user
         try:
             ChatHandler.emit(to_user, "chat_receive", chat.json())
         except Exception as err:
-            print(err)
+            current_app.logger.error(err)
 
         # update chat head
         ChatService.update_chat_head(to_user, from_user)

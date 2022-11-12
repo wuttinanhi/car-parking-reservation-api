@@ -1,8 +1,9 @@
 from typing import List
 
-from database.database import db_session
+from flask import current_app
 from werkzeug.exceptions import InternalServerError, NotFound
 
+from database.database import db_session
 from parking_lot.model import ParkingLot
 
 
@@ -36,7 +37,7 @@ class ParkingLotService:
             return parking_lot
         except Exception as err:
             db_session.rollback()
-            print(err)
+            current_app.logger.error(err)
             raise InternalServerError("Something error when adding parking lot")
 
     @staticmethod
@@ -50,7 +51,7 @@ class ParkingLotService:
             )
             db_session.commit()
         except Exception as e:
-            print(e)
+            current_app.logger.error(e)
             db_session.rollback()
             raise InternalServerError("Failed to update parking lot!")
 

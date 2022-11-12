@@ -6,15 +6,15 @@ import json
 from http.client import FORBIDDEN, NOT_FOUND, OK
 
 import stripe
+from flask import Blueprint, current_app, jsonify, request
+from marshmallow import Schema, fields, validate
+
 from auth.decorator import admin_only, login_required
 from auth.function import get_user
-from flask import Blueprint, jsonify, request
-from marshmallow import Schema, fields, validate
 from pagination.pagination import create_pagination_options_from_request
-from util.validate_request import validate_request
-
 from payment.model import InvoiceStatus
 from payment.service import PaymentService
+from util.validate_request import validate_request
 
 blueprint = Blueprint("payment", __name__, url_prefix="/payment")
 
@@ -69,7 +69,9 @@ def stripe_webhook():
     try:
         event = json.loads(payload)
     except:
-        print("⚠️  Webhook error while parsing basic request." + str(e))
+        current_app.logger.error(
+            "⚠️  Webhook error while parsing basic request." + str(e)
+        )
         return jsonify(success=False)
 
     # get signature header
@@ -79,7 +81,7 @@ def stripe_webhook():
             payload, sig_header, PaymentService.stripe_webhook_secret
         )
     except stripe.error.SignatureVerificationError as e:
-        print("⚠️  Webhook signature verification failed." + str(e))
+        current_app.logger.error("⚠️  Webhook signature verification failed." + str(e))
         return jsonify(success=False)
 
     # check event is none
@@ -90,10 +92,12 @@ def stripe_webhook():
     if event and event["type"] == "payment_intent.succeeded":
         payment_intent: stripe.PaymentIntent = event["data"]["object"]
         PaymentService.handle_stripe_payment(payment_intent)
-        print("Payment for {} succeeded".format(payment_intent["amount"]))
+        current_app.logger.info(
+            "Payment for {} succeeded".format(payment_intent["amount"])
+        )
     else:
         # Unexpected event type
-        print("Unhandled event type {}".format(event["type"]))
+        current_app.logger.error("Unhandled event type {}".format(event["type"]))
 
     # return success
     return jsonify(success=True)

@@ -1,19 +1,20 @@
 from datetime import datetime
 from typing import List
 
+from flask import current_app
+from sqlalchemy import or_
+from sqlalchemy.orm import Query
+from werkzeug.exceptions import Conflict, Forbidden, NotFound
+
 from car.model import Car
 from car.service import CarService
 from database.database import db_session
 from pagination.pagination import Pagination, PaginationOptions
 from parking_lot.model import ParkingLot
 from parking_lot.service import ParkingLotService
-from sqlalchemy import or_
-from sqlalchemy.orm import Query
+from reservation.model import Reservation
 from user.model import User
 from user.service import UserService
-from werkzeug.exceptions import Conflict, Forbidden, NotFound
-
-from reservation.model import Reservation
 
 
 class ReservationPaginationResult:
@@ -56,7 +57,7 @@ class ReservationService:
             return reservation
         except Exception as err:
             db_session.rollback()
-            print(err)
+            current_app.logger.error(err)
             raise err
 
     @staticmethod
