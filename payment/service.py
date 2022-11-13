@@ -165,6 +165,9 @@ class PaymentService:
     def admin_list_payment(
         pagination_options: PaginationOptions,
     ) -> List[CustomInvoiceUserModel]:
+        if pagination_options.order_by == "id":
+            pagination_options.order_by = "invoices.id"
+
         pagination = PaginationRaw(
             """
             SELECT  
