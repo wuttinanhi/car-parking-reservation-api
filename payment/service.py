@@ -27,7 +27,8 @@ class CustomInvoiceUserModel:
         self.user = UserService.find_by_id(user_id)
 
     def json(self):
-        return {**self.invoice.json(), **self.user.json_full()}
+        return { "invoice": self.invoice.json(), "user": self.user.json_full() }
+
 
 
 class PaymentService:
