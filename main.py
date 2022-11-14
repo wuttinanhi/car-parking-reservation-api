@@ -7,6 +7,7 @@ from http.client import BAD_REQUEST, INTERNAL_SERVER_ERROR
 
 from flask import Flask, request
 from flask.logging import create_logger
+from flask_cors import CORS
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_socketio import SocketIO, emit
@@ -26,7 +27,6 @@ from reservation.blueprint import blueprint as reservation_blueprint
 from settings.blueprint import blueprint as settings_blueprint
 from settings.service import SettingService
 from user.blueprint import blueprint as user_blueprint
-from flask_cors import CORS
 
 # load env
 load_env()
@@ -48,7 +48,7 @@ app.logger = create_logger(app)
 limiter = Limiter(
     app,
     key_func=get_remote_address,
-    default_limits=["1000/hour"],
+    default_limits=["3000/hour"],
     storage_uri="memory://",
 )
 
