@@ -5,12 +5,12 @@
 
 from http.client import CREATED, FORBIDDEN, NOT_FOUND, OK
 
-from auth.decorator import admin_only, login_required
 from flask import Blueprint, request
 from marshmallow import Schema, fields, validate
-from util.validate_request import validate_request
 
+from auth.decorator import admin_only, login_required
 from parking_lot.service import ParkingLotService
+from util.validate_request import validate_request
 
 blueprint = Blueprint("parking_lot", __name__, url_prefix="/parking_lot")
 
@@ -74,7 +74,7 @@ def admin_available_parking_lot():
     response = []
     parking_lots = ParkingLotService.get_all_parking_lot_with_available_status()
     for obj in parking_lots:
-        response.append(obj.json())
+        response.append(obj.json_full())
     return response
 
 

@@ -1,10 +1,15 @@
 from typing import List
 
 from flask import current_app
+from sqlalchemy.orm import Query
+from sqlalchemy.sql import and_, desc
 from werkzeug.exceptions import InternalServerError, NotFound
 
+from car.model import Car
 from database.database import db_session
 from parking_lot.model import ParkingLot
+from reservation.model import Reservation
+from user.service import UserService
 
 
 class CustomAvailableParkingLot:
@@ -17,6 +22,9 @@ class CustomAvailableParkingLot:
             ParkingLotService.is_parking_lot_available(self.parking_lot)
             and self.parking_lot.open_status
         )
+        self.reservation = None
+        self.car = None
+        self.user = None
 
     def json(self):
         return {
@@ -24,6 +32,24 @@ class CustomAvailableParkingLot:
             "location": self.parking_lot.location,
             "open_status": self.parking_lot.open_status,
             "available": self.available,
+        }
+
+    def json_full(self):
+        self.reservation = ParkingLotService.get_last_reservation(self.parking_lot)
+        if self.reservation is not None:
+            self.car = ParkingLotService.get_parking_car(self.reservation)
+            self.user = UserService.find_by_id(self.reservation.user_id)
+
+        return {
+            "id": self.parking_lot.id,
+            "location": self.parking_lot.location,
+            "open_status": self.parking_lot.open_status,
+            "available": self.available,
+            "reservation": self.reservation.json()
+            if self.reservation is not None
+            else None,
+            "car": self.car.json() if self.car is not None else None,
+            "user": self.user.json_shareable() if self.user is not None else None,
         }
 
 
@@ -112,3 +138,23 @@ class ParkingLotService:
             new_obj = CustomAvailableParkingLot(parking_lot)
             parsed.append(new_obj)
         return parsed
+
+    @staticmethod
+    def get_last_reservation(parking_lot: ParkingLot) -> Reservation:
+        query_reservation: Query = db_session.query(Reservation)
+        query_reservation = query_reservation.order_by(desc(Reservation.id)).where(
+            and_(
+                Reservation.end_time == None,
+                Reservation.parking_lot_id == parking_lot.id,
+            )
+        )
+        query_reservation = query_reservation.limit(1)
+        busy_reservation = query_reservation.first()
+        return busy_reservation
+
+    @staticmethod
+    def get_parking_car(reservation: Reservation) -> Car:
+        if reservation is None:
+            return None
+        car = Car.query.where(Car.id == reservation.car_id).first()
+        return car
