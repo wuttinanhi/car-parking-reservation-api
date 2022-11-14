@@ -27,8 +27,7 @@ class CustomInvoiceUserModel:
         self.user = UserService.find_by_id(user_id)
 
     def json(self):
-        return { "invoice": self.invoice.json(), "user": self.user.json_full() }
-
+        return {"invoice": self.invoice.json(), "user": self.user.json_full()}
 
 
 class PaymentService:
@@ -110,7 +109,10 @@ class PaymentService:
 
     @staticmethod
     def get_invoice_by_id(id: int) -> Invoice:
-        return Invoice.query.filter(Invoice.id == id).first()
+        invoice = Invoice.query.filter(Invoice.id == id).first()
+        if invoice is None:
+            raise NotFound("Invoice not found!")
+        return invoice
 
     @staticmethod
     def get_invoice_by_reservation(reservation: Reservation) -> Invoice:
