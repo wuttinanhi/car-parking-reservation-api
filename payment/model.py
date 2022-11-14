@@ -1,8 +1,9 @@
 import enum
 from datetime import datetime
 
-from database import Base
 from sqlalchemy import Column, DateTime, Enum, Float, ForeignKey, Integer, String
+
+from database import Base
 
 
 class InvoiceStatus(enum.Enum):
@@ -56,4 +57,5 @@ class Invoice(Base):
             "invoice_charge_amount": self.charge_amount,
             "invoice_create_date": self.create_date,
             "invoice_status": str(self.status),
+            "invoice_description": self.description,
         }
